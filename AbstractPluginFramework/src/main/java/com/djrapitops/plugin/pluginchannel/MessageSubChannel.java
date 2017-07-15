@@ -46,7 +46,7 @@ public abstract class MessageSubChannel<T extends BukkitPlugin> implements Plugi
             if (somePlayer == null) {
                 throw new IllegalStateException("No players online to send message with.");
             }
-            player = Fetch.wrap(somePlayer);
+            player = Fetch.wrapBukkit(somePlayer);
         }
         player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
     }
@@ -59,7 +59,7 @@ public abstract class MessageSubChannel<T extends BukkitPlugin> implements Plugi
         ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
         String subchannel = in.readUTF();
         if (subchannel.equals(channelName)) {
-            onPluginMessageReceived(Fetch.wrap(player), bytes);
+            onPluginMessageReceived(Fetch.wrapBukkit(player), bytes);
         }
     }
 
