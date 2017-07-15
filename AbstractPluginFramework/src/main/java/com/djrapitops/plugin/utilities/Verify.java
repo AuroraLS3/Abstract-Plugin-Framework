@@ -1,0 +1,216 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.djrapitops.plugin.utilities;
+
+import com.djrapitops.plugin.api.SelfValidating;
+import com.djrapitops.plugin.command.ISender;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Stream;
+
+/**
+ *
+ * @author Rsl1122
+ */
+public class Verify {
+
+    /**
+     * Checks if the file exists if it is not null.
+     *
+     * @param file File to check
+     * @return false if null or file.exists()
+     */
+    public static boolean exists(File file) {
+        if (notNull(file)) {
+            return file.exists();
+        }
+        return false;
+    }
+
+    public static File existCheck(File file) throws IllegalArgumentException {
+        nullCheck(file);
+        if (exists(file)) {
+            return file;
+        }
+        throw new IllegalArgumentException("File did not exist");
+    }
+
+    /**
+     * Checks if the given parameter is empty if it is not null.
+     *
+     * @param string String.
+     * @return true if null, string.isEmpty() if not
+     */
+    public static boolean isEmpty(String string) {
+        if (notNull(string)) {
+            return string.isEmpty();
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the given parameter is empty if it is not null.
+     *
+     * @param <T> Object type variable
+     * @param coll Collection
+     * @return true if null, coll.isEmpty() if not
+     */
+    public static <T> boolean isEmpty(Collection<T> coll) {
+        if (notNull(coll)) {
+            return coll.isEmpty();
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the given parameter is empty if it is not null.
+     *
+     * @param <T> Object type variable
+     * @param <K> Object type variable, not checked
+     * @param map Any map object
+     * @return true if null, map.isEmpty() if not
+     */
+    public static <T, K> boolean isEmpty(Map<T, K> map) {
+        if (notNull(map)) {
+            return map.isEmpty();
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the collection contains the object if collection is not null.
+     *
+     * @param <T> Object type variable
+     * @param lookFor object to look for
+     * @param coll Collection to check the object for
+     * @return false if collection is null or Stream#anyMatch(Verify.equals)
+     */
+    public static <T> boolean contains(T lookFor, Collection<T> coll) {
+        if (!isEmpty(coll)) {
+            return contains(lookFor, coll.stream());
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the stream contains the object.
+     *
+     * @param <T> Object type variable
+     * @param lookFor object to look for
+     * @param stream stream of objects
+     * @return Does the array contain the object.
+     */
+    public static <T> boolean contains(T lookFor, Stream<T> stream) {
+        return stream.anyMatch(obj -> equals(obj, lookFor));
+    }
+
+    /**
+     * Checks if the array contains the object.
+     *
+     * @param <T> Object type variable
+     * @param lookFor object to look for
+     * @param objects objects
+     * @return Does the array contain the object.
+     */
+    public static <T> boolean contains(T lookFor, T... objects) {
+        return contains(lookFor, Arrays.stream(objects));
+    }
+
+    /**
+     *
+     * @param <T>
+     * @param lookFor
+     * @param map
+     * @return
+     */
+    public static <T> boolean contains(T lookFor, Map<T, Object> map) {
+        return contains(lookFor, map.keySet().stream());
+    }
+
+    /**
+     *
+     * @param one
+     * @param two
+     * @return
+     */
+    public static boolean equalsIgnoreCase(String one, String two) {
+        if (notNull(one)) {
+            return one.equalsIgnoreCase(two);
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param <T>
+     * @param <K>
+     * @param object
+     * @param object2
+     * @return
+     */
+    public static <T, K> boolean equals(T object, K object2) {
+        if (notNull(object)) {
+            return object.equals(object2);
+        }
+        return false;
+    }
+
+    public static boolean isValid(SelfValidating validate) {
+        if (notNull(validate)) {
+            return validate.isValid();
+        }
+        return false;
+    }
+    
+    public static boolean notNull(Object... object) {
+        if (object == null) {
+            return false;
+        }
+        for (Object t : object) {
+            if (t == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the given object is null, throws exception if null.
+     *
+     * @param <T> Object type variable
+     * @param object Object to check
+     * @return the original object
+     * @throws NullPointerException If the object is null.
+     */
+    public static <T> T nullCheck(T object) throws IllegalArgumentException {
+        if (!notNull(object)) {
+            throw new IllegalArgumentException(object.getClass().getSimpleName() + " was null!");
+        }
+        return object;
+    }
+
+    public static <T> T[] nullCheck(T... objects) throws IllegalArgumentException {
+        for (T obj : objects) {
+            if (!notNull(obj)) {
+                throw new IllegalArgumentException(objects.getClass().getSimpleName() + " contained a null object!");
+            }
+        }
+        return objects;
+    }
+
+    /**
+     *
+     * @param permission
+     * @param sender
+     * @return
+     */
+    public static boolean hasPermission(String permission, ISender sender) {
+        return sender.hasPermission(permission);
+    }
+
+}
