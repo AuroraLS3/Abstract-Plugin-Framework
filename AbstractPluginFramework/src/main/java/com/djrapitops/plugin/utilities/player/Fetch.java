@@ -97,7 +97,11 @@ public class Fetch<T extends IPlugin> {
         } else {
             throw new IllegalStateException("Can not get Player objecst without Bukkit or Bungee.");
         }
-        return Optional.of(p);
+        if (p != null) {
+            return Optional.of(p);
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**

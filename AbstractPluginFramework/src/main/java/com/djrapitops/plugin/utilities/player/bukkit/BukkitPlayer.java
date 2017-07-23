@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.djrapitops.plugin.utilities.player.bukkit;
 
 import com.djrapitops.plugin.BukkitPlugin;
 import com.djrapitops.plugin.IPlugin;
+import com.djrapitops.plugin.command.SenderType;
 import com.djrapitops.plugin.utilities.player.Gamemode;
 import com.djrapitops.plugin.utilities.player.IPlayer;
 import java.net.InetSocketAddress;
@@ -147,5 +143,30 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
         } catch (Throwable e) {
             plugin.getPluginLogger().toLog(this.getClass().getName(), e);
         }
+    }
+
+    @Override
+    public void sendMessage(String string) {
+        p.sendMessage(string);
+    }
+
+    @Override
+    public void sendMessage(String[] strings) {
+        p.sendMessage(strings);
+    }
+
+    @Override
+    public boolean hasPermission(String string) {
+        return p.hasPermission(string);
+    }
+
+    @Override
+    public SenderType getSenderType() {
+        return SenderType.PLAYER;
+    }
+
+    @Override
+    public Object getSender() {
+        return getWrappedPlayerClass();
     }
 }

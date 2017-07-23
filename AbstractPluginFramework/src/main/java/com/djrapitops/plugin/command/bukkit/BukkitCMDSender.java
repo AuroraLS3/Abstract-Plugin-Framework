@@ -2,6 +2,7 @@ package com.djrapitops.plugin.command.bukkit;
 
 import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.SenderType;
+import org.bukkit.ChatColor;
 import org.bukkit.block.CommandBlock;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,7 +25,24 @@ public class BukkitCMDSender implements ISender {
 
     @Override
     public void sendMessage(String string) {
-        cs.sendMessage(string);
+        if (!(cs instanceof Player)) {
+            cs.sendMessage(string);
+            return;
+        }
+        final int length = string.length();
+        if (length > 100) {
+            int i = 99;
+            while (i < length && string.charAt(i) != ' ') {
+                i++;
+            }
+            String shortened = string.substring(0, i);
+            String lastCols = ChatColor.getLastColors(string);
+            cs.sendMessage(shortened);
+            String leftover = lastCols + string.substring(i);
+            sendMessage(leftover);
+        } else {
+            cs.sendMessage(string);
+        }
     }
 
     @Override

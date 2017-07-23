@@ -98,7 +98,6 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
      */
     @Override
     public boolean onCommand(ISender sender, String commandLabel, String[] args) {
-        plugin.getPluginLogger().debug("Registered command with arguments: " + Arrays.toString(args));
         if (args.length < 1) {
             sendDefaultCommand(sender, commandLabel, args);
             return true;

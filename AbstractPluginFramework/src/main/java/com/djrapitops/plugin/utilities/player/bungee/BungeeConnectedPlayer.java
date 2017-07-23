@@ -1,12 +1,15 @@
 package com.djrapitops.plugin.utilities.player.bungee;
 
 import com.djrapitops.plugin.IPlugin;
+import com.djrapitops.plugin.command.SenderType;
 import com.djrapitops.plugin.utilities.player.Gamemode;
 import com.djrapitops.plugin.utilities.player.IPlayer;
 import java.net.InetSocketAddress;
 import java.util.UUID;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ConnectedPlayer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
  *
@@ -130,5 +133,33 @@ public class BungeeConnectedPlayer extends BungeeProxiedPlayer implements IPlaye
     @Override
     public long getRegistered() {
         return getFirstPlayed();
+    }
+
+    @Override
+    public void sendMessage(String string) {
+        ComponentBuilder c = new ComponentBuilder(string);
+        p.sendMessage(c.create());
+    }
+
+    @Override
+    public boolean hasPermission(String string) {
+        return p.hasPermission(string);
+    }
+
+    @Override
+    public void sendMessage(String[] strings) {
+        for (int i = 1; i < strings.length; i++) {
+            sendMessage(strings[i]);
+        }
+    }
+
+    @Override
+    public SenderType getSenderType() {
+        return p instanceof ConnectedPlayer ? SenderType.PLAYER : (p instanceof ProxiedPlayer ? SenderType.PROXY_PLAYER : SenderType.CONSOLE);
+    }
+
+    @Override
+    public Object getSender() {
+        return getWrappedPlayerClass();
     }
 }

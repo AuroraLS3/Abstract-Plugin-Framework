@@ -50,7 +50,7 @@ public class FormattingUtils {
      * @return
      */
     public static String removeLetters(String dataPoint) {
-        return dataPoint.replaceAll("[^\\d.]", "");
+        return dataPoint.replaceAll("[A-Za-z]", "");
     }
 
     /**
@@ -59,11 +59,22 @@ public class FormattingUtils {
      * @return
      */
     public static String removeNumbers(String dataPoint) {
-        for (char c : removeLetters(dataPoint).toCharArray()) {
-            dataPoint = dataPoint.replace(c + "", "");
-        }
-        dataPoint = dataPoint.replace(" ", "");
-        return dataPoint;
+        return dataPoint.replaceAll("[0-9]", "");
+    }
+
+    public static String removeSymbols(String dataPoint) {
+        return dataPoint.replaceAll("[^a-zA-Z0-9_\\s]", "");
+    }
+    public static String removeSymbolsButDot(String dataPoint) {
+        return dataPoint.replaceAll("[^a-zA-Z0-9_\\s\\.]", "");
+    }
+
+    public static String spaceWhitespace(String dataPoint) {
+        return dataPoint.replaceAll("[\\s]", " ");
+    }
+
+    public static String removeWhitespace(String dataPoint) {
+        return dataPoint.replaceAll("[\\s]", "");
     }
 
     /**
