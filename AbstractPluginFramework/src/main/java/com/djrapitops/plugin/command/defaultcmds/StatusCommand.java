@@ -6,15 +6,18 @@ import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
+import com.djrapitops.plugin.utilities.NotificationCenter;
 import com.djrapitops.plugin.utilities.status.ProcessStatus;
 import com.djrapitops.plugin.utilities.status.TaskStatus;
+
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * A Default Command for displaying plugin's task, process and benchmark status.
  *
- * @author Rsl1122
  * @param <T>
+ * @author Rsl1122
  * @since 2.0.0
  */
 public class StatusCommand<T extends IPlugin> extends SubCommand {
@@ -42,6 +45,17 @@ public class StatusCommand<T extends IPlugin> extends SubCommand {
                     .forEach(msg -> sender.sendMessage(msg));
             return true;
         }
+
+        NotificationCenter notificationCenter = plugin.getNotificationCenter();
+
+        List<String> notifications = notificationCenter.getNotifications();
+        if (!notifications.isEmpty()) {
+            sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Notifications: ");
+            for (String notification : notifications) {
+                sender.sendMessage("   " + notification.replace(plugin.getPrefix() + " ", ""));
+            }
+        }
+
 
         TaskStatus taskStatus = plugin.taskStatus();
         ProcessStatus processStatus = plugin.processStatus();

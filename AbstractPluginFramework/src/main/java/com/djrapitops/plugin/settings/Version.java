@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 import com.djrapitops.plugin.IPlugin;
+import com.djrapitops.plugin.api.Priority;
 import com.djrapitops.plugin.utilities.FormattingUtils;
 
 /**
@@ -30,7 +31,9 @@ public class Version {
             String currentVersion = instance.getVersion();
             String gitVersion = getGitVersion(instance);
             if (isNewVersionAvailable(currentVersion, gitVersion)) {
-                return "New Version (" + gitVersion + ") is availible at" + instance.getUpdateUrl();
+                String message = "New Version (" + gitVersion + ") is available at" + instance.getUpdateUrl();
+                instance.getNotificationCenter().addNotification(Priority.HIGH, message);
+                return message;
             } else {
                 return "You're running the latest version";
             }

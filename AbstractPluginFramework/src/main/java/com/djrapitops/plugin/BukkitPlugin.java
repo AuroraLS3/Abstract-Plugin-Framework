@@ -1,5 +1,6 @@
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.utilities.NotificationCenter;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.djrapitops.plugin.command.SubCommand;
@@ -38,8 +39,6 @@ import org.bukkit.plugin.messaging.Messenger;
  */
 public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin implements IPlugin {
 
-    final private String version = "2.0.0";
-
     private String updateCheckUrl = "";
     private String updateUrl = "";
     private String logPrefix = "[DefaultPrefix]";
@@ -52,6 +51,7 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
     private PluginLog log;
     private final RunnableFactory factory;
     private final Fetch<T> playerFetcher;
+    private final NotificationCenter<T> notificationCenter;
 
     public BukkitPlugin() {
         getDataFolder().mkdirs();
@@ -61,6 +61,7 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
         benchmark = new BenchUtil();
         factory = new RunnableFactory(this);
         playerFetcher = new Fetch(this);
+        notificationCenter = new NotificationCenter(this);
     }
 
     @Override
@@ -160,7 +161,7 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
 
     @Override
     public String getAPFVersion() {
-        return version;
+        return StaticHolder.getAPFVersion();
     }
 
     public void registerListener(Listener l) {
@@ -227,5 +228,10 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
         final Messenger m = getServer().getMessenger();
         m.registerIncomingPluginChannel(this, "BungeeCord", channel);
         m.registerOutgoingPluginChannel(this, "BungeeCord");
+    }
+
+    @Override
+    public NotificationCenter getNotificationCenter() {
+        return notificationCenter;
     }
 }

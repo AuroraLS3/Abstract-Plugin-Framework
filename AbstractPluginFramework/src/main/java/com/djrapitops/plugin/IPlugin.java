@@ -4,6 +4,7 @@ import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.utilities.BenchUtil;
+import com.djrapitops.plugin.utilities.NotificationCenter;
 import com.djrapitops.plugin.utilities.log.PluginLog;
 import com.djrapitops.plugin.utilities.player.Fetch;
 import com.djrapitops.plugin.utilities.status.ProcessStatus;
@@ -58,4 +59,6 @@ public interface IPlugin {
     public Fetch fetch();
     
     public void copyDefaultConfig(String header);
+
+    public NotificationCenter getNotificationCenter();
 }

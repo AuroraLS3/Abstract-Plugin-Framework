@@ -1,5 +1,6 @@
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.utilities.NotificationCenter;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import com.djrapitops.plugin.command.SubCommand;
@@ -13,23 +14,22 @@ import com.djrapitops.plugin.utilities.log.PluginLog;
 import com.djrapitops.plugin.utilities.player.Fetch;
 import com.djrapitops.plugin.utilities.status.ProcessStatus;
 import com.djrapitops.plugin.utilities.status.TaskStatus;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
 /**
- *
- * @author Rsl1122
  * @param <T>
+ * @author Rsl1122
  */
 public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implements IPlugin {
-
-    final private String version = "2.0.0";
 
     private String updateCheckUrl = "";
     private String updateUrl = "";
@@ -37,12 +37,24 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
     private String debugMode = "false";
     private ColorScheme colorScheme = new ColorScheme(ChatColor.WHITE, ChatColor.GRAY, ChatColor.DARK_GRAY);
 
-    private ProcessStatus<T> progressStat;
-    private TaskStatus<T> taskStat;
-    private BenchUtil benchmark;
+    private final ProcessStatus<T> progressStat;
+    private final TaskStatus<T> taskStat;
+    private final BenchUtil benchmark;
     private PluginLog log;
-    private RunnableFactory factory;
-    private Fetch<T> playerFetcher;
+    private final RunnableFactory factory;
+    private final Fetch<T> playerFetcher;
+    private final NotificationCenter<T> notificationCenter;
+
+    public BungeePlugin() {
+        getDataFolder().mkdirs();
+        log = new BungeeLog(this, debugMode, logPrefix);
+        progressStat = new ProcessStatus(this);
+        taskStat = new TaskStatus(this);
+        benchmark = new BenchUtil();
+        factory = new RunnableFactory(this);
+        playerFetcher = new Fetch(this);
+        notificationCenter = new NotificationCenter(this);
+    }
 
     @Override
     public abstract void onEnable();
@@ -52,15 +64,12 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
 
     @Override
     public void onEnableDefaultTasks() {
-        getDataFolder().mkdirs();
-        log = new BungeeLog(this, debugMode, logPrefix);
-        progressStat = new ProcessStatus(this);
-        taskStat = new TaskStatus(this);
-        benchmark = new BenchUtil();
-        factory = new RunnableFactory(this);
-        playerFetcher = new Fetch(this);
+        log.setDebugMode(debugMode);
+        log.setPrefix(logPrefix);
         logDebugHeader();
-        getPluginLogger().info(Version.checkVersion(this));
+        if (!updateCheckUrl.isEmpty()) {
+            getPluginLogger().info(Version.checkVersion(this));
+        }
     }
 
     private void logDebugHeader() {
@@ -143,7 +152,7 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
 
     @Override
     public String getAPFVersion() {
-        return version;
+        return StaticHolder.getAPFVersion();
     }
 
     public void registerListener(Listener l) {
@@ -221,5 +230,10 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
 
     public void saveConfig(Configuration config) throws IOException {
         ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, new File(getDataFolder(), "config.yml"));
+    }
+
+    @Override
+    public NotificationCenter getNotificationCenter() {
+        return notificationCenter;
     }
 }
