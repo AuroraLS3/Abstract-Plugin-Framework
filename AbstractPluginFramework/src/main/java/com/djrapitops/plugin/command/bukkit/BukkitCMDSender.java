@@ -34,8 +34,8 @@ public class BukkitCMDSender implements ISender {
             return;
         }
         final int length = string.length();
-        if (length > 100) {
-            int i = 99;
+        if (length > 60) {
+            int i = 59;
             while (i < length && string.charAt(i) != ' ') {
                 i++;
             }

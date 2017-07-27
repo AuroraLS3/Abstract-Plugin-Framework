@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class StaticHolder {
 
-    private static final String apfVersion = "2.0.0";
+    private static final String apfVersion = "2.0.1";
     private static final Map<Class, BukkitPlugin> INSTANCES_BUKKIT = new HashMap<>();
     private static final Map<Class, BungeePlugin> INSTANCES_BUNGEE = new HashMap<>();
     private static Class utilityProvider = null;
