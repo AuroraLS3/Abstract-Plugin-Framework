@@ -7,7 +7,7 @@ package com.djrapitops.plugin.settings;
  * @since 2.0.0
  */
 public enum DefaultMessages {
-    COMMAND_NO_PERMISSION("You do not have the required permmission."),
+    COMMAND_NO_PERMISSION("You do not have the required permission."),
     COMMAND_REQUIRES_ARGUMENTS("Command requires REPLACE0 argument(s):"),
     COMMAND_SENDER_NOT_PLAYER("This command can be only used as a player."),
     ARROWS_RIGHT("»"),
@@ -15,7 +15,7 @@ public enum DefaultMessages {
 
     private final String text;
 
-    private DefaultMessages(String text) {
+    DefaultMessages(String text) {
         this.text = text;
     }
 

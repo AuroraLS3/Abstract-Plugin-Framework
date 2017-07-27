@@ -19,7 +19,7 @@ public enum TimeAmount {
 
     private final long ms;
 
-    private TimeAmount(long ms) {
+    TimeAmount(long ms) {
         this.ms = ms;
     }
 

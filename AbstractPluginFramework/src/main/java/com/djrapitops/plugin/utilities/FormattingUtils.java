@@ -3,16 +3,15 @@ package com.djrapitops.plugin.utilities;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Date;
+
 import org.bukkit.Location;
 
 /**
- *
  * @author Rsl1122
  */
 public class FormattingUtils {
 
     /**
-     *
      * @param epochMs
      * @return
      */
@@ -54,7 +53,6 @@ public class FormattingUtils {
     }
 
     /**
-     *
      * @param dataPoint
      * @return
      */
@@ -65,6 +63,7 @@ public class FormattingUtils {
     public static String removeSymbols(String dataPoint) {
         return dataPoint.replaceAll("[^a-zA-Z0-9_\\s]", "");
     }
+
     public static String removeSymbolsButDot(String dataPoint) {
         return dataPoint.replaceAll("[^a-zA-Z0-9_\\s\\.]", "");
     }
@@ -92,15 +91,12 @@ public class FormattingUtils {
         int main = Integer.parseInt(versionArray[0]) * 10000;
         int major = Integer.parseInt(versionArray[1]) * 100;
         int minor = Integer.parseInt(versionArray[2]);
-        int versionNumber = main + major + minor;
-        return versionNumber;
+        return main + major + minor;
     }
 
     public static String[] removeFirstArgument(String... args) {
         String[] arguments = new String[args.length - 1];
-        for (int i = 1; i < args.length; i++) {
-            arguments[i - 1] = args[i];
-        }
+        System.arraycopy(args, 1, arguments, 0, args.length - 1);
         return arguments;
     }
 
@@ -136,7 +132,6 @@ public class FormattingUtils {
     }
 
     /**
-     *
      * @param d
      * @return
      */
@@ -146,7 +141,7 @@ public class FormattingUtils {
         return df.format(d);
     }
 
-    public static String collectionToStringNoBrackets(Collection<? extends Object> coll) {
+    public static <T> String collectionToStringNoBrackets(Collection<T> coll) {
         return coll.toString().replace("[", "").replace("]", "").replace("{", "").replace("}", "");
     }
 }

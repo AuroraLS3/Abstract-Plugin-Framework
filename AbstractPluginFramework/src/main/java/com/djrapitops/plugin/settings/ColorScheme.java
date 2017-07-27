@@ -15,11 +15,11 @@ public class ColorScheme {
     private final List<String> colors;
 
     public ColorScheme(org.bukkit.ChatColor... colors) {
-        this.colors = Arrays.stream(colors).map(c -> c.toString()).collect(Collectors.toList());
+        this.colors = Arrays.stream(colors).map(org.bukkit.ChatColor::toString).collect(Collectors.toList());
     }
 
     public ColorScheme(net.md_5.bungee.api.ChatColor... colors) {
-        this.colors = Arrays.stream(colors).map(c -> c.toString()).collect(Collectors.toList());
+        this.colors = Arrays.stream(colors).map(net.md_5.bungee.api.ChatColor::toString).collect(Collectors.toList());
     }
 
     public String getColor(int i) {

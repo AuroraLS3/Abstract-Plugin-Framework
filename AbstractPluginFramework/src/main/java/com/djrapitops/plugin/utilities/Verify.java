@@ -26,10 +26,7 @@ public class Verify {
      * @return false if null or file.exists()
      */
     public static boolean exists(File file) {
-        if (notNull(file)) {
-            return file.exists();
-        }
-        return false;
+        return notNull(file) && file.exists();
     }
 
     public static File existCheck(File file) throws IllegalArgumentException {
@@ -47,10 +44,7 @@ public class Verify {
      * @return true if null, string.isEmpty() if not
      */
     public static boolean isEmpty(String string) {
-        if (notNull(string)) {
-            return string.isEmpty();
-        }
-        return true;
+        return !notNull(string) || string.isEmpty();
     }
 
     /**
@@ -61,10 +55,7 @@ public class Verify {
      * @return true if null, coll.isEmpty() if not
      */
     public static <T> boolean isEmpty(Collection<T> coll) {
-        if (notNull(coll)) {
-            return coll.isEmpty();
-        }
-        return true;
+        return !notNull(coll) || coll.isEmpty();
     }
 
     /**
@@ -76,10 +67,7 @@ public class Verify {
      * @return true if null, map.isEmpty() if not
      */
     public static <T, K> boolean isEmpty(Map<T, K> map) {
-        if (notNull(map)) {
-            return map.isEmpty();
-        }
-        return true;
+        return !notNull(map) || map.isEmpty();
     }
 
     /**
@@ -91,10 +79,7 @@ public class Verify {
      * @return false if collection is null or Stream#anyMatch(Verify.equals)
      */
     public static <T> boolean contains(T lookFor, Collection<T> coll) {
-        if (!isEmpty(coll)) {
-            return contains(lookFor, coll.stream());
-        }
-        return false;
+        return !isEmpty(coll) && contains(lookFor, coll.stream());
     }
 
     /**
@@ -117,6 +102,7 @@ public class Verify {
      * @param objects objects
      * @return Does the array contain the object.
      */
+    @SafeVarargs
     public static <T> boolean contains(T lookFor, T... objects) {
         return contains(lookFor, Arrays.stream(objects));
     }
@@ -139,10 +125,7 @@ public class Verify {
      * @return
      */
     public static boolean equalsIgnoreCase(String one, String two) {
-        if (notNull(one)) {
-            return one.equalsIgnoreCase(two);
-        }
-        return false;
+        return notNull(one) && one.equalsIgnoreCase(two);
     }
 
     /**
@@ -154,17 +137,11 @@ public class Verify {
      * @return
      */
     public static <T, K> boolean equals(T object, K object2) {
-        if (notNull(object)) {
-            return object.equals(object2);
-        }
-        return false;
+        return notNull(object) && object.equals(object2);
     }
 
     public static boolean isValid(SelfValidating validate) {
-        if (notNull(validate)) {
-            return validate.isValid();
-        }
-        return false;
+        return notNull(validate) && validate.isValid();
     }
     
     public static boolean notNull(Object... object) {
@@ -194,6 +171,7 @@ public class Verify {
         return object;
     }
 
+    @SafeVarargs
     public static <T> T[] nullCheck(T... objects) throws IllegalArgumentException {
         for (T obj : objects) {
             if (!notNull(obj)) {

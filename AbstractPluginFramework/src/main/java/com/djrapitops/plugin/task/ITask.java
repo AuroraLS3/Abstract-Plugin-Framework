@@ -11,11 +11,11 @@ package com.djrapitops.plugin.task;
  */
 public interface ITask<T> {
 
-    public int getTaskId();
+    int getTaskId();
 
-    public boolean isSync();
+    boolean isSync();
 
-    public void cancel();
+    void cancel();
     
-    public T getWrappedTask();
+    T getWrappedTask();
 }

@@ -46,11 +46,7 @@ public class TaskStatus<T extends IPlugin> {
     }
 
     public void cancelAllKnownTasks() {
-        tasks.keySet().forEach((name) -> {
-            tasks.get(name).forEach((task) -> {
-                task.cancel();
-            });
-        });
+        tasks.keySet().forEach((name) -> tasks.get(name).forEach(IRunnable::cancel));
     }
 
     public void taskCancelled(String name, int id) {
@@ -81,10 +77,7 @@ public class TaskStatus<T extends IPlugin> {
             info.addAll(tInfo);
         }
         Optional<TaskInfo> task = info.stream().filter(i -> i.getId() == id).findFirst();
-        if (task.isPresent()) {
-            return task.get().getName();
-        }
-        return "Unknown";
+        return task.map(TaskInfo::getName).orElse("Unknown");
     }
 
     public String[] getTasks() {
@@ -102,6 +95,6 @@ public class TaskStatus<T extends IPlugin> {
     }
 
     public int getTaskCount() {
-        return new HashSet<>(taskInfo.values()).stream().map(l -> l.size()).mapToInt(i -> i).sum();
+        return new HashSet<>(taskInfo.values()).stream().map(List::size).mapToInt(i -> i).sum();
     }
 }

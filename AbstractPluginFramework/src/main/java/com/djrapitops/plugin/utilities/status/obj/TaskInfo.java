@@ -70,19 +70,10 @@ public class TaskInfo {
             return false;
         }
         final TaskInfo other = (TaskInfo) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (!Objects.equals(this.runType, other.runType)) {
-            return false;
-        }
-        if (!Objects.equals(this.status, other.status)) {
-            return false;
-        }
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        return true;
+        return this.id == other.id
+                && Objects.equals(this.runType, other.runType)
+                && Objects.equals(this.status, other.status)
+                && Objects.equals(this.name, other.name);
     }
 
     @Override

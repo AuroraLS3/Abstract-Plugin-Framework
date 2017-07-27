@@ -42,7 +42,7 @@ public class StatusCommand<T extends IPlugin> extends SubCommand {
             sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Benchmark Averages: ");
             Arrays.stream(plugin.benchmark().getTimings().getTimings())
                     .map(benchmark -> tColor + "   " + benchmark)
-                    .forEach(msg -> sender.sendMessage(msg));
+                    .forEach(sender::sendMessage);
             return true;
         }
 
@@ -63,11 +63,11 @@ public class StatusCommand<T extends IPlugin> extends SubCommand {
         sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Processes: ");
         Arrays.stream(processStatus.getProcesses())
                 .map(process -> tColor + "   " + process)
-                .forEach(msg -> sender.sendMessage(msg));
+                .forEach(sender::sendMessage);
         sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Tasks: ");
         Arrays.stream(taskStatus.getTasks())
                 .map(process -> tColor + "   " + process)
-                .forEach(msg -> sender.sendMessage(msg));
+                .forEach(sender::sendMessage);
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse());
         return true;
     }

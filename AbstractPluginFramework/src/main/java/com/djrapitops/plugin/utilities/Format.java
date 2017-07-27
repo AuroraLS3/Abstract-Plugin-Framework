@@ -52,7 +52,7 @@ public class Format {
         return this;
     }
 
-    public Format spaceWhatespace() {
+    public Format spaceWhitespace() {
         string = FormattingUtils.spaceWhitespace(string);
         return this;
     }
@@ -108,10 +108,7 @@ public class Format {
             return false;
         }
         final Format other = (Format) obj;
-        if (!Objects.equals(this.string, other.string)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.string, other.string);
     }
     
     

@@ -16,49 +16,49 @@ import com.djrapitops.plugin.utilities.status.TaskStatus;
  */
 public interface IPlugin {
 
-    public void onEnable();
+    void onEnable();
 
-    public void onDisable();
+    void onDisable();
 
-    public void onEnableDefaultTasks();
+    void onEnableDefaultTasks();
 
-    public ProcessStatus processStatus();
+    ProcessStatus processStatus();
 
-    public TaskStatus taskStatus();
+    TaskStatus taskStatus();
 
-    public String getVersion();
+    String getVersion();
 
-    public String getUpdateUrl();
+    String getUpdateUrl();
 
-    public String getUpdateCheckUrl();
+    String getUpdateCheckUrl();
 
-    public PluginLog getPluginLogger();
+    PluginLog getPluginLogger();
 
-    public void setLogPrefix(String logPrefix);
+    void setLogPrefix(String logPrefix);
 
-    public void setDebugMode(String debugMode);
+    void setDebugMode(String debugMode);
 
-    public String getPrefix();
+    String getPrefix();
 
-    public void setLog(PluginLog log);
+    void setLog(PluginLog log);
 
-    public ColorScheme getColorScheme();
+    ColorScheme getColorScheme();
 
-    public void setColorScheme(ColorScheme colorScheme);
+    void setColorScheme(ColorScheme colorScheme);
 
-    public String getAPFVersion();
+    String getAPFVersion();
 
-    public void registerCommand(SubCommand subCmd);
+    void registerCommand(SubCommand subCmd);
 
-    public BenchUtil benchmark();
+    BenchUtil benchmark();
 
-    public RunnableFactory getRunnableFactory();
+    RunnableFactory getRunnableFactory();
     
-    public void disablePlugin();
+    void disablePlugin();
     
-    public Fetch fetch();
+    Fetch fetch();
     
-    public void copyDefaultConfig(String header);
+    void copyDefaultConfig(String header);
 
-    public NotificationCenter getNotificationCenter();
+    NotificationCenter getNotificationCenter();
 }

@@ -5,7 +5,6 @@ import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
 import com.djrapitops.plugin.utilities.FormattingUtils;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -130,9 +129,7 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
 
         String[] realArgs = new String[args.length - 1];
 
-        for (int i = 1; i < args.length; i++) {
-            realArgs[i - 1] = args[i];
-        }
+        System.arraycopy(args, 1, realArgs, 0, args.length - 1);
 
         command.onCommand(sender, commandLabel, realArgs);
         return true;
@@ -176,7 +173,7 @@ class HelpCommand<T extends IPlugin> extends SubCommand {
                 .filter(cmd -> cmd.hasPermission(sender))
                 .filter(cmd -> !(isConsole && cmd.getCommandType() == CommandType.PLAYER))
                 .map(cmd -> tColor + " " + DefaultMessages.BALL.toString() + oColor + " /" + command.getHelpCmd() + " " + cmd.getFirstName() + " " + cmd.getArguments() + tColor + " - " + cmd.getUsage())
-                .forEach(msg -> sender.sendMessage(msg));
+                .forEach(sender::sendMessage);
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse());
         return true;
     }

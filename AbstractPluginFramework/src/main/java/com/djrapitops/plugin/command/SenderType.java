@@ -12,5 +12,5 @@ package com.djrapitops.plugin.command;
  * @since 2.0.0
  */
 public enum SenderType {
-    PLAYER, PROXY_PLAYER, CONSOLE, CMD_BLOCK;
+    PLAYER, PROXY_PLAYER, CONSOLE, CMD_BLOCK
 }

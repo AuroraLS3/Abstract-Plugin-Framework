@@ -4,15 +4,16 @@ import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.command.SenderType;
 import com.djrapitops.plugin.utilities.player.Gamemode;
 import com.djrapitops.plugin.utilities.player.IPlayer;
+
 import java.net.InetSocketAddress;
 import java.util.UUID;
+
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ConnectedPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
- *
  * @author Rsl1122
  */
 public class BungeeConnectedPlayer extends BungeeProxiedPlayer implements IPlayer {
@@ -151,6 +152,15 @@ public class BungeeConnectedPlayer extends BungeeProxiedPlayer implements IPlaye
         for (int i = 1; i < strings.length; i++) {
             sendMessage(strings[i]);
         }
+    }
+
+    @Override
+    public void sendLink(String pretext, String linkMsg, String url) {
+        TextComponent message = new TextComponent(pretext);
+        TextComponent link = new TextComponent(linkMsg);
+        link.setUnderlined(true);
+        message.addExtra(link);
+        p.sendMessage(message);
     }
 
     @Override

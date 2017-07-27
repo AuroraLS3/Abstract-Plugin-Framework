@@ -29,24 +29,22 @@ public class RunnableFactory<T extends IPlugin> {
 
     public IRunnable createNew(String name, AbsRunnable runnable) {
         if (Compatibility.isBukkitAvailable()) {
-            AbsBukkitRunnable newRunnable = new AbsBukkitRunnable(name, plugin) {
+
+            return new AbsBukkitRunnable(name, plugin) {
                 @Override
                 public void run() {
                     runnable.setCancellable(this);
                     runnable.run();
                 }
             };
-            
-            return newRunnable;
         } else if (Compatibility.isBungeeAvailable()) {
-            AbsBungeeRunnable newRunnable = new AbsBungeeRunnable(name, plugin) {
+            return new AbsBungeeRunnable(name, plugin) {
                 @Override
                 public void run() {
                     runnable.setCancellable(this);
                     runnable.run();
                 }
             };
-            return newRunnable;
         } else {
             // TODO new Thread runnable.
             return null;

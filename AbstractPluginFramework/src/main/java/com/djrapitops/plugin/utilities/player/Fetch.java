@@ -66,11 +66,8 @@ public class Fetch<T extends IPlugin> {
     public boolean hasPlayedBefore(UUID uuid) {
         if (Compatibility.isBukkitAvailable()) {
             return ((BukkitPlugin) plugin).getServer().getOfflinePlayer(uuid).hasPlayedBefore();
-        } else if (Compatibility.isBungeeAvailable()) {
-            return isOnline(uuid);
-        } else {
-            return false;
-        }
+        } else
+            return Compatibility.isBungeeAvailable() && isOnline(uuid);
     }
 
     /**
@@ -95,7 +92,7 @@ public class Fetch<T extends IPlugin> {
             } catch (Throwable e) {
             }
         } else {
-            throw new IllegalStateException("Can not get Player objecst without Bukkit or Bungee.");
+            throw new IllegalStateException("Can not get Player objects without Bukkit or Bungee.");
         }
         if (p != null) {
             return Optional.of(p);
@@ -127,7 +124,7 @@ public class Fetch<T extends IPlugin> {
                 return null;
             }
         } else {
-            throw new IllegalStateException("Can not get Player objecst without Bukkit or Bungee.");
+            throw new IllegalStateException("Can not get Player objects without Bukkit or Bungee.");
         }
     }
 
@@ -146,7 +143,7 @@ public class Fetch<T extends IPlugin> {
     public List<IPlayer> getOnlinePlayers() {
         if (Compatibility.isBukkitAvailable()) {
             return ((BukkitPlugin) plugin).getServer().getOnlinePlayers().stream()
-                    .map(p -> wrapBukkit(p))
+                    .map(Fetch::wrapBukkit)
                     .collect(Collectors.toList());
         } else if (Compatibility.isBungeeAvailable()) {
             return ((BungeePlugin) plugin).getProxy().getPlayers().stream()
@@ -154,7 +151,7 @@ public class Fetch<T extends IPlugin> {
                     .map(p -> wrapBungee((net.md_5.bungee.api.connection.ConnectedPlayer) p))
                     .collect(Collectors.toList());
         } else {
-            throw new IllegalStateException("Can not get Player objecst without Bukkit or Bungee.");
+            throw new IllegalStateException("Can not get Player objects without Bukkit or Bungee.");
         }
     }
 
@@ -173,15 +170,15 @@ public class Fetch<T extends IPlugin> {
     public List<IOfflinePlayer> getOfflinePlayers() {
         if (Compatibility.isBukkitAvailable()) {
             return Arrays.stream(((BukkitPlugin) plugin).getServer().getOfflinePlayers())
-                    .map(p -> wrapBukkit(p))
+                    .map(Fetch::wrapBukkit)
                     .collect(Collectors.toList());
         } else if (Compatibility.isBungeeAvailable()) {
             return ((BungeePlugin) plugin).getProxy().getPlayers().stream()
                     .filter(p -> p != null && p.isConnected())
-                    .map(p -> wrapBungee(p))
+                    .map(Fetch::wrapBungee)
                     .collect(Collectors.toList());
         } else {
-            throw new IllegalStateException("Can not get Player objecst without Bukkit or Bungee.");
+            throw new IllegalStateException("Can not get Player objects without Bukkit or Bungee.");
         }
     }
 
@@ -300,7 +297,7 @@ public class Fetch<T extends IPlugin> {
         if (Compatibility.isBukkitAvailable() || Compatibility.isBungeeAvailable()) {
             return StaticHolder.getInstance(c).fetch();
         } else {
-            throw new IllegalStateException("Can not get Player objecst without Bukkit or Bungee.");
+            throw new IllegalStateException("Can not get Player objects without Bukkit or Bungee.");
         }
     }
 

@@ -13,31 +13,31 @@ import java.util.UUID;
  */
 public interface IOfflinePlayer {
 
-    public String getName();
+    String getName();
 
-    public default UUID getUuid() {
+    default UUID getUuid() {
         return getUniqueId();
     }
 
-    public UUID getUniqueId();
+    UUID getUniqueId();
 
-    public abstract boolean isBanned();
+    boolean isBanned();
 
-    public abstract boolean isWhitelisted();
+    boolean isWhitelisted();
 
-    public abstract boolean isOnline();
+    boolean isOnline();
 
-    public abstract long getLastPlayed();
+    long getLastPlayed();
 
-    public abstract boolean isOp();
+    boolean isOp();
 
-    public long getFirstPlayed();
+    long getFirstPlayed();
 
-    public abstract Object getWrappedPlayerClass();
+    Object getWrappedPlayerClass();
 
-    public default long getRegistered() {
+    default long getRegistered() {
         return getFirstPlayed();
     }
     
-    public boolean hasPlayedBefore();
+    boolean hasPlayedBefore();
 }

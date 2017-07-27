@@ -17,7 +17,7 @@ public enum Gamemode {
 
     private final int number;
 
-    private Gamemode(int number) {
+    Gamemode(int number) {
         this.number = number;
     }
 

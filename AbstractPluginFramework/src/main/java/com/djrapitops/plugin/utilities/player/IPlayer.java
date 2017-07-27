@@ -11,73 +11,73 @@ import java.util.UUID;
  */
 public interface IPlayer extends IOfflinePlayer, ISender {
 
-    public String getDisplayName();
+    String getDisplayName();
 
-    public String getPlayerListName();
+    String getPlayerListName();
 
-    public InetSocketAddress getAddress();
+    InetSocketAddress getAddress();
 
-    public void sendRawMessage(String string);
+    void sendRawMessage(String string);
 
-    public void chat(String string);
+    void chat(String string);
 
-    public boolean performCommand(String string);
+    boolean performCommand(String string);
 
-    public boolean isSneaking();
+    boolean isSneaking();
 
-    public boolean isSprinting();
+    boolean isSprinting();
 
-    public boolean isSleepingIgnored();
+    boolean isSleepingIgnored();
 
-    public void giveExp(int i);
+    void giveExp(int i);
 
-    public void giveExpLevels(int i);
+    void giveExpLevels(int i);
 
-    public float getExp();
+    float getExp();
 
-    public int getLevel();
+    int getLevel();
 
-    public int getTotalExperience();
+    int getTotalExperience();
 
-    public boolean getAllowFlight();
+    boolean getAllowFlight();
 
-    public void setAllowFlight(boolean bln);
+    void setAllowFlight(boolean bln);
 
-    public boolean isFlying();
+    boolean isFlying();
 
-    public void setFlying(boolean bln);
+    void setFlying(boolean bln);
 
-    public String getName();
+    String getName();
 
-    public UUID getUuid();
+    UUID getUuid();
 
-    public boolean isBanned();
+    boolean isBanned();
 
-    public boolean isWhitelisted();
+    boolean isWhitelisted();
 
-    public boolean isOnline();
+    boolean isOnline();
 
-    public long getLastPlayed();
+    long getLastPlayed();
 
-    public boolean isOp();
+    boolean isOp();
 
-    public long getFirstPlayed();
+    long getFirstPlayed();
 
-    public abstract Object getWrappedPlayerClass();
+    Object getWrappedPlayerClass();
 
-    public long getRegistered();
+    long getRegistered();
 
-    public Gamemode getGamemode();
+    Gamemode getGamemode();
 
     @Deprecated
-    public default Gamemode getGameMode() {
+    default Gamemode getGameMode() {
         return getGamemode();
     }
 
     @Deprecated
-    public default UUID getUniqueId() {
+    default UUID getUniqueId() {
         return getUuid();
     }
 
-    public void sendPluginMessage(IPlugin plugin, String channel, byte[] bytes);
+    void sendPluginMessage(IPlugin plugin, String channel, byte[] bytes);
 }

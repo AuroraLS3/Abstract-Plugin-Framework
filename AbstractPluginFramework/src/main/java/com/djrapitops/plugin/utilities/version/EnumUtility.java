@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -44,16 +45,15 @@ public class EnumUtility {
     }
 
     private static List<String> getWantedNames(String[] names) {
-        List<String> materialNames = Arrays.stream(names)
-                .filter(s -> s != null)
-                .map(name -> name.toUpperCase())
+        return Arrays.stream(names)
+                .filter(Objects::nonNull)
+                .map(String::toUpperCase)
                 .collect(Collectors.toList());
-        return materialNames;
     }
 
     private static <T> List<T> getSupportedValues(T[] values, List<String> materialNames) {
-        List<T> supportedValues = Arrays.stream(values)
-                .filter(obj -> obj != null)
+        return Arrays.stream(values)
+                .filter(Objects::nonNull)
                 .filter(obj -> {
                     try {
                         String name = (String) obj.getClass().getMethod("name").invoke(obj);
@@ -63,6 +63,5 @@ public class EnumUtility {
                     }
                 })
                 .collect(Collectors.toList());
-        return supportedValues;
     }
 }

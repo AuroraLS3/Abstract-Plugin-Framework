@@ -15,11 +15,6 @@ import com.djrapitops.plugin.utilities.FormattingUtils;
 public class Version {
 
     /**
-     * Used to get the current time as milliseconds.
-     *
-     * @return Epoch ms.
-     */
-    /**
      * Checks the version and returns response String.
      *
      * @param <T>

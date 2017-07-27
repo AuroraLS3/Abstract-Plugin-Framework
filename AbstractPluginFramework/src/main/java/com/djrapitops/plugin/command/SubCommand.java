@@ -41,13 +41,9 @@ public abstract class SubCommand {
     }
 
     public boolean hasPermission(ISender sender) {
-        if (permission.isEmpty()) {
-            return true;
-        }
-        if (!CommandUtils.isPlayer(sender)) {
-            return true;
-        }
-        return sender.hasPermission(permission);
+        return permission.isEmpty()
+                || !CommandUtils.isPlayer(sender)
+                || sender.hasPermission(permission);
     }
 
     public String getName() {

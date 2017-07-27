@@ -8,5 +8,5 @@ package com.djrapitops.plugin.api;
  */
 public interface SelfValidating {
 
-    public boolean isValid();
+    boolean isValid();
 }

@@ -12,21 +12,21 @@ package com.djrapitops.plugin.task;
  */
 public interface IRunnable<T> {
 
-    public String getTaskName();
+    String getTaskName();
 
-    public void cancel();
+    void cancel();
 
-    public int getTaskId();
+    int getTaskId();
 
-    public ITask runTask();
+    ITask runTask();
 
-    public ITask runTaskAsynchronously();
+    ITask runTaskAsynchronously();
 
-    public ITask runTaskLater(long delay);
+    ITask runTaskLater(long delay);
 
-    public ITask runTaskLaterAsynchronously(long delay);
+    ITask runTaskLaterAsynchronously(long delay);
 
-    public ITask runTaskTimer(long delay, long period);
+    ITask runTaskTimer(long delay, long period);
 
-    public ITask runTaskTimerAsynchronously(long delay, long period);
+    ITask runTaskTimerAsynchronously(long delay, long period);
 }
