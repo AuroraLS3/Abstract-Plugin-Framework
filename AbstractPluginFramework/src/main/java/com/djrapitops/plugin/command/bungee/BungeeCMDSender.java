@@ -39,8 +39,8 @@ public class BungeeCMDSender implements ISender {
         TextComponent message = new TextComponent(pretext);
         TextComponent link = new TextComponent(linkMsg);
         link.setUnderlined(true);
-        link.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
         message.addExtra(link);
+        message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
         cs.sendMessage(message);
     }
 
