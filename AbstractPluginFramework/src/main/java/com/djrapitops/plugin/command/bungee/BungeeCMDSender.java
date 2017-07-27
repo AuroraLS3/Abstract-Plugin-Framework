@@ -4,6 +4,7 @@ import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.SenderType;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ConnectedPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -30,6 +31,15 @@ public class BungeeCMDSender implements ISender {
     public void sendMessage(String string) {
         ComponentBuilder c = new ComponentBuilder(string);
         cs.sendMessage(c.create());
+    }
+
+    @Override
+    public void sendLink(String pretext, String linkMsg, String url) {
+        TextComponent message = new TextComponent(pretext);
+        TextComponent link = new TextComponent(linkMsg);
+        link.setUnderlined(true);
+        message.addExtra(link);
+        cs.sendMessage(message);
     }
 
     @Override

@@ -2,6 +2,10 @@ package com.djrapitops.plugin.command.bukkit;
 
 import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.SenderType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.block.CommandBlock;
 import org.bukkit.command.CommandSender;
@@ -48,6 +52,20 @@ public class BukkitCMDSender implements ISender {
     @Override
     public void sendMessage(String[] strings) {
         cs.sendMessage(strings);
+    }
+
+    @Override
+    public void sendLink(String pretext, String linkMsg, String url) {
+        TextComponent message = new TextComponent(pretext);
+        TextComponent link = new TextComponent(linkMsg);
+        link.setUnderlined(true);
+        message.addExtra(link);
+        cs.spigot().sendMessage(message);
+    }
+
+    @Override
+    public void sendLink(String message, String url) {
+
     }
 
     @Override

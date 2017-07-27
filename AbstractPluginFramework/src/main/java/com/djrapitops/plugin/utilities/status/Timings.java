@@ -21,16 +21,16 @@ public class Timings {
     }
 
     public void markExecution(String benchmark, long time) {
-        if (!avgTimings.containsKey(benchmark)) {
-            avgTimings.put(benchmark, new Benchmark());
-        }
-        avgTimings.get(benchmark).addBenchmark(time);
+        avgTimings.computeIfAbsent(benchmark, computedBench -> new Benchmark())
+                .addBenchmark(time);
     }
 
     public String[] getTimings() {
         String[] states = new String[avgTimings.size()];
         int i = 0;
-        List<String> msgs = avgTimings.keySet().stream().map(bench -> bench + ": " + avgTimings.get(bench).getAverage() + "ms ").collect(Collectors.toList());
+        List<String> msgs = avgTimings.keySet().stream()
+                .map(bench -> bench + ": " + avgTimings.get(bench).getAverage() + "ms ")
+                .collect(Collectors.toList());
         Collections.sort(msgs);
         for (String msg : msgs) {
             states[i] = msg;

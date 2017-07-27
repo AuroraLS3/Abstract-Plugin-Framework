@@ -8,17 +8,23 @@ package com.djrapitops.plugin.command;
  */
 public interface ISender {
 
-    public void sendMessage(String string);
+    void sendMessage(String string);
 
-    public void sendMessage(String[] strings);
+    void sendMessage(String[] strings);
 
-    public String getName();
+    void sendLink(String pretext, String message, String url);
 
-    public boolean hasPermission(String string);
+    default void sendLink(String message, String url) {
+        sendLink("", message, url);
+    }
 
-    public boolean isOp();
+    String getName();
 
-    public SenderType getSenderType();
+    boolean hasPermission(String string);
 
-    public Object getSender();
+    boolean isOp();
+
+    SenderType getSenderType();
+
+    Object getSender();
 }
