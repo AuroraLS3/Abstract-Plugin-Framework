@@ -3,6 +3,7 @@ package com.djrapitops.plugin.command.bungee;
 import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.SenderType;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ConnectedPlayer;
@@ -38,6 +39,7 @@ public class BungeeCMDSender implements ISender {
         TextComponent message = new TextComponent(pretext);
         TextComponent link = new TextComponent(linkMsg);
         link.setUnderlined(true);
+        link.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
         message.addExtra(link);
         cs.sendMessage(message);
     }
