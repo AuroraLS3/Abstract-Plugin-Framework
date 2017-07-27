@@ -3,14 +3,16 @@ package com.djrapitops.plugin.utilities.player.bukkit;
 import com.djrapitops.plugin.BukkitPlugin;
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.command.SenderType;
+import com.djrapitops.plugin.command.bukkit.BukkitCMDSender;
 import com.djrapitops.plugin.utilities.player.Gamemode;
 import com.djrapitops.plugin.utilities.player.IPlayer;
+
 import java.net.InetSocketAddress;
 import java.util.UUID;
+
 import org.bukkit.entity.Player;
 
 /**
- *
  * @author Rsl1122
  */
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
@@ -146,13 +148,18 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     }
 
     @Override
+    public void sendLink(String pretext, String message, String url) {
+        new BukkitCMDSender((Player) this.getWrappedPlayerClass()).sendLink(pretext, message, url);
+    }
+
+    @Override
     public void sendMessage(String string) {
-        p.sendMessage(string);
+        new BukkitCMDSender((Player) this.getWrappedPlayerClass()).sendMessage(string);
     }
 
     @Override
     public void sendMessage(String[] strings) {
-        p.sendMessage(strings);
+        new BukkitCMDSender((Player) this.getWrappedPlayerClass()).sendMessage(strings);
     }
 
     @Override

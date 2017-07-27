@@ -2,6 +2,7 @@ package com.djrapitops.plugin.utilities.player.bungee;
 
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.command.SenderType;
+import com.djrapitops.plugin.command.bungee.BungeeCMDSender;
 import com.djrapitops.plugin.utilities.player.Gamemode;
 import com.djrapitops.plugin.utilities.player.IPlayer;
 
@@ -156,11 +157,12 @@ public class BungeeConnectedPlayer extends BungeeProxiedPlayer implements IPlaye
 
     @Override
     public void sendLink(String pretext, String linkMsg, String url) {
-        TextComponent message = new TextComponent(pretext);
-        TextComponent link = new TextComponent(linkMsg);
-        link.setUnderlined(true);
-        message.addExtra(link);
-        p.sendMessage(message);
+        new BungeeCMDSender((ConnectedPlayer) this.getWrappedPlayerClass()).sendLink(pretext, linkMsg, url);
+    }
+
+    @Override
+    public void sendLink(String message, String url) {
+        sendLink("", message, url);
     }
 
     @Override

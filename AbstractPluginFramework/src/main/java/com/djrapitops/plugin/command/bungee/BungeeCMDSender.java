@@ -43,6 +43,11 @@ public class BungeeCMDSender implements ISender {
     }
 
     @Override
+    public void sendLink(String linkMsg, String url) {
+        sendLink("", linkMsg, url);
+    }
+
+    @Override
     public boolean hasPermission(String string) {
         return cs.hasPermission(string);
     }

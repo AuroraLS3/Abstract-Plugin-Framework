@@ -62,7 +62,7 @@ public class BukkitCMDSender implements ISender {
 
     @Override
     public void sendLink(String message, String url) {
-
+        sendLink("", message, url);
     }
 
     @Override
