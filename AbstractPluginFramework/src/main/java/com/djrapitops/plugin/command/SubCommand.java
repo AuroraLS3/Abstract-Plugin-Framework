@@ -13,6 +13,7 @@ public abstract class SubCommand {
     final private String permission;
     final private String usage;
     final private String arguments;
+    private String[] inDepthHelp;
 
     public SubCommand(String name, CommandType type, String permission, String usage, String arguments) {
         commandType = type;
@@ -69,4 +70,15 @@ public abstract class SubCommand {
         return arguments;
     }
 
+    public String[] getInDepthHelp() {
+        if (inDepthHelp != null) {
+            return inDepthHelp;
+        } else {
+            return new String[]{usage};
+        }
+    }
+
+    public void setInDepthHelp(String[] inDepthHelp) {
+        this.inDepthHelp = inDepthHelp;
+    }
 }

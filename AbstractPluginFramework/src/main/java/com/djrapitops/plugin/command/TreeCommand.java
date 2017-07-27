@@ -4,16 +4,18 @@ import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
 import com.djrapitops.plugin.utilities.FormattingUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 
 /**
  * Abstract class for any command that has multiple subcommands.
- * 
- * @author Rsl1122
+ *
  * @param <T> IPlugin implementation type.
+ * @author Rsl1122
  * @since 2.0.0
  */
 public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
@@ -27,7 +29,7 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
     /**
      * Class Constructor.
      *
-     * @param plugin Current instance
+     * @param plugin     Current instance
      * @param values
      * @param helpPrefix
      */
@@ -90,9 +92,9 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
      * Checks if Sender has rights to run the command and executes matching
      * subcommand.
      *
-     * @param sender source of the command.
+     * @param sender       source of the command.
      * @param commandLabel label.
-     * @param args arguments of the command
+     * @param args         arguments of the command
      * @return true
      */
     @Override
@@ -127,8 +129,12 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
             return true;
         }
 
-        String[] realArgs = new String[args.length - 1];
+        if (args[args.length - 1].equals("?")) {
+            sender.sendMessage(command.getInDepthHelp());
+            return true;
+        }
 
+        String[] realArgs = new String[args.length - 1];
         System.arraycopy(args, 1, realArgs, 0, args.length - 1);
 
         command.onCommand(sender, commandLabel, realArgs);
@@ -148,7 +154,7 @@ class HelpCommand<T extends IPlugin> extends SubCommand {
     /**
      * Subcommand Constructor.
      *
-     * @param plugin Current instance of Plan
+     * @param plugin  Current instance of Plan
      * @param command Current instance of PlanCommand
      */
     public HelpCommand(T plugin, TreeCommand command) {
@@ -163,6 +169,7 @@ class HelpCommand<T extends IPlugin> extends SubCommand {
         boolean isConsole = !CommandUtils.isPlayer(sender);
         ColorScheme cs = plugin.getColorScheme();
         String oColor = cs.getMainColor();
+        String sColor = cs.getSecondaryColor();
         String tColor = cs.getTertiaryColor();
 
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse() + oColor + " " + StringUtils.capitalize(command.getFirstName()) + " Help");
@@ -174,6 +181,7 @@ class HelpCommand<T extends IPlugin> extends SubCommand {
                 .filter(cmd -> !(isConsole && cmd.getCommandType() == CommandType.PLAYER))
                 .map(cmd -> tColor + " " + DefaultMessages.BALL.toString() + oColor + " /" + command.getHelpCmd() + " " + cmd.getFirstName() + " " + cmd.getArguments() + tColor + " - " + cmd.getUsage())
                 .forEach(sender::sendMessage);
+        sender.sendMessage(sColor+" Add ? to the end of the command for more help");
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse());
         return true;
     }
