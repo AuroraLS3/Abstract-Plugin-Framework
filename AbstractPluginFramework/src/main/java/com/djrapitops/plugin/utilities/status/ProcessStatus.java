@@ -13,16 +13,19 @@ import com.djrapitops.plugin.utilities.FormattingUtils;
  * @author Rsl1122
  * @param <T>
  */
+@Deprecated
 public class ProcessStatus<T extends IPlugin> {
 
     private final T plugin;
     private final Map<String, String> status;
 
+    @Deprecated
     public ProcessStatus(T plugin) {
         status = new HashMap<>();
         this.plugin = plugin;
     }
 
+    @Deprecated
     public String getStatus(String process) {
         final String state = status.get(process);
         if (state == null) {
@@ -31,17 +34,20 @@ public class ProcessStatus<T extends IPlugin> {
         return state;
     }
 
+    @Deprecated
     public void setStatus(String process, String state) {
         status.put(process, state);
         plugin.getPluginLogger().debug(process + ": " + state);
     }
 
+    @Deprecated
     public void startExecution(String process) {
         BenchUtil benchmark = plugin.benchmark();
         benchmark.start(process);
         setStatus(process, "Started: " + FormattingUtils.formatTimeStampSecond(BenchUtil.getTime()));
     }
 
+    @Deprecated
     public long finishExecution(String process) {
         if (!status.containsKey(process)) {
             return -1;
@@ -52,6 +58,7 @@ public class ProcessStatus<T extends IPlugin> {
         return ms;
     }
 
+    @Deprecated
     public String[] getProcesses() {
         String[] states = new String[status.size()];
         List<String> processes = new ArrayList<>(status.keySet());

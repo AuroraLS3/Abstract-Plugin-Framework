@@ -54,25 +54,20 @@ public class BukkitLog<T extends BukkitPlugin> extends PluginLog {
         }
     }
 
-    /**
-     * Logs a message to the a given file with a timestamp.
-     *
-     * @param message Message to log to Errors.txt [timestamp] Message
-     * @param filename Name of the file to write to.
-     */
     @Override
-    public void toLog(String message, String filename) {
+    public File getFolder() {
         if (instance == null) {
-            return;
+            throw new IllegalStateException("Plugin is not initialized");
         }
         File folder = instance.getDataFolder();
         if (!folder.exists()) {
             folder.mkdir();
         }
-        toLog(message, filename, folder);
+        return folder;
     }
 
     @Override
+    @Deprecated
     public void addToErrorStatus() {
         ProcessStatus process = instance.processStatus();
         String status = process.getStatus("Errors caught");

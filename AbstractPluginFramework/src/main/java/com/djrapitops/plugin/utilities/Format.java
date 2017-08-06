@@ -8,7 +8,6 @@ package com.djrapitops.plugin.utilities;
 import java.util.Objects;
 
 /**
- *
  * @author Rsl1122
  * @since 2.0.0
  */
@@ -33,10 +32,12 @@ public class Format {
         string = FormattingUtils.removeSymbols(string);
         return this;
     }
+
     public Format removeSymbolsButDot() {
         string = FormattingUtils.removeSymbolsButDot(string);
         return this;
     }
+
     public Format removeDot() {
         string = string.replaceAll("\\.", "");
         return this;
@@ -54,6 +55,32 @@ public class Format {
 
     public Format spaceWhitespace() {
         string = FormattingUtils.spaceWhitespace(string);
+        return this;
+    }
+
+    public Format remove(String... regex) {
+        Format removed = this;
+        for (String reg : regex) {
+            removed = this.remove(reg);
+        }
+        return removed;
+    }
+
+    public Format remove(String regex) {
+        this.string = string.replaceAll(regex, "");
+        return this;
+    }
+
+    public Format remove(char... characters) {
+        Format removed = this;
+        for (char character : characters) {
+            removed = this.remove(character);
+        }
+        return removed;
+    }
+
+    public Format remove(char character) {
+        this.string = string.replace(String.valueOf(character), "");
         return this;
     }
 
@@ -110,6 +137,6 @@ public class Format {
         final Format other = (Format) obj;
         return Objects.equals(this.string, other.string);
     }
-    
-    
+
+
 }
