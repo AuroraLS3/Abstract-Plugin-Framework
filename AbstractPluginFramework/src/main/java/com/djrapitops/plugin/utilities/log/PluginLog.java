@@ -9,10 +9,7 @@ import com.djrapitops.plugin.utilities.BenchUtil;
 import com.djrapitops.plugin.utilities.FormattingUtils;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Rsl1122
@@ -25,11 +22,13 @@ public abstract class PluginLog {
     final private String ERRORS = "Errors.txt";
 
     private final Map<String, DebugInfo> debugInfoMap;
+    private final ErrorLogManager errorLogManager;
 
-    public PluginLog(String debugMode, String prefix) {
+    public PluginLog(String debugMode, String prefix) throws IOException {
         this.prefix = prefix;
         this.debugMode = debugMode;
         debugInfoMap = new HashMap<>();
+        errorLogManager = new ErrorLogManager(this, getFolder());
     }
 
     /**
@@ -99,12 +98,14 @@ public abstract class PluginLog {
      * @param e      Throwable, eg NullPointerException
      */
     public void toLog(String source, Throwable e) {
-        error("Caught " + e.toString() + ". It has been logged to " + ERRORS);
-        toLog(source + " Caught " + e, ERRORS);
+        String caught = source + " Caught " + e;
+        error(caught + ". It has been logged to " + ERRORS);
+        List<String> stack = new ArrayList<>();
+        stack.add(caught);
         for (StackTraceElement x : e.getStackTrace()) {
-            toLog("  " + x, ERRORS);
+            stack.add("  " + x);
         }
-        toLog("", ERRORS);
+        errorLogManager.addError(stack);
     }
 
     @Deprecated
@@ -161,7 +162,7 @@ public abstract class PluginLog {
             }
             pw.flush();
         } catch (IOException e) {
-            error("Failed to create" + filename + "file");
+            error("Failed to create " + filename + " file");
         } finally {
             close(pw, fw);
         }
@@ -183,11 +184,11 @@ public abstract class PluginLog {
                 pw.flush();
             }
         } catch (IOException e) {
-            error("Failed to create" + filename + "file");
+            error("Failed to create " + filename + " file");
         }
     }
 
-    private void close(Closeable... close) {
+    public void close(Closeable... close) {
         for (Closeable c : close) {
             try {
                 if (c != null) {

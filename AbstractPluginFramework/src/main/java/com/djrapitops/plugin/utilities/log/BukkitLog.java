@@ -2,20 +2,22 @@ package com.djrapitops.plugin.utilities.log;
 
 import com.djrapitops.plugin.BukkitPlugin;
 import com.djrapitops.plugin.utilities.status.ProcessStatus;
-import java.io.File;
 import org.bukkit.command.ConsoleCommandSender;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This class manages the messages going to the Bukkit's Logger.
  *
- * @author Rsl1122
  * @param <T>
+ * @author Rsl1122
  */
 public class BukkitLog<T extends BukkitPlugin> extends PluginLog {
 
     final private T instance;
 
-    public BukkitLog(T instance, String debugMode, String prefix) {
+    public BukkitLog(T instance, String debugMode, String prefix) throws IOException {
         super(debugMode, prefix);
         this.instance = instance;
     }

@@ -1,29 +1,28 @@
 package com.djrapitops.plugin;
 
-import com.djrapitops.plugin.utilities.NotificationCenter;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.command.bungee.BungeeCommand;
 import com.djrapitops.plugin.settings.ColorScheme;
+import com.djrapitops.plugin.settings.Version;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.utilities.BenchUtil;
-import com.djrapitops.plugin.settings.Version;
+import com.djrapitops.plugin.utilities.NotificationCenter;
 import com.djrapitops.plugin.utilities.log.BungeeLog;
 import com.djrapitops.plugin.utilities.log.PluginLog;
 import com.djrapitops.plugin.utilities.player.Fetch;
 import com.djrapitops.plugin.utilities.status.ProcessStatus;
 import com.djrapitops.plugin.utilities.status.TaskStatus;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 
 /**
  * @param <T>
@@ -45,12 +44,12 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
     private final Fetch<T> playerFetcher;
     private final NotificationCenter<T> notificationCenter;
 
-    public BungeePlugin() {
+    public BungeePlugin() throws IOException{
         getDataFolder().mkdirs();
         log = new BungeeLog(this, debugMode, logPrefix);
         progressStat = new ProcessStatus(this);
         taskStat = new TaskStatus(this);
-        benchmark = new BenchUtil();
+        benchmark = new BenchUtil(this);
         factory = new RunnableFactory(this);
         playerFetcher = new Fetch(this);
         notificationCenter = new NotificationCenter(this);

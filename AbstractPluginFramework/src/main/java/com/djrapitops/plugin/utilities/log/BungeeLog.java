@@ -2,19 +2,21 @@ package com.djrapitops.plugin.utilities.log;
 
 import com.djrapitops.plugin.BungeePlugin;
 import com.djrapitops.plugin.utilities.status.ProcessStatus;
+
 import java.io.File;
+import java.io.IOException;
 
 /**
  * This class manages the messages going to the Bukkit's Logger.
  *
- * @author Rsl1122
  * @param <T>
+ * @author Rsl1122
  */
 public class BungeeLog<T extends BungeePlugin> extends PluginLog {
 
     final private T instance;
 
-    public BungeeLog(T instance, String debugMode, String prefix) {
+    public BungeeLog(T instance, String debugMode, String prefix) throws IOException {
         super(debugMode, prefix);
         this.instance = instance;
     }

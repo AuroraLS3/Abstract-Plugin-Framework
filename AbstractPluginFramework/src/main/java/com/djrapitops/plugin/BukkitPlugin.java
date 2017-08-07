@@ -1,40 +1,42 @@
 package com.djrapitops.plugin;
 
-import com.djrapitops.plugin.utilities.NotificationCenter;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.java.JavaPlugin;
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
 import com.djrapitops.plugin.pluginchannel.MessageSubChannel;
 import com.djrapitops.plugin.settings.ColorScheme;
+import com.djrapitops.plugin.settings.Version;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.utilities.BenchUtil;
-import com.djrapitops.plugin.settings.Version;
+import com.djrapitops.plugin.utilities.NotificationCenter;
 import com.djrapitops.plugin.utilities.log.BukkitLog;
 import com.djrapitops.plugin.utilities.log.PluginLog;
 import com.djrapitops.plugin.utilities.player.Fetch;
 import com.djrapitops.plugin.utilities.status.ProcessStatus;
 import com.djrapitops.plugin.utilities.status.TaskStatus;
 import org.bukkit.ChatColor;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
+
+import java.io.IOException;
 
 /**
  * Abstract BukkitPlugin instance that extends JavaPlugin.
- *
+ * <p>
  * {@code setInstance(this);} should be called on the first line of onEnable.
  * {@code setInstance(this.getClass(), null);} should be called on the last line
  * of onDisable.
- *
+ * <p>
  * Required settings: logPrefix.
- *
+ * <p>
  * Optional: updateCheckUrl, updateUrl, debugMode, colorScheme
- *
+ * <p>
  * Call {@code super.onEnableDefaultTasks();} before using utility classes or
  * methods. Set settings before using the method.
  *
- * @author Rsl1122
  * @param <T> The Type which is being extended, ie.
- * {@code Example extends BukkitPlugin<Example>}
+ *            {@code Example extends BukkitPlugin<Example>}
+ * @author Rsl1122
  * @since 2.0.0
  */
 public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin implements IPlugin {
@@ -53,12 +55,12 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
     private final Fetch<T> playerFetcher;
     private final NotificationCenter<T> notificationCenter;
 
-    public BukkitPlugin() {
+    public BukkitPlugin() throws IOException {
         getDataFolder().mkdirs();
         log = new BukkitLog(this, debugMode, logPrefix);
         progressStat = new ProcessStatus(this);
         taskStat = new TaskStatus(this);
-        benchmark = new BenchUtil();
+        benchmark = new BenchUtil(this);
         factory = new RunnableFactory(this);
         playerFetcher = new Fetch(this);
         notificationCenter = new NotificationCenter(this);
