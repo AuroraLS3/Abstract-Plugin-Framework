@@ -2,11 +2,11 @@ package com.djrapitops.plugin.utilities;
 
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.utilities.status.Timings;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Rsl1122
  */
 public class BenchUtil {
@@ -22,7 +22,6 @@ public class BenchUtil {
     }
 
     /**
-     *
      * @param source
      */
     public void start(String source) {
@@ -30,7 +29,6 @@ public class BenchUtil {
     }
 
     /**
-     *
      * @param source
      * @return
      */
@@ -50,11 +48,21 @@ public class BenchUtil {
         if (s != null) {
             long ms = (System.nanoTime() - s) / 1000000;
             starts.remove(source);
-            timings.markExecution(source, ms);
-            plugin.getPluginLogger().getDebug(task).addLine(source+" took: "+ms+" ms");
+            timings.markExecution(task + ": " + source, ms);
+            plugin.getPluginLogger().getDebug(task).addLine(FormattingUtils.formatBench(source, ms));
             return ms;
         }
         return -1;
+    }
+
+    private String getLine(String source, long ms) {
+        StringBuilder b = new StringBuilder();
+        b.append(ms).append(" ms");
+        while (b.length() < 10) {
+            b.append(" ");
+        }
+        b.append(source);
+        return b.toString();
     }
 
     public static long getTime() {

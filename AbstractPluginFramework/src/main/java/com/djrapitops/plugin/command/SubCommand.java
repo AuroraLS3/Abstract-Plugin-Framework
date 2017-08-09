@@ -21,6 +21,7 @@ public abstract class SubCommand {
         this.permission = permission;
         this.usage = usage;
         this.arguments = arguments;
+        inDepthHelp = addHelp();
     }
 
     public SubCommand(String name, CommandType type) {
@@ -76,6 +77,15 @@ public abstract class SubCommand {
         } else {
             return new String[]{usage};
         }
+    }
+
+    /**
+     * Override this method to automatically set the In depth help
+     *
+     * @return Lines of In Depth help.
+     */
+    public String[] addHelp() {
+        return null;
     }
 
     public void setInDepthHelp(String[] inDepthHelp) {

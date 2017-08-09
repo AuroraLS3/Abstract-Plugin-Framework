@@ -19,7 +19,6 @@ public abstract class PluginLog {
     private String debugMode;
     protected String prefix;
     final private String DEBUG = "DebugLog.txt";
-    final private String ERRORS = "Errors.txt";
 
     private final Map<String, DebugInfo> debugInfoMap;
     private final ErrorLogManager errorLogManager;
@@ -28,7 +27,7 @@ public abstract class PluginLog {
         this.prefix = prefix;
         this.debugMode = debugMode;
         debugInfoMap = new HashMap<>();
-        errorLogManager = new ErrorLogManager(this, getFolder());
+        errorLogManager = new ErrorLogManager(this);
     }
 
     /**
@@ -99,7 +98,7 @@ public abstract class PluginLog {
      */
     public void toLog(String source, Throwable e) {
         String caught = source + " Caught " + e;
-        error(caught + ". It has been logged to " + ERRORS);
+        error(caught + ". It has been logged to " + getErrorsFilename());
         List<String> stack = new ArrayList<>();
         stack.add(caught);
         for (StackTraceElement x : e.getStackTrace()) {
@@ -107,9 +106,6 @@ public abstract class PluginLog {
         }
         errorLogManager.addError(stack);
     }
-
-    @Deprecated
-    public abstract void addToErrorStatus();
 
     /**
      * Logs multiple caught Errors to Errors.txt.
@@ -158,6 +154,9 @@ public abstract class PluginLog {
             fw = new FileWriter(log, true);
             pw = new PrintWriter(fw);
             for (String msg : message) {
+                if (logConsole()) {
+                    info("[" + filename.replace(".txt", "") + "] " + msg.substring(19));
+                }
                 pw.println(msg);
             }
             pw.flush();
@@ -170,8 +169,8 @@ public abstract class PluginLog {
 
     public void toLog(String message, String filename, File folder) {
         File log = new File(folder, filename);
-        if (filename.equals(ERRORS)) {
-            debug(message);
+        if (filename.equals(getErrorsFilename())) {
+            return;
         }
         try {
             if (!log.exists()) {
@@ -180,7 +179,7 @@ public abstract class PluginLog {
             FileWriter fw = new FileWriter(log, true);
             try (PrintWriter pw = new PrintWriter(fw)) {
                 String timestamp = FormattingUtils.formatTimeStampSecond(BenchUtil.getTime());
-                pw.println("[" + timestamp + "] " + message);
+                pw.println("| " + timestamp + " | " + message);
                 pw.flush();
             }
         } catch (IOException e) {
@@ -200,7 +199,7 @@ public abstract class PluginLog {
     }
 
     public String getErrorsFilename() {
-        return ERRORS;
+        return errorLogManager.getErrorFileName();
     }
 
     public String getDebugFilename() {

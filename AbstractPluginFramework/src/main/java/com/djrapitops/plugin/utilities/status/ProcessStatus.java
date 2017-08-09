@@ -37,7 +37,6 @@ public class ProcessStatus<T extends IPlugin> {
     @Deprecated
     public void setStatus(String process, String state) {
         status.put(process, state);
-        plugin.getPluginLogger().debug(process + ": " + state);
     }
 
     @Deprecated

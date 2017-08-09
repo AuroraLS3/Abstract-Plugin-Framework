@@ -1,5 +1,6 @@
 package com.djrapitops.plugin.utilities.status;
 
+import com.djrapitops.plugin.utilities.FormattingUtils;
 import com.djrapitops.plugin.utilities.status.obj.Benchmark;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class Timings {
         String[] states = new String[avgTimings.size()];
         int i = 0;
         List<String> msgs = avgTimings.keySet().stream()
-                .map(bench -> bench + ": " + avgTimings.get(bench).getAverage() + "ms ")
+                .map(bench -> FormattingUtils.formatBench(bench, avgTimings.get(bench).getAverage()))
                 .collect(Collectors.toList());
         Collections.sort(msgs);
         for (String msg : msgs) {

@@ -20,26 +20,52 @@ import java.util.stream.Collectors;
 public class ErrorLogManager {
 
     private final PluginLog logger;
-    private final File folder;
-    private final List<ErrorObject> errors;
+    private File folder;
+    private List<ErrorObject> errors;
 
     final private String ERRORS = "Errors.txt";
 
-    public ErrorLogManager(PluginLog log, File folder) throws IOException {
+    /**
+     * Constructor.
+     *
+     * @param log PluginLog this ErrorLogManager is used in.
+     * @throws IOException If File can not be read or written to.
+     */
+    public ErrorLogManager(PluginLog log) throws IOException {
         this.logger = log;
-        this.folder = folder;
-        errors = readFile();
     }
 
+    /**
+     * Adds a new ErrorObject to errors by using the stacktrace.
+     *
+     * @param stackTrace Full Stacktrace containing the name of the class that caught the throwable.
+     */
     public void addError(List<String> stackTrace) {
+        if (errors == null) {
+            try {
+                errors = readFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         ErrorObject error = new ErrorObject(stackTrace);
         if (!errors.contains(error)) {
             errors.add(error);
+            logger.getDebug(error.getException()).addLines(error.getStackTrace()).toLog();
             toFile(openToString(errors));
         }
     }
 
+    /**
+     * Reads the Errors.txt file.
+     *
+     * @return List with ErrorObject for each stacktrace found in the file.
+     * @throws IOException If file can not be read.
+     */
     public List<ErrorObject> readFile() throws IOException {
+        if (folder == null) {
+            folder = logger.getFolder();
+        }
         File log = new File(folder, ERRORS);
         if (!Verify.exists(log)) {
             return new ArrayList<>();
@@ -58,11 +84,18 @@ public class ErrorLogManager {
         }
 
         List<ErrorObject> errors = split.stream()
-                .map(list -> new ErrorObject(list))
+                .filter(trace -> !Verify.isEmpty(trace))
+                .map(trace -> new ErrorObject(trace))
                 .collect(Collectors.toList());
         return errors;
     }
 
+    /**
+     * Opens ErrorObjects to a list of lines that can be written to the log.
+     *
+     * @param errors List of ErrorObjects with stack traces.
+     * @return List of Strings "lines" of the file.
+     */
     public List<String> openToString(List<ErrorObject> errors) {
         List<String> lines = new ArrayList<>();
         for (ErrorObject error : errors) {
@@ -75,6 +108,11 @@ public class ErrorLogManager {
         return lines;
     }
 
+    /**
+     * Overwrites Errors.txt with the list of lines.
+     *
+     * @param lines New content of the file.
+     */
     public void toFile(List<String> lines) {
         File log = new File(folder, ERRORS);
         FileWriter fw = null;
@@ -96,6 +134,11 @@ public class ErrorLogManager {
         }
     }
 
+    /**
+     * Used to get the name of the Error log file.
+     *
+     * @return Errors.txt
+     */
     public String getErrorFileName() {
         return ERRORS;
     }

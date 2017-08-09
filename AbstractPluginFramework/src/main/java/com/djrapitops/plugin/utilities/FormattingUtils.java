@@ -144,4 +144,14 @@ public class FormattingUtils {
     public static <T> String collectionToStringNoBrackets(Collection<T> coll) {
         return coll.toString().replace("[", "").replace("]", "").replace("{", "").replace("}", "");
     }
+
+    public static String formatBench(String source, long ms) {
+        StringBuilder b = new StringBuilder();
+        b.append(ms).append(" ms");
+        while (b.length() < 10) {
+            b.append(" ");
+        }
+        b.append(source);
+        return b.toString();
+    }
 }

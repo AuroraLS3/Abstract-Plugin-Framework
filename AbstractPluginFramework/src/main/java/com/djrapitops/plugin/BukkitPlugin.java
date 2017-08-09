@@ -55,9 +55,13 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
     private final Fetch<T> playerFetcher;
     private final NotificationCenter<T> notificationCenter;
 
-    public BukkitPlugin() throws IOException {
+    public BukkitPlugin() {
         getDataFolder().mkdirs();
-        log = new BukkitLog(this, debugMode, logPrefix);
+        try {
+            log = new BukkitLog(this, debugMode, logPrefix);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         progressStat = new ProcessStatus(this);
         taskStat = new TaskStatus(this);
         benchmark = new BenchUtil(this);

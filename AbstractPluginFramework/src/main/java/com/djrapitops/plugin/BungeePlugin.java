@@ -44,9 +44,13 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
     private final Fetch<T> playerFetcher;
     private final NotificationCenter<T> notificationCenter;
 
-    public BungeePlugin() throws IOException{
+    public BungeePlugin() {
         getDataFolder().mkdirs();
-        log = new BungeeLog(this, debugMode, logPrefix);
+        try {
+            log = new BungeeLog(this, debugMode, logPrefix);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         progressStat = new ProcessStatus(this);
         taskStat = new TaskStatus(this);
         benchmark = new BenchUtil(this);

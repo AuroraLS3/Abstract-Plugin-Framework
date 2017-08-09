@@ -32,7 +32,7 @@ public class BukkitLog<T extends BukkitPlugin> extends PluginLog {
         if (instance != null) {
             instance.getLogger().info(message);
         }
-        if (!message.contains("[DEBUG]")) {
+        if (!message.contains("[DEBUG]") && !message.contains("[DebugLog]") && !message.contains("[Errors]")) {
             debug(message);
         }
     }
@@ -66,17 +66,5 @@ public class BukkitLog<T extends BukkitPlugin> extends PluginLog {
             folder.mkdir();
         }
         return folder;
-    }
-
-    @Override
-    @Deprecated
-    public void addToErrorStatus() {
-        ProcessStatus process = instance.processStatus();
-        String status = process.getStatus("Errors caught");
-        if ("Process not running.".equals(status)) {
-            process.setStatus("Errors caught", "1");
-        } else {
-            process.setStatus("Errors caught", "" + (Integer.parseInt(status) + 1));
-        }
     }
 }
