@@ -2,10 +2,8 @@ package com.djrapitops.plugin.utilities.log;
 
 import com.djrapitops.plugin.utilities.Verify;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +68,7 @@ public class ErrorLogManager {
         if (!Verify.exists(log)) {
             return new ArrayList<>();
         }
-        List<String> lines = Files.lines(log.toPath()).collect(Collectors.toList());
+        List<String> lines = Files.lines(log.toPath(), StandardCharsets.UTF_8).collect(Collectors.toList());
 
         List<List<String>> split = new ArrayList<>();
         split.add(new ArrayList<>());
@@ -115,14 +113,15 @@ public class ErrorLogManager {
      */
     public void toFile(List<String> lines) {
         File log = new File(folder, ERRORS);
-        FileWriter fw = null;
+        OutputStreamWriter oSW = null;
         PrintWriter pw = null;
         try {
             if (!log.exists()) {
                 log.createNewFile();
             }
-            fw = new FileWriter(log, false);
-            pw = new PrintWriter(fw);
+
+            oSW = new OutputStreamWriter(new FileOutputStream(log), StandardCharsets.UTF_8);
+            pw = new PrintWriter(oSW);
             for (String msg : lines) {
                 pw.println(msg);
             }
@@ -130,7 +129,7 @@ public class ErrorLogManager {
         } catch (IOException e) {
             logger.error("Failed to create " + ERRORS + " file");
         } finally {
-            logger.close(pw, fw);
+            logger.close(pw, oSW);
         }
     }
 
