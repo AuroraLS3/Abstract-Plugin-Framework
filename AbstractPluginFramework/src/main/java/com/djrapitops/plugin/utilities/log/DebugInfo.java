@@ -6,6 +6,7 @@ import com.djrapitops.plugin.utilities.Verify;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,14 +20,15 @@ public class DebugInfo {
     private final PluginLog log;
     private final String task;
     private final List<String> msg;
-    private boolean logged = false;
+    private final long firstCallTime;
 
     public DebugInfo(PluginLog log, long time, String task) {
         Verify.nullCheck(log, task);
         this.log = log;
         this.task = task;
-        this.msg = new ArrayList<>();
-        this.msg.add("|                  | " + task + " (" + timeStamp(time) + ") ------------");
+        this.msg = Collections.synchronizedList(new ArrayList<String>());
+        addHeader();
+        this.firstCallTime = time;
     }
 
     private String timeStamp(long time) {
@@ -34,27 +36,24 @@ public class DebugInfo {
     }
 
     public DebugInfo addLine(String line) {
-        clean();
         addLine(line, BenchUtil.getTime());
         return this;
     }
 
-    private void clean() {
-        if (logged) {
-            msg.clear();
-            msg.add("| ---------------- | " + task + " (" + timeStamp(BenchUtil.getTime()) + ") ------------");
-            logged = false;
+    private void addHeader() {
+        if (msg.isEmpty()) {
+            this.msg.add("|                  | " + task + " (" + timeStamp(firstCallTime) + ") ------------");
         }
     }
 
     public DebugInfo addLine(String line, long time) {
-        clean();
+        addHeader();
         msg.add("| " + timeStamp(time) + " | " + line);
         return this;
     }
 
     public DebugInfo addLines(Collection<String> lines) {
-        clean();
+        addHeader();
         for (String line : lines) {
             msg.add("| " + line);
         }
@@ -62,20 +61,21 @@ public class DebugInfo {
     }
 
     public DebugInfo addEmptyLine() {
-        clean();
+        addHeader();
         msg.add("|");
         return this;
     }
 
-    public DebugInfo toLog() {
-        return toLog(null);
+    public void toLog() {
+        toLog(null);
     }
 
-    public DebugInfo toLog(Long time) {
-        msg.add(getFooter(time));
-        log.toLog(msg, log.getDebugFilename());
-        logged = true;
-        return this;
+    public void toLog(Long time) {
+        if (msg.size() > 1) {
+            msg.add(getFooter(time));
+            log.toLog(new ArrayList<>(msg), log.getDebugFilename());
+        }
+        log.clearDebug(task);
     }
 
     private String getFooter(Long time) {

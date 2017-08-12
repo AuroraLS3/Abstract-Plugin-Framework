@@ -10,23 +10,29 @@ import com.djrapitops.plugin.utilities.FormattingUtils;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rsl1122
  */
 public abstract class PluginLog {
 
-    private String debugMode;
+    private boolean debugToConsole;
+    private boolean debugToFile;
+
     protected String prefix;
     final private String DEBUG = "DebugLog.txt";
+
+    final private File folder;
 
     private final Map<String, DebugInfo> debugInfoMap;
     private final ErrorLogManager errorLogManager;
 
-    public PluginLog(String debugMode, String prefix) throws IOException {
+    public PluginLog(String debugMode, String prefix, File folder) throws IOException {
+        this.folder = folder;
         this.prefix = prefix;
-        this.debugMode = debugMode;
-        debugInfoMap = new HashMap<>();
+        setDebugMode(debugMode);
+        debugInfoMap = new ConcurrentHashMap<>();
         errorLogManager = new ErrorLogManager(this);
     }
 
@@ -52,19 +58,12 @@ public abstract class PluginLog {
      * @param message "Message" will show up as [INFO][Plan]: [DEBUG] Message
      */
     public void debug(String message) {
-        boolean both = debugMode.equals("true") || debugMode.equals("both");
-        boolean logConsole = both || debugMode.equals("console");
-        boolean logFile = debugMode.equals("file") || both;
-        if (logConsole) {
+        if (debugToConsole) {
             info("[DEBUG] " + message);
         }
-        if (logFile) {
+        if (debugToFile) {
             toLog(message, DEBUG);
         }
-    }
-
-    public boolean logConsole() {
-        return debugMode.equals("true") || debugMode.equals("both") || debugMode.equals("console");
     }
 
     public DebugInfo getDebug(String task) {
@@ -88,6 +87,16 @@ public abstract class PluginLog {
         if (debug != null) {
             debug.toLog(duration);
         }
+    }
+
+    public void endAllDebugs() {
+        for (DebugInfo i : debugInfoMap.values()) {
+            i.addLine("Ended due to onDisable").toLog();
+        }
+    }
+
+    protected void clearDebug(String task) {
+        debugInfoMap.remove(task);
     }
 
     /**
@@ -119,7 +128,12 @@ public abstract class PluginLog {
         }
     }
 
-    public abstract File getFolder() throws IllegalStateException;
+    public File getFolder() {
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        return folder;
+    }
 
     /**
      * Logs a message to the a given file with a timestamp.
@@ -144,6 +158,8 @@ public abstract class PluginLog {
     }
 
     public void toLog(List<String> message, String filename, File folder) {
+        boolean isDebugLog = filename.equals("DebugLog.txt");
+
         File log = new File(folder, filename);
         FileWriter fw = null;
         PrintWriter pw = null;
@@ -154,10 +170,16 @@ public abstract class PluginLog {
             fw = new FileWriter(log, true);
             pw = new PrintWriter(fw);
             for (String msg : message) {
-                if (logConsole()) {
-                    info("[" + filename.replace(".txt", "") + "] " + msg.substring(19));
+                if (debugToConsole) {
+                    if (isDebugLog) {
+                        info("[" + filename.replace(".txt", "") + "] " + msg.substring(19));
+                    } else {
+                        info("[" + filename.replace(".txt", "") + "] " + msg);
+                    }
                 }
-                pw.println(msg);
+                if (!isDebugLog || (isDebugLog && debugToFile)) {
+                    pw.println(msg);
+                }
             }
             pw.flush();
         } catch (IOException e) {
@@ -207,10 +229,16 @@ public abstract class PluginLog {
     }
 
     public void setDebugMode(String debugMode) {
-        this.debugMode = debugMode;
+        boolean both = debugMode.equals("true") || debugMode.equals("both");
+        debugToConsole = both || debugMode.equals("console");
+        debugToFile = both || debugMode.equals("file");
     }
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public ErrorLogManager getErrorLogManager() {
+        return errorLogManager;
     }
 }

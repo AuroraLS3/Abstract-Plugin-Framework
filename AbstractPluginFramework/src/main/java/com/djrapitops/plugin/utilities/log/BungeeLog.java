@@ -17,7 +17,7 @@ public class BungeeLog<T extends BungeePlugin> extends PluginLog {
     final private T instance;
 
     public BungeeLog(T instance, String debugMode, String prefix) throws IOException {
-        super(debugMode, prefix);
+        super(debugMode, prefix, instance.getDataFolder());
         this.instance = instance;
     }
 
@@ -51,17 +51,5 @@ public class BungeeLog<T extends BungeePlugin> extends PluginLog {
         if (instance != null) {
             instance.getLogger().severe(message);
         }
-    }
-
-    @Override
-    public File getFolder() {
-        if (instance == null) {
-            throw new IllegalStateException("Plugin is not initialized");
-        }
-        File folder = instance.getDataFolder();
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-        return folder;
     }
 }

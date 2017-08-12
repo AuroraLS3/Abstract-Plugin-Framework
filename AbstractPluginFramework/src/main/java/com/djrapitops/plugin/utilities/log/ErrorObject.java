@@ -10,8 +10,11 @@ public class ErrorObject {
     private List<String> stackTrace;
 
     public ErrorObject(List<String> stackTrace) throws IllegalStateException {
-        if (Verify.isEmpty(stackTrace)) {
-            throw new IllegalStateException("Stack Trace was null");
+        if (stackTrace == null) {
+            throw new NullPointerException("Stack trace is null");
+        }
+        if (stackTrace.isEmpty()) {
+            throw new IllegalStateException("Stack Trace was empty");
         }
         this.exception = stackTrace.get(0);
         this.stackTrace = stackTrace;
@@ -45,5 +48,13 @@ public class ErrorObject {
         int result = exception.hashCode();
         result = 31 * result + stackTrace.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorObject{\n" +
+                "exception='" + exception + "\',\n" +
+                "stackTrace=" + stackTrace.toString().replace(",", "\n") +
+                '}';
     }
 }

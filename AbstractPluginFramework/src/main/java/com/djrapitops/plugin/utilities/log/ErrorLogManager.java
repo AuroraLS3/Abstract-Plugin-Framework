@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Class responsible for Errors.txt file.
@@ -50,7 +51,7 @@ public class ErrorLogManager {
         if (!errors.contains(error)) {
             errors.add(error);
             logger.getDebug(error.getException()).addLines(error.getStackTrace()).toLog();
-            toFile(openToString(errors));
+            toFile(openToString(new ArrayList<>(errors)));
         }
     }
 
@@ -68,7 +69,10 @@ public class ErrorLogManager {
         if (!Verify.exists(log)) {
             return new ArrayList<>();
         }
-        List<String> lines = Files.lines(log.toPath(), StandardCharsets.UTF_8).collect(Collectors.toList());
+        List<String> lines;
+        try (Stream<String> lineStream = Files.lines(log.toPath(), StandardCharsets.UTF_8)) {
+            lines = lineStream.collect(Collectors.toList());
+        }
 
         List<List<String>> split = new ArrayList<>();
         split.add(new ArrayList<>());
@@ -97,6 +101,9 @@ public class ErrorLogManager {
     public List<String> openToString(List<ErrorObject> errors) {
         List<String> lines = new ArrayList<>();
         for (ErrorObject error : errors) {
+            if (error == null) {
+                continue;
+            }
             List<String> stackTrace = error.getStackTrace();
             for (String s : stackTrace) {
                 lines.add(s);
