@@ -91,4 +91,11 @@ public class DebugInfo {
         }
         return footer.toString();
     }
+
+    public String getLastLine() {
+        if (msg.isEmpty()) {
+            return "No information.";
+        }
+        return msg.get(msg.size() - 1);
+    }
 }

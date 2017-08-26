@@ -1,9 +1,7 @@
 package com.djrapitops.plugin.utilities.log;
 
 import com.djrapitops.plugin.BungeePlugin;
-import com.djrapitops.plugin.utilities.status.ProcessStatus;
 
-import java.io.File;
 import java.io.IOException;
 
 /**

@@ -7,7 +7,6 @@ import com.djrapitops.plugin.utilities.BenchUtil;
 import com.djrapitops.plugin.utilities.NotificationCenter;
 import com.djrapitops.plugin.utilities.log.PluginLog;
 import com.djrapitops.plugin.utilities.player.Fetch;
-import com.djrapitops.plugin.utilities.status.ProcessStatus;
 import com.djrapitops.plugin.utilities.status.TaskStatus;
 
 /**
@@ -21,8 +20,6 @@ public interface IPlugin {
     void onDisable();
 
     void onEnableDefaultTasks();
-
-    ProcessStatus processStatus();
 
     TaskStatus taskStatus();
 

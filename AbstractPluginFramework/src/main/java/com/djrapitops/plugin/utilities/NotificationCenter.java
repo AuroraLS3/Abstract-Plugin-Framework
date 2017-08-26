@@ -34,12 +34,10 @@ public class NotificationCenter<T extends IPlugin> {
     }
 
     public void checkNotifications(IPlayer player) {
-        if (!player.isOp() || player.hasPermission("apf.notify")) {
-            return;
-        }
-
-        for (String msg : getNotifications()) {
-            player.sendMessage(msg);
+        if (player.isOp() || player.hasPermission("apf.notify")) {
+            for (String msg : getNotifications()) {
+                player.sendMessage(msg);
+            }
         }
     }
 

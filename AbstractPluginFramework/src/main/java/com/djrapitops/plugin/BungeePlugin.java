@@ -10,7 +10,6 @@ import com.djrapitops.plugin.utilities.NotificationCenter;
 import com.djrapitops.plugin.utilities.log.BungeeLog;
 import com.djrapitops.plugin.utilities.log.PluginLog;
 import com.djrapitops.plugin.utilities.player.Fetch;
-import com.djrapitops.plugin.utilities.status.ProcessStatus;
 import com.djrapitops.plugin.utilities.status.TaskStatus;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.plugin.Listener;
@@ -36,7 +35,6 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
     private String debugMode = "false";
     private ColorScheme colorScheme = new ColorScheme(ChatColor.WHITE, ChatColor.GRAY, ChatColor.DARK_GRAY);
 
-    private final ProcessStatus<T> progressStat;
     private final TaskStatus<T> taskStat;
     private final BenchUtil benchmark;
     private PluginLog log;
@@ -51,7 +49,6 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
         } catch (IOException e) {
             e.printStackTrace();
         }
-        progressStat = new ProcessStatus(this);
         taskStat = new TaskStatus(this);
         benchmark = new BenchUtil(this);
         factory = new RunnableFactory(this);
@@ -165,11 +162,6 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
     @Override
     public void setLog(PluginLog log) {
         this.log = log;
-    }
-
-    @Override
-    public ProcessStatus<T> processStatus() {
-        return progressStat;
     }
 
     @Override

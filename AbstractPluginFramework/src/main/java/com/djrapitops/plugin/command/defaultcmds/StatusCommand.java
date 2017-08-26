@@ -7,11 +7,12 @@ import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
 import com.djrapitops.plugin.utilities.NotificationCenter;
-import com.djrapitops.plugin.utilities.status.ProcessStatus;
+import com.djrapitops.plugin.utilities.log.DebugInfo;
 import com.djrapitops.plugin.utilities.status.TaskStatus;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A Default Command for displaying plugin's task, process and benchmark status.
@@ -55,18 +56,15 @@ public class StatusCommand<T extends IPlugin> extends SubCommand {
                 sender.sendMessage("   " + notification.replace(plugin.getPrefix() + " ", ""));
             }
         }
-
-
         TaskStatus taskStatus = plugin.taskStatus();
-        ProcessStatus processStatus = plugin.processStatus();
+
         sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Tasks running: " + sColor + taskStatus.getTaskCount());
         sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Processes: ");
-        Arrays.stream(processStatus.getProcesses())
-                .map(process -> tColor + "   " + process)
-                .forEach(sender::sendMessage);
+        Map<String, DebugInfo> debugs = plugin.getPluginLogger().getAllDebugs();
+        debugs.entrySet().forEach(entry -> sender.sendMessage(tColor + "   " + entry.getKey() + ": " + entry.getValue().getLastLine()));
         sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Tasks: ");
         Arrays.stream(taskStatus.getTasks())
-                .map(process -> tColor + "   " + process)
+                .map(task -> tColor + "   " + task)
                 .forEach(sender::sendMessage);
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse());
         return true;

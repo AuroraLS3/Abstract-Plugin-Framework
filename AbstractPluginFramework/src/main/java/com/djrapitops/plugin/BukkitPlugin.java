@@ -11,7 +11,6 @@ import com.djrapitops.plugin.utilities.NotificationCenter;
 import com.djrapitops.plugin.utilities.log.BukkitLog;
 import com.djrapitops.plugin.utilities.log.PluginLog;
 import com.djrapitops.plugin.utilities.player.Fetch;
-import com.djrapitops.plugin.utilities.status.ProcessStatus;
 import com.djrapitops.plugin.utilities.status.TaskStatus;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
@@ -47,7 +46,6 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
     private String debugMode = "false";
     private ColorScheme colorScheme = new ColorScheme(ChatColor.WHITE, ChatColor.GRAY, ChatColor.DARK_GRAY);
 
-    private final ProcessStatus<T> progressStat;
     private final TaskStatus<T> taskStat;
     private final BenchUtil benchmark;
     private PluginLog log;
@@ -62,7 +60,6 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
         } catch (IOException e) {
             e.printStackTrace();
         }
-        progressStat = new ProcessStatus(this);
         taskStat = new TaskStatus(this);
         benchmark = new BenchUtil(this);
         factory = new RunnableFactory(this);
@@ -177,11 +174,6 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
     @Override
     public void setLog(PluginLog log) {
         this.log = log;
-    }
-
-    @Override
-    public ProcessStatus<T> processStatus() {
-        return progressStat;
     }
 
     @Override

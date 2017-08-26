@@ -241,4 +241,8 @@ public abstract class PluginLog {
     public ErrorLogManager getErrorLogManager() {
         return errorLogManager;
     }
+
+    public Map<String, DebugInfo> getAllDebugs() {
+        return debugInfoMap;
+    }
 }

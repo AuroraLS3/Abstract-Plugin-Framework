@@ -1,10 +1,8 @@
 package com.djrapitops.plugin.utilities.log;
 
 import com.djrapitops.plugin.BukkitPlugin;
-import com.djrapitops.plugin.utilities.status.ProcessStatus;
 import org.bukkit.command.ConsoleCommandSender;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
