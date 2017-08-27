@@ -2,6 +2,8 @@ package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.command.bungee.BungeeCommand;
+import com.djrapitops.plugin.config.BungeeConfig;
+import com.djrapitops.plugin.config.IConfig;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.Version;
 import com.djrapitops.plugin.task.RunnableFactory;
@@ -219,8 +221,9 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
         }
     }
 
-    public Configuration getConfig() throws IOException {
-        return ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder(), "config.yml"));
+    public IConfig getIConfig() throws IOException {
+        BungeeConfig bungeeConfig = new BungeeConfig(getDataFolder(), "config.yml");
+        return bungeeConfig;
     }
 
     public void saveConfig(Configuration config) throws IOException {

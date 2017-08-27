@@ -2,6 +2,8 @@ package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
+import com.djrapitops.plugin.config.BukkitConfig;
+import com.djrapitops.plugin.config.IConfig;
 import com.djrapitops.plugin.pluginchannel.MessageSubChannel;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.Version;
@@ -231,5 +233,10 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
     @Override
     public NotificationCenter getNotificationCenter() {
         return notificationCenter;
+    }
+
+    public IConfig getIConfig() throws IOException {
+        BukkitConfig bukkitConfig = new BukkitConfig(getDataFolder(), "config.yml");
+        return bukkitConfig;
     }
 }

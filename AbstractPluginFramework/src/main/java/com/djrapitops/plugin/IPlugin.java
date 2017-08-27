@@ -1,6 +1,7 @@
 package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.command.SubCommand;
+import com.djrapitops.plugin.config.IConfig;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.utilities.BenchUtil;
@@ -8,6 +9,9 @@ import com.djrapitops.plugin.utilities.NotificationCenter;
 import com.djrapitops.plugin.utilities.log.PluginLog;
 import com.djrapitops.plugin.utilities.player.Fetch;
 import com.djrapitops.plugin.utilities.status.TaskStatus;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Interface all APF Plugin classes implement.
@@ -58,4 +62,8 @@ public interface IPlugin {
     void copyDefaultConfig(String header);
 
     NotificationCenter getNotificationCenter();
+
+    File getDataFolder();
+
+    IConfig getIConfig() throws IOException;
 }
