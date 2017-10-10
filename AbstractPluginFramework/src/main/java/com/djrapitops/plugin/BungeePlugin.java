@@ -45,7 +45,6 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends Plugin implem
     private final NotificationCenter<T> notificationCenter;
 
     public BungeePlugin() {
-        getDataFolder().mkdirs();
         try {
             log = new BungeeLog(this, debugMode, logPrefix);
         } catch (IOException e) {

@@ -15,7 +15,7 @@ public class BungeeLog<T extends BungeePlugin> extends PluginLog {
     final private T instance;
 
     public BungeeLog(T instance, String debugMode, String prefix) throws IOException {
-        super(debugMode, prefix, instance.getDataFolder());
+        super(debugMode, prefix, null);
         this.instance = instance;
     }
 

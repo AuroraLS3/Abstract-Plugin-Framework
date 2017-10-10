@@ -23,7 +23,7 @@ public abstract class PluginLog {
     protected String prefix;
     final private String DEBUG = "DebugLog.txt";
 
-    final private File folder;
+    private File folder;
 
     private final Map<String, DebugInfo> debugInfoMap;
     private final ErrorLogManager errorLogManager;
@@ -244,5 +244,9 @@ public abstract class PluginLog {
 
     public Map<String, DebugInfo> getAllDebugs() {
         return debugInfoMap;
+    }
+
+    public void setFolder(File folder) {
+        this.folder = folder;
     }
 }
