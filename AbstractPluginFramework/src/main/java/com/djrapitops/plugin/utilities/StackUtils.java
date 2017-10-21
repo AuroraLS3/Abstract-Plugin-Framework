@@ -1,6 +1,7 @@
 package com.djrapitops.plugin.utilities;
 
 import com.djrapitops.plugin.Plugin;
+import com.djrapitops.plugin.StaticHolder;
 
 /**
  * Class for getting information about the current StackTrace.
@@ -23,7 +24,13 @@ public class StackUtils {
                 return c;
             }
         }
-        // TODO check commands, tasks and listeners
+        for (int i = 0; i < stack.length; i++) {
+            Class c = stack[i].getClass();
+            Class provider = StaticHolder.getProvidingPlugin(c);
+            if (provider != null) {
+                return provider;
+            }
+        }
         return Plugin.class;
     }
 

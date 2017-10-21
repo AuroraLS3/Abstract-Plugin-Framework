@@ -1,14 +1,13 @@
 package com.djrapitops.plugin.command.defaultcmds;
 
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.command.CommandType;
 import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
-import com.djrapitops.plugin.utilities.NotificationCenter;
+import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.utilities.log.DebugInfo;
-import com.djrapitops.plugin.utilities.status.TaskStatus;
+import com.djrapitops.plugin.utilities.status.TaskCenter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,14 +55,14 @@ public class StatusCommand<T extends IPlugin> extends SubCommand {
                 sender.sendMessage("   " + notification.replace(plugin.getPrefix() + " ", ""));
             }
         }
-        TaskStatus taskStatus = plugin.taskStatus();
+        TaskCenter taskCenter = plugin.taskStatus();
 
-        sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Tasks running: " + sColor + taskStatus.getTaskCount());
+        sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Tasks running: " + sColor + taskCenter.getTaskCount());
         sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Processes: ");
         Map<String, DebugInfo> debugs = plugin.getPluginLogger().getAllDebugs();
         debugs.entrySet().forEach(entry -> sender.sendMessage(tColor + "   " + entry.getKey() + ": " + entry.getValue().getLastLine()));
         sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Tasks: ");
-        Arrays.stream(taskStatus.getTasks())
+        Arrays.stream(taskCenter.getTasks())
                 .map(task -> tColor + "   " + task)
                 .forEach(sender::sendMessage);
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse());

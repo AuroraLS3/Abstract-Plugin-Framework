@@ -1,7 +1,9 @@
-package com.djrapitops.plugin.utilities;
+package com.djrapitops.plugin.api.systems;
 
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.Priority;
+import com.djrapitops.plugin.utilities.Format;
+import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.player.IPlayer;
 
 import java.util.ArrayList;
@@ -18,18 +20,18 @@ import java.util.stream.Collectors;
  * @author Rsl1122
  * @since 2.0.1
  */
-public class NotificationCenter<T extends IPlugin> {
+public class NotificationCenter {
 
-    private final T instance;
-    private final Map<Priority, List<String>> notifications;
+    private final Map<Class, Map<Priority, List<String>>> notifications;
 
-    public NotificationCenter(T instance) {
-        this.instance = instance;
+    public NotificationCenter() {
         notifications = new HashMap<>();
     }
 
     public void addNotification(Priority priority, String message) {
-        notifications.computeIfAbsent(priority, p -> new ArrayList<>())
+        Class callingPlugin = StackUtils.getCallingPlugin();
+        Map<Priority, List<String>> notificationMap = notifications.computeIfAbsent(callingPlugin, p -> new HashMap<>());
+        notificationMap.computeIfAbsent(priority, p -> new ArrayList<>())
                 .add(message);
     }
 
@@ -42,14 +44,18 @@ public class NotificationCenter<T extends IPlugin> {
     }
 
     public List<String> getNotifications() {
-        String prefix = instance.getColorScheme().getMainColor() + instance.getPrefix();
+        Class callingPlugin = StackUtils.getCallingPlugin();
+        String prefix = "[" + callingPlugin.getSimpleName() + "]";
+
         List<String> messages = new ArrayList<>();
+
+        Map<Priority, List<String>> notificationMap = notifications.getOrDefault(callingPlugin, new HashMap<>());
         for (Priority p : new Priority[]{Priority.HIGH, Priority.MEDIUM, Priority.LOW}) {
             String priority = Format.create(p.name()).capitalize().toString();
-            List<String> msgs = notifications.get(p);
+            List<String> msgs = notificationMap.get(p);
             if (msgs != null) {
                 messages.addAll(msgs.stream()
-                        .map(notification -> prefix + " " + p.getColor() + priority + "§r " + notification)
+                        .map(notification -> p.getColor() + prefix + " " + priority + "§r " + notification)
                         .collect(Collectors.toList()));
             }
         }

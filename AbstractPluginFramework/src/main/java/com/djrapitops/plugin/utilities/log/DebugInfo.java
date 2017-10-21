@@ -1,6 +1,5 @@
 package com.djrapitops.plugin.utilities.log;
 
-import com.djrapitops.plugin.utilities.BenchUtil;
 import com.djrapitops.plugin.utilities.FormattingUtils;
 import com.djrapitops.plugin.utilities.Verify;
 

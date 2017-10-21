@@ -5,7 +5,6 @@
  */
 package com.djrapitops.plugin.task;
 
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.task.bukkit.AbsBukkitRunnable;
 import com.djrapitops.plugin.task.bungee.AbsBungeeRunnable;
 import com.djrapitops.plugin.utilities.Compatibility;

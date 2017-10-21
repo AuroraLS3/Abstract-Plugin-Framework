@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import com.djrapitops.plugin.IPlugin;
+import com.djrapitops.plugin.api.Log;
 import com.djrapitops.plugin.task.IRunnable;
 import com.djrapitops.plugin.task.ITask;
 import com.djrapitops.plugin.utilities.Verify;
@@ -20,14 +22,12 @@ import com.djrapitops.plugin.utilities.status.obj.TaskInfo;
  * @author Rsl1122
  * @param <T>
  */
-public class TaskStatus<T extends IPlugin> {
+public class TaskCenter {
 
-    private final T plugin;
     private final Map<String, List<TaskInfo>> taskInfo;
     private final Map<String, List<IRunnable>> tasks;
 
-    public TaskStatus(T plugin) {
-        this.plugin = plugin;
+    public TaskCenter() {
         this.taskInfo = new HashMap<>();
         tasks = new HashMap<>();
     }
@@ -42,7 +42,7 @@ public class TaskStatus<T extends IPlugin> {
             tasks.put(name, new ArrayList<>());
         }
         tasks.get(name).add(run);
-        plugin.getPluginLogger().debug("Started task " + info);
+        Log.debug("Started task " + info);
     }
 
     public void cancelAllKnownTasks() {
@@ -56,7 +56,7 @@ public class TaskStatus<T extends IPlugin> {
         }
         TaskInfo info = getMatchingTask(name, id);
         if (info != null) {
-            plugin.getPluginLogger().debug("Ended task " + info);
+            Log.debug("Ended task " + info);
             task.remove(info);
         }
     }

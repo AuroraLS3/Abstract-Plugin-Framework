@@ -1,49 +1,42 @@
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.api.systems.NotificationCenter;
+import com.djrapitops.plugin.utilities.status.TaskCenter;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Rsl1122
- * @since 2.0.0
  */
 public class StaticHolder {
 
-    private static final String apfVersion = "2.0.5";
-    private static final Map<Class, BukkitPlugin> INSTANCES_BUKKIT = new HashMap<>();
-    private static final Map<Class, BungeePlugin> INSTANCES_BUNGEE = new HashMap<>();
-    private static Class utilityProvider = null;
+    private static final Map<Class, Plugin> plugins = new HashMap<>();
+    private static final Map<Class, Class> classMap = new HashMap<>();
+    private static final NotificationCenter notificationCenter = new NotificationCenter();
+    private static final TaskCenter taskCenter = new TaskCenter();
 
-    public final static void setInstance(Class c, BukkitPlugin instance) {
-        utilityProvider = c;
-        INSTANCES_BUKKIT.put(c, instance);
+    public static void saveInstance(Class c, Class plugin) {
+        classMap.put(c, plugin);
     }
 
-    public final static void setInstance(Class c, BungeePlugin instance) {
-        utilityProvider = c;
-        INSTANCES_BUNGEE.put(c, instance);
+    public static Class getProvidingPlugin(Class c) {
+        return classMap.get(c);
     }
 
-    public final static <T extends IPlugin> T getInstance(Class<T> c) {
-        if (c != null) {
-            BukkitPlugin pluginBukkit = INSTANCES_BUKKIT.get(c);
-            if (pluginBukkit != null) {
-                return (T) pluginBukkit;
-            }
-            BungeePlugin pluginBungee = INSTANCES_BUNGEE.get(c);
-            if (pluginBungee != null) {
-                return (T) pluginBungee;
-            }
-        }
-        return null;
+    public static NotificationCenter getNotificationCenter() {
+        return notificationCenter;
     }
 
-    public final static String getAPFVersion() {
-        return apfVersion;
+    public static <T extends Plugin> void register(Class c, T plugin) {
+        plugins.put(c, plugin);
     }
 
-    public static Class getUtilityProviderClass() {
-        return utilityProvider;
+    public static void unRegister(Class<? extends Plugin> c) {
+        plugins.remove(c);
+    }
+
+    public static TaskCenter getTaskCenter() {
+        return taskCenter;
     }
 }

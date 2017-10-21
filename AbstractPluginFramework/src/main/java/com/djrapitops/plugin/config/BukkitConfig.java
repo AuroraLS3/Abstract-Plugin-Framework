@@ -1,15 +1,9 @@
 package com.djrapitops.plugin.config;
 
-import com.djrapitops.plugin.BukkitPlugin;
-
 import java.io.File;
 import java.io.IOException;
 
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.config.fileconfig.BukkitFileConfig;
-import com.djrapitops.plugin.config.fileconfig.IFileConfig;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**

@@ -3,7 +3,7 @@ package com.djrapitops.plugin.settings;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
-import com.djrapitops.plugin.IPlugin;
+
 import com.djrapitops.plugin.api.Priority;
 import com.djrapitops.plugin.utilities.FormattingUtils;
 

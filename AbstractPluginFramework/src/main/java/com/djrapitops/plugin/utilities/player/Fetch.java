@@ -2,7 +2,6 @@ package com.djrapitops.plugin.utilities.player;
 
 import com.djrapitops.plugin.BukkitPlugin;
 import com.djrapitops.plugin.BungeePlugin;
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.utilities.Compatibility;
 import com.djrapitops.plugin.utilities.Verify;

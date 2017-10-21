@@ -1,6 +1,5 @@
 package com.djrapitops.plugin.utilities.player;
 
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.command.ISender;
 import java.net.InetSocketAddress;
 import java.util.UUID;

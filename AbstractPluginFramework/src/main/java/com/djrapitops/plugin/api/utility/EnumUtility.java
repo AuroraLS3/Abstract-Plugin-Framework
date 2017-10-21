@@ -1,14 +1,17 @@
-package com.djrapitops.plugin.utilities.version;
+package com.djrapitops.plugin.api.utility;
 
 import com.djrapitops.plugin.utilities.Verify;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
+ * Can be used for reducing FieldNotFoundErrors related to Enums and versions.
  *
  * @author Rsl1122
  */
@@ -18,15 +21,14 @@ public class EnumUtility {
      * Method for version compatibility - enums can have different values with
      * different versions.
      *
-     * @param <T> Enum class with values() & name() method.
+     * @param <T>   Enum class with values() & name() method.
      * @param clazz Class of the enum
      * @param names Names of the enum variables to get
      * @return List of Enum variables that were found
      * @throws NullPointerException If class or names is null
      */
     public static <T> List<T> getSupportedEnumValues(Class<T> clazz, String... names) throws NullPointerException {
-        Verify.nullCheck(clazz);
-        Verify.nullCheck(names);
+        Verify.nullCheck(clazz, names);
         try {
             List<String> wantedNames = getWantedNames(names);
 
@@ -34,13 +36,9 @@ public class EnumUtility {
             Verify.nullCheck(method);
             T[] values = (T[]) method.invoke(clazz);
 
-            List<T> supportedValues = getSupportedValues(values, wantedNames);
-            if (Verify.isEmpty(supportedValues)) {
-                return null;
-            }
-            return supportedValues;
+            return getSupportedValues(values, wantedNames);
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            return null;
+            return new ArrayList<>();
         }
     }
 

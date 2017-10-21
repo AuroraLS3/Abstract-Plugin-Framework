@@ -1,7 +1,6 @@
 package com.djrapitops.plugin.utilities.player.bukkit;
 
 import com.djrapitops.plugin.BukkitPlugin;
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.command.SenderType;
 import com.djrapitops.plugin.command.bukkit.BukkitCMDSender;
 import com.djrapitops.plugin.utilities.player.Gamemode;

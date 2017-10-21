@@ -1,6 +1,5 @@
 package com.djrapitops.plugin.command;
 
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
 import com.djrapitops.plugin.utilities.FormattingUtils;

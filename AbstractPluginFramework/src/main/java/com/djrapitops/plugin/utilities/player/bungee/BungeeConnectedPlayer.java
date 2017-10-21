@@ -1,6 +1,5 @@
 package com.djrapitops.plugin.utilities.player.bungee;
 
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.command.SenderType;
 import com.djrapitops.plugin.command.bungee.BungeeCMDSender;
 import com.djrapitops.plugin.utilities.player.Gamemode;

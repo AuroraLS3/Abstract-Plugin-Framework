@@ -3,10 +3,9 @@ package com.djrapitops.plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * 
  * @author Rsl1122
  */
-public abstract class BukkitPlugin extends JavaPlugin {
+public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
     private final Plugin plugin;
 
@@ -16,11 +15,16 @@ public abstract class BukkitPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        plugin.onEnable();
+        plugin.enable();
     }
 
     @Override
     public void onDisable() {
-        plugin.onDisable();
+        plugin.disable();
+    }
+
+    @Override
+    public void reloadPlugin(boolean full) {
+        plugin.reloadPlugin(full);
     }
 }
