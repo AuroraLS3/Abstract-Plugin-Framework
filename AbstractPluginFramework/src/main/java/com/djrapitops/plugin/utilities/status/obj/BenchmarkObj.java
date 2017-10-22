@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class representing a Benchmark times given by BenchUtil.
+ * Class representing a BenchmarkObj times given by BenchUtil.
  *
  * @author Rsl1122
  */
-public class Benchmark {
+public class BenchmarkObj {
 
     private final List<Long> benchmarks;
 
-    public Benchmark() {
+    public BenchmarkObj() {
         benchmarks = new ArrayList<>();
     }
 

@@ -5,6 +5,7 @@
  */
 package com.djrapitops.plugin.utilities.log;
 
+import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.utilities.FormattingUtils;
 
 import java.io.*;
@@ -68,7 +69,7 @@ public abstract class PluginLog {
     public DebugInfo getDebug(String task) {
         DebugInfo debug = debugInfoMap.get(task);
         if (debug == null) {
-            debug = new DebugInfo(this, BenchUtil.getTime(), task);
+            debug = new DebugInfo(this.getClass(), Benchmark.getTime(), task);
             debugInfoMap.put(task, debug);
         }
         return debug;
@@ -199,7 +200,7 @@ public abstract class PluginLog {
             }
             FileWriter fw = new FileWriter(log, true);
             try (PrintWriter pw = new PrintWriter(fw)) {
-                String timestamp = FormattingUtils.formatTimeStampSecond(BenchUtil.getTime());
+                String timestamp = FormattingUtils.formatTimeStampSecond(Benchmark.getTime());
                 pw.println("| " + timestamp + " | " + message);
                 pw.flush();
             }

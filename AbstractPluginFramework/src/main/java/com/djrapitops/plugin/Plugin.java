@@ -1,6 +1,10 @@
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.systems.NotificationCenter;
+import com.djrapitops.plugin.api.utility.log.DebugLog;
+
+import java.io.File;
 
 /**
  * @author Rsl1122
@@ -9,7 +13,10 @@ public abstract class Plugin implements IPlugin {
 
     protected boolean reloading;
 
-    void enable() {
+    private IPlugin provider;
+
+    void enable(IPlugin provider) {
+        this.provider = provider;
         StaticHolder.register(getClass(), this);
         onEnable();
     }
@@ -18,8 +25,11 @@ public abstract class Plugin implements IPlugin {
     public abstract void onEnable();
 
     void disable() {
-        StaticHolder.unRegister(getClass());
-        onDisable();
+        Class<? extends Plugin> pluginClass = getClass();
+        StaticHolder.unRegister(pluginClass);
+        Benchmark.pluginDisabled(pluginClass);
+        DebugLog.pluginDisabled(pluginClass);
+        provider = null;
     }
 
     @Override
@@ -29,9 +39,10 @@ public abstract class Plugin implements IPlugin {
     public void reloadPlugin(boolean full) {
         reloading = true;
         if (full) {
+            IPlugin safe = provider;
             disable();
             onReload();
-            enable();
+            enable(safe);
         } else {
             onReload();
         }
@@ -42,5 +53,23 @@ public abstract class Plugin implements IPlugin {
 
     public NotificationCenter getNotificationCenter() {
         return StaticHolder.getNotificationCenter();
+    }
+
+    public void log(String level, String s) {
+        if (provider != null) {
+            provider.log(level, s);
+        }
+    }
+
+    public void setProvider(IPlugin provider) {
+        this.provider = provider;
+    }
+
+    @Override
+    public File getDataFolder() {
+        if (provider == null) {
+            throw new IllegalStateException("Plugin provider can not be null after plugin is enabled.");
+        }
+        return provider.getDataFolder();
     }
 }

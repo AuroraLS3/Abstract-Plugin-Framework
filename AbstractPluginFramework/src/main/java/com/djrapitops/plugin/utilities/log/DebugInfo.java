@@ -1,8 +1,12 @@
 package com.djrapitops.plugin.utilities.log;
 
+import com.djrapitops.plugin.api.Benchmark;
+import com.djrapitops.plugin.api.utility.log.DebugLog;
+import com.djrapitops.plugin.api.utility.log.Log;
 import com.djrapitops.plugin.utilities.FormattingUtils;
 import com.djrapitops.plugin.utilities.Verify;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,18 +20,18 @@ import java.util.List;
  */
 public class DebugInfo {
 
-    private final PluginLog log;
+    private final Class sourcePlugin;
     private final String task;
     private final List<String> msg;
     private final long firstCallTime;
 
-    public DebugInfo(PluginLog log, long time, String task) {
-        Verify.nullCheck(log, task);
-        this.log = log;
+    public DebugInfo(Class sourcePlugin, long time, String task) {
+        Verify.nullCheck(sourcePlugin, task);
+        this.sourcePlugin = sourcePlugin;
         this.task = task;
         this.msg = Collections.synchronizedList(new ArrayList<String>());
-        addHeader();
         this.firstCallTime = time;
+        addHeader();
     }
 
     private String timeStamp(long time) {
@@ -35,7 +39,7 @@ public class DebugInfo {
     }
 
     public DebugInfo addLine(String line) {
-        addLine(line, BenchUtil.getTime());
+        addLine(line, Benchmark.getTime());
         return this;
     }
 
@@ -54,7 +58,7 @@ public class DebugInfo {
     public DebugInfo addLines(Collection<String> lines) {
         addHeader();
         for (String line : lines) {
-            msg.add("| " + line);
+            msg.add("|                  | " + line);
         }
         return this;
     }
@@ -72,9 +76,9 @@ public class DebugInfo {
     public void toLog(Long time) {
         if (msg.size() > 1) {
             msg.add(getFooter(time));
-            log.toLog(new ArrayList<>(msg), log.getDebugFilename());
+            Log.debug(msg);
         }
-        log.clearDebug(task);
+        DebugLog.clearDebug(task);
     }
 
     private String getFooter(Long time) {

@@ -10,8 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.djrapitops.plugin.IPlugin;
-import com.djrapitops.plugin.api.Log;
+import com.djrapitops.plugin.api.utility.log.Log;
 import com.djrapitops.plugin.task.IRunnable;
 import com.djrapitops.plugin.task.ITask;
 import com.djrapitops.plugin.utilities.Verify;

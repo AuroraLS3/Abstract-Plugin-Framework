@@ -4,6 +4,8 @@
  */
 package com.djrapitops.plugin;
 
+import java.io.File;
+
 /**
  * //TODO Class Javadoc Comment
  *
@@ -16,5 +18,9 @@ public interface IPlugin {
     void onDisable();
 
     void reloadPlugin(boolean full);
+
+    void log(String level, String s);
+
+    File getDataFolder();
 
 }

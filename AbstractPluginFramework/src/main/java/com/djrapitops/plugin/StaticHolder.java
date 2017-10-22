@@ -39,4 +39,8 @@ public class StaticHolder {
     public static TaskCenter getTaskCenter() {
         return taskCenter;
     }
+
+    public static Plugin getInstance(Class c) {
+        return plugins.get(c);
+    }
 }

@@ -33,5 +33,4 @@ public class StackUtils {
         }
         return Plugin.class;
     }
-
 }

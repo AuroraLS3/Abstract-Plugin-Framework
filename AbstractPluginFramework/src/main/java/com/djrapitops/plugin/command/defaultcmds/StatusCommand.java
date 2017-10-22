@@ -1,5 +1,6 @@
 package com.djrapitops.plugin.command.defaultcmds;
 
+import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.command.CommandType;
 import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.SubCommand;
@@ -39,7 +40,7 @@ public class StatusCommand<T extends IPlugin> extends SubCommand {
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse() + oColor + " " + plugin.getClass().getSimpleName() + " Status");
 
         if (args.length >= 1 && "timings".equals(args[0].toLowerCase())) {
-            sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Benchmark Averages: ");
+            sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " BenchmarkObj Averages: ");
             Arrays.stream(plugin.benchmark().getTimings().getTimings())
                     .map(benchmark -> tColor + "   " + benchmark)
                     .forEach(sender::sendMessage);

@@ -129,7 +129,7 @@ public class Verify {
         if (isEqual == null) {
             return false;
         }
-        if (toCheck == null && !notNull(new Object[]{isEqual})) {
+        if (toCheck == null && containsNull(new Object[]{isEqual})) {
             return true;
         }
         for (String s : isEqual) {
@@ -156,12 +156,16 @@ public class Verify {
         if (object == null) {
             return false;
         }
+        return !containsNull(object);
+    }
+
+    public static boolean containsNull(Object... object) {
         for (Object t : object) {
             if (t == null) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**

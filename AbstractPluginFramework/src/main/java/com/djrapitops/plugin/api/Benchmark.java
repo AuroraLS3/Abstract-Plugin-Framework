@@ -1,12 +1,14 @@
 package com.djrapitops.plugin.api;
 
+import com.djrapitops.plugin.utilities.Format;
+import com.djrapitops.plugin.utilities.FormattingUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.status.Timings;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Rsl1122
  */
 public class Benchmark {
@@ -21,6 +23,10 @@ public class Benchmark {
         STARTS.put(plugin, pluginBenchStarts);
     }
 
+    public static String stopAndFormat(String source) {
+        return FormattingUtils.formatBench(source, stop(source));
+    }
+
     public static long stop(String source) {
         Class plugin = StackUtils.getCallingPlugin();
         long stop = getTime();
@@ -31,16 +37,20 @@ public class Benchmark {
         if (start == null) {
             return -1;
         }
-        
+
         pluginBenchStarts.remove(source);
-        
+
         long bench = stop - start;
-        
+
         Timings timings = TIMINGS.getOrDefault(plugin, new Timings());
         timings.markExecution(source, bench);
         TIMINGS.put(plugin, timings);
 
         return bench;
+    }
+
+    public Timings getAverages() {
+        return TIMINGS.getOrDefault(StackUtils.getCallingPlugin(), new Timings());
     }
 
     public static void pluginDisabled(Class c) {
@@ -50,5 +60,4 @@ public class Benchmark {
     public static long getTime() {
         return System.currentTimeMillis();
     }
-
 }
