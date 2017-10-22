@@ -21,11 +21,15 @@ import java.util.stream.Collectors;
  */
 public class FileLogger {
 
-    public static void logToFile(File file, String... lines) throws IOException {
-        logToFile(file, Arrays.asList(lines));
+    public static void appendToFile(File file, String... lines) throws IOException {
+        appendToFile(file, Arrays.asList(lines));
     }
 
     public static void logToFile(File file, List<String> lines) throws IOException {
+        Files.write(file.toPath(), lines, Charset.forName("UTF-8"));
+    }
+
+    public static void appendToFile(File file, List<String> lines) throws IOException {
         if (!file.exists()) {
             if (file.createNewFile()) {
                 throw new FileNotFoundException("Failed to create a new file!: " + file.getAbsolutePath());
@@ -38,4 +42,15 @@ public class FileLogger {
         return Files.lines(file.toPath(), Charset.forName("UTF-8")).collect(Collectors.toList());
     }
 
+    public static int getIndentation(String line) {
+        int indentation = 0;
+        for (char c : line.toCharArray()) {
+            if (c == ' ') {
+                indentation++;
+            } else {
+                break;
+            }
+        }
+        return indentation;
+    }
 }

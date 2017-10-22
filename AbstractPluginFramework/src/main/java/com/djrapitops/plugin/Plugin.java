@@ -5,6 +5,7 @@ import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 
 import java.io.File;
+import java.net.URL;
 
 /**
  * @author Rsl1122
@@ -71,5 +72,15 @@ public abstract class Plugin implements IPlugin {
             throw new IllegalStateException("Plugin provider can not be null after plugin is enabled.");
         }
         return provider.getDataFolder();
+    }
+
+    @Override
+    public String getVersion() {
+        return provider.getVersion();
+    }
+
+    protected boolean isNewVersionAvailable(String versionStringUrl) {
+        boolean gitHubAddress = versionStringUrl.contains("github.com");
+
     }
 }

@@ -122,7 +122,7 @@ public class Log {
         String debugLogFileName = split[0] + "-" + day + ".txt";
 
         try {
-            FileLogger.logToFile(new File(logsFolder, debugLogFileName), lines);
+            FileLogger.appendToFile(new File(logsFolder, debugLogFileName), lines);
         } catch (IOException e) {
             Log.toLog("com.djrapitops.plugin.api.utility.log.Log", e);
         }
