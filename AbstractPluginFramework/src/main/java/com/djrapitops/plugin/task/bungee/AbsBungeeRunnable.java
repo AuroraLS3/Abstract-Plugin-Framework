@@ -7,6 +7,8 @@ package com.djrapitops.plugin.task.bungee;
 
 import com.djrapitops.plugin.BungeePlugin;
 import java.util.concurrent.TimeUnit;
+
+import com.djrapitops.plugin.IPlugin;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 import com.djrapitops.plugin.api.TimeAmount;
 import com.djrapitops.plugin.task.IRunnable;

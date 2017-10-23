@@ -1,5 +1,6 @@
 package com.djrapitops.plugin.command;
 
+import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
 import com.djrapitops.plugin.utilities.FormattingUtils;
@@ -113,17 +114,17 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
         boolean console = !CommandUtils.isPlayer(sender);
 
         if (!command.hasPermission(sender)) {
-            sender.sendMessage(ChatColor.RED + plugin.getPrefix() + " " + DefaultMessages.COMMAND_NO_PERMISSION);
+            sender.sendMessage(ChatColor.RED + "[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_NO_PERMISSION);
             return true;
         }
 
         if (console && args.length < 2 && command.getCommandType() == CommandType.CONSOLE_WITH_ARGUMENTS) {
-            sender.sendMessage(ChatColor.RED + plugin.getPrefix() + " " + DefaultMessages.COMMAND_REQUIRES_ARGUMENTS.parse("1") + " " + command.getArguments());
+            sender.sendMessage(ChatColor.RED + "[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_REQUIRES_ARGUMENTS.parse("1") + " " + command.getArguments());
             return true;
         }
 
         if (console && command.getCommandType() == CommandType.PLAYER) {
-            sender.sendMessage(ChatColor.RED + plugin.getPrefix() + " " + DefaultMessages.COMMAND_SENDER_NOT_PLAYER);
+            sender.sendMessage(ChatColor.RED + "[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_SENDER_NOT_PLAYER);
 
             return true;
         }
@@ -180,7 +181,7 @@ class HelpCommand<T extends IPlugin> extends SubCommand {
                 .filter(cmd -> !(isConsole && cmd.getCommandType() == CommandType.PLAYER))
                 .map(cmd -> tColor + " " + DefaultMessages.BALL.toString() + oColor + " /" + command.getHelpCmd() + " " + cmd.getFirstName() + " " + cmd.getArguments() + tColor + " - " + cmd.getUsage())
                 .forEach(sender::sendMessage);
-        sender.sendMessage(sColor+" Add ? to the end of the command for more help");
+        sender.sendMessage(sColor + " Add ? to the end of the command for more help");
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse());
         return true;
     }

@@ -4,7 +4,6 @@ import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.Priority;
 import com.djrapitops.plugin.utilities.Format;
 import com.djrapitops.plugin.utilities.StackUtils;
-import com.djrapitops.plugin.utilities.player.IPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +34,7 @@ public class NotificationCenter {
                 .add(message);
     }
 
-    public void checkNotifications(IPlayer player) {
+    public void checkNotifications(org.bukkit.entity.Player player) {
         if (player.isOp() || player.hasPermission("apf.notify")) {
             for (String msg : getNotifications()) {
                 player.sendMessage(msg);

@@ -6,6 +6,7 @@
 package com.djrapitops.plugin.task.bukkit;
 
 import com.djrapitops.plugin.BukkitPlugin;
+import com.djrapitops.plugin.IPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import com.djrapitops.plugin.task.IRunnable;
 import com.djrapitops.plugin.task.ITask;

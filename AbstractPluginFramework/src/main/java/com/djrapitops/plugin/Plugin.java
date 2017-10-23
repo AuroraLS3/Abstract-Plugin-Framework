@@ -3,6 +3,7 @@ package com.djrapitops.plugin;
 import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
+import com.djrapitops.plugin.task.RunnableFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -56,6 +57,10 @@ public abstract class Plugin implements IPlugin {
         return StaticHolder.getNotificationCenter();
     }
 
+    public RunnableFactory getRunnableFactory() {
+        return StaticHolder.getRunnableFactory();
+    }
+
     public void log(String level, String s) {
         if (provider != null) {
             provider.log(level, s);
@@ -81,6 +86,10 @@ public abstract class Plugin implements IPlugin {
 
     protected boolean isNewVersionAvailable(String versionStringUrl) {
         boolean gitHubAddress = versionStringUrl.contains("github.com");
+        return false;
+    }
 
+    public IPlugin getProvider() {
+        return provider;
     }
 }

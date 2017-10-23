@@ -117,4 +117,8 @@ public class ConfigNode {
         }
         parent.save();
     }
+
+    public String getValue() {
+        return value;
+    }
 }

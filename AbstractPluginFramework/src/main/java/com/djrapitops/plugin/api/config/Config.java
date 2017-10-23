@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +33,13 @@ public class Config extends ConfigNode {
     public Config(File file, List<String> currentValues) {
         this(file);
         copyDefaults(currentValues);
+    }
+
+    public void read() throws IOException {
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        copyDefaults(file);
     }
 
     public void copyDefaults(File from) throws IOException {
@@ -93,7 +101,52 @@ public class Config extends ConfigNode {
     }
 
     private List<String> processTree() {
-        //TODO create lines to be saved to file
-        return new ArrayList<>();
+        return getLines(this, 0);
+    }
+
+    private List<String> getLines(ConfigNode root, int depth) {
+        List<String> lines = new ArrayList<>();
+        for (Map.Entry<String, ConfigNode> entry : root.children.entrySet()) {
+            String key = entry.getKey();
+            ConfigNode node = entry.getValue();
+            String value = node.getValue();
+
+            for (String commentLine : node.getComment()) {
+                StringBuilder comment = new StringBuilder();
+                addIndentation(depth, comment);
+                comment.append("#").append(comment);
+                lines.add(commentLine);
+            }
+
+            StringBuilder b = new StringBuilder();
+            addIndentation(depth, b);
+            if (value.startsWith("-")) {
+                // Keyline
+                lines.add(b.append(key).append(":").toString());
+                // List
+                String[] list = value.split("-");
+                for (String listValue : list) {
+                    String v = listValue.trim();
+                    if (v.isEmpty()) {
+                        continue;
+                    }
+                    StringBuilder listBuilder = new StringBuilder();
+                    addIndentation(depth + 1, listBuilder);
+                    listBuilder.append("- ").append(v);
+                    lines.add(listBuilder.toString());
+                }
+            } else {
+                b.append(key).append(": ").append(value);
+                lines.add(b.toString());
+            }
+            lines.addAll(getLines(node, depth + 1));
+        }
+        return lines;
+    }
+
+    private void addIndentation(int depth, StringBuilder b) {
+        for (int i = 0; i < depth; i++) {
+            b.append("    ");
+        }
     }
 }
