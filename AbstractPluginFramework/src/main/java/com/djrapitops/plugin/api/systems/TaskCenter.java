@@ -1,4 +1,4 @@
-package com.djrapitops.plugin.utilities.status;
+package com.djrapitops.plugin.api.systems;
 
 import java.util.*;
 import java.util.stream.Collectors;

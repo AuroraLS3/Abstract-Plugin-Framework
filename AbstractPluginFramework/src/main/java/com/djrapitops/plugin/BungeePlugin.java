@@ -1,5 +1,9 @@
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.command.SubCommand;
+import com.djrapitops.plugin.command.bungee.BungeeCommand;
+import net.md_5.bungee.api.plugin.Listener;
+
 import java.util.logging.Logger;
 
 /**
@@ -47,5 +51,15 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
             default:
                 logger.info(s);
         }
+    }
+
+    public void registerListener(Listener listener) {
+        getProxy().getPluginManager().registerListener(this, listener);
+        StaticHolder.saveInstance(listener.getClass(), plugin.getClass());
+    }
+
+    public void registerCommand(String name, SubCommand command) {
+        getProxy().getPluginManager().registerCommand(this, new BungeeCommand(command));
+        StaticHolder.saveInstance(command.getClass(), plugin.getClass());
     }
 }

@@ -5,7 +5,7 @@ package com.djrapitops.plugin.command;
  *
  * PLAYER: Bukkit's Player, Bungee's ConnectedPlayer.
  * PROXY_PLAYER: Player connected to Bungee but not in lobby.
- * CONSOLE: Not a player or a command block.
+ * ALL: Not a player or a command block.
  * CMD_BLOCK: Bukkit's CommandBlock.
  * 
  * @author Rsl1122

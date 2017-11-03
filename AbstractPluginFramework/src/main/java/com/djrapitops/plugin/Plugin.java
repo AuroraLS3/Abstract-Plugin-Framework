@@ -5,10 +5,10 @@ import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.settings.Version;
 import com.djrapitops.plugin.task.RunnableFactory;
-import com.djrapitops.plugin.utilities.status.TaskCenter;
+import com.djrapitops.plugin.api.systems.TaskCenter;
 
 import java.io.File;
-import java.net.URL;
+import java.io.IOException;
 
 /**
  * @author Rsl1122
@@ -21,7 +21,7 @@ public abstract class Plugin implements IPlugin {
 
     void enable(IPlugin provider) {
         this.provider = provider;
-        StaticHolder.register(getClass(), this);
+        StaticHolder.register(this);
         onEnable();
     }
 
@@ -87,7 +87,7 @@ public abstract class Plugin implements IPlugin {
         return provider.getVersion();
     }
 
-    protected boolean isNewVersionAvailable(String versionStringUrl) {
+    protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {
         return Version.checkVersion(getVersion(), versionStringUrl);
     }
 

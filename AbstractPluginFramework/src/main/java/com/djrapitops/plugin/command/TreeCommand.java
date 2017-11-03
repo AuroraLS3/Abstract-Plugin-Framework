@@ -1,6 +1,7 @@
 package com.djrapitops.plugin.command;
 
 import com.djrapitops.plugin.IPlugin;
+import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
 import com.djrapitops.plugin.utilities.FormatUtils;
@@ -25,6 +26,7 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
     protected final List<SubCommand> commands;
     private String defaultCommand = "help";
     private String helpPrefix = "";
+    private ColorScheme cs = new ColorScheme("§7", "§f", "§8");
 
     /**
      * Class Constructor.
@@ -42,12 +44,19 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
         this.plugin = plugin;
         this.helpPrefix = helpPrefix;
         commands = new ArrayList<>();
-        commands.add(new HelpCommand(plugin, this));
+        add(new HelpCommand(plugin, this));
         addCommands();
     }
 
     public void setDefaultCommand(String defaultCommand) {
         this.defaultCommand = defaultCommand;
+    }
+
+    public void add(SubCommand... commands) {
+        for (SubCommand command : commands) {
+            this.commands.add(command);
+            StaticHolder.saveInstance(command.getClass(), plugin.getClass());
+        }
     }
 
     public abstract void addCommands();
@@ -118,12 +127,13 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
             return true;
         }
 
-        if (console && args.length < 2 && command.getCommandType() == CommandType.CONSOLE_WITH_ARGUMENTS) {
+        CommandType cType = command.getCommandType();
+        if (cType == CommandType.ALL_WITH_ARGS || console && args.length < 2 && cType == CommandType.PLAYER_OR_ARGS) {
             sender.sendMessage(ChatColor.RED + "[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_REQUIRES_ARGUMENTS.parse("1") + " " + command.getArguments());
             return true;
         }
 
-        if (console && command.getCommandType() == CommandType.PLAYER) {
+        if (console && cType == CommandType.PLAYER) {
             sender.sendMessage(ChatColor.RED + "[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_SENDER_NOT_PLAYER);
 
             return true;
@@ -144,12 +154,19 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
     public String getHelpCmd() {
         return helpPrefix;
     }
+
+    public ColorScheme getColorScheme() {
+        return cs;
+    }
+
+    public void setColorScheme(ColorScheme cs) {
+        this.cs = cs;
+    }
 }
 
 class HelpCommand<T extends IPlugin> extends SubCommand {
 
-    private final T plugin;
-    private final TreeCommand command;
+    private final TreeCommand<T> command;
 
     /**
      * Subcommand Constructor.
@@ -157,17 +174,15 @@ class HelpCommand<T extends IPlugin> extends SubCommand {
      * @param plugin  Current instance of Plan
      * @param command Current instance of PlanCommand
      */
-    public HelpCommand(T plugin, TreeCommand command) {
-        super("help,?", CommandType.CONSOLE, command.getPermission(), "Show help for the command.");
-
-        this.plugin = plugin;
+    public HelpCommand(T plugin, TreeCommand<T> command) {
+        super("help,?", CommandType.ALL, command.getPermission(), "Show help for the command.");
         this.command = command;
     }
 
     @Override
     public boolean onCommand(ISender sender, String commandLabel, String[] args) {
         boolean isConsole = !CommandUtils.isPlayer(sender);
-        ColorScheme cs = plugin.getColorScheme();
+        ColorScheme cs = command.getColorScheme();
         String oColor = cs.getMainColor();
         String sColor = cs.getSecondaryColor();
         String tColor = cs.getTertiaryColor();

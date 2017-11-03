@@ -1,5 +1,8 @@
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.command.SubCommand;
+import com.djrapitops.plugin.command.bukkit.BukkitCommand;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.event.Level;
 
@@ -51,5 +54,15 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
             default:
                 logger.info(s);
         }
+    }
+
+    public void registerListener(Listener listener) {
+        getServer().getPluginManager().registerEvents(listener, this);
+        StaticHolder.saveInstance(listener.getClass(), plugin.getClass());
+    }
+
+    public void registerCommand(String name, SubCommand command) {
+        getCommand(name).setExecutor(new BukkitCommand(command));
+        StaticHolder.saveInstance(command.getClass(), plugin.getClass());
     }
 }

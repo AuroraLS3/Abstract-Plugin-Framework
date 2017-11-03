@@ -10,7 +10,7 @@ import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.TimeAmount;
 import com.djrapitops.plugin.task.IRunnable;
 import com.djrapitops.plugin.task.ITask;
-import com.djrapitops.plugin.utilities.status.TaskCenter;
+import com.djrapitops.plugin.api.systems.TaskCenter;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 
 import java.util.concurrent.TimeUnit;

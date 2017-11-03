@@ -10,7 +10,7 @@ import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
 import com.djrapitops.plugin.api.systems.NotificationCenter;
-import com.djrapitops.plugin.utilities.status.TaskCenter;
+import com.djrapitops.plugin.api.systems.TaskCenter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +29,7 @@ public class StatusCommand<T extends IPlugin> extends SubCommand {
     private final ColorScheme cs;
 
     public StatusCommand(T plugin, String permission, ColorScheme cs) {
-        super("status", CommandType.CONSOLE, permission, "Check the status of plugin's processes.", "[timings]");
+        super("status", CommandType.ALL, permission, "Check the status of plugin's processes.", "[timings]");
         this.plugin = plugin;
         this.cs = cs;
     }

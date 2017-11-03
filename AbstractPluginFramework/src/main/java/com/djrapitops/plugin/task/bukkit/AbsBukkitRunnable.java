@@ -9,7 +9,7 @@ import com.djrapitops.plugin.BukkitPlugin;
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.task.IRunnable;
 import com.djrapitops.plugin.task.ITask;
-import com.djrapitops.plugin.utilities.status.TaskCenter;
+import com.djrapitops.plugin.api.systems.TaskCenter;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**

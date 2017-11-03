@@ -2,7 +2,7 @@ package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.task.RunnableFactory;
-import com.djrapitops.plugin.utilities.status.TaskCenter;
+import com.djrapitops.plugin.api.systems.TaskCenter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +31,8 @@ public class StaticHolder {
         return notificationCenter;
     }
 
-    public static <T extends Plugin> void register(Class c, T plugin) {
-        plugins.put(c, plugin);
+    public static <T extends Plugin> void register(T plugin) {
+        plugins.put(plugin.getClass(), plugin);
     }
 
     public static void unRegister(Class<? extends Plugin> c) {

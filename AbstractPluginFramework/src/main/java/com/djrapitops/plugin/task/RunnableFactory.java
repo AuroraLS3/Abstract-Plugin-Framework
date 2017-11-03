@@ -13,7 +13,6 @@ import com.djrapitops.plugin.task.bungee.AbsBungeeRunnable;
 import com.djrapitops.plugin.utilities.StackUtils;
 
 /**
- *
  * @author Rsl1122
  */
 public class RunnableFactory {
@@ -25,6 +24,7 @@ public class RunnableFactory {
     public static IRunnable createNew(String name, AbsRunnable runnable) {
         Class callingPlugin = StackUtils.getCallingPlugin();
         Plugin instance = StaticHolder.getInstance(callingPlugin);
+        StaticHolder.saveInstance(runnable.getClass(), callingPlugin);
 
         if (Check.isBukkitAvailable()) {
             return new AbsBukkitRunnable(name, instance.getProvider()) {
