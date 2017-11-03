@@ -5,7 +5,6 @@
 package com.djrapitops.plugin.api.config;
 
 import com.djrapitops.plugin.api.utility.log.FileLogger;
-import com.djrapitops.plugin.utilities.Format;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class Config extends ConfigNode {
     private final File file;
 
     public Config(File file) {
-        super(null, "");
+        super("", null, "");
         this.file = file;
     }
 
@@ -56,42 +55,57 @@ public class Config extends ConfigNode {
         ConfigNode parent = this;
         ConfigNode lastNode = this;
         for (String line : fileLines) {
-            int depth = FileLogger.getIndentation(line) / 4;
+            System.out.print(fileLines.indexOf(line) + ": ");
+            try {
+                int depth = FileLogger.getIndentation(line);
 
-            String trimmed = line.trim();
-            if (trimmed.startsWith("#")) {
-                comments.add(trimmed);
-                continue;
-            }
-
-            String[] keyAndValue = trimmed.split(":", 2);
-            String configKey = keyAndValue[0];
-
-            String value = keyAndValue[1];
-            int indexOfHashtag = value.lastIndexOf("#");
-            String valueWithoutComment = indexOfHashtag < 0 ? value : value.substring(0, indexOfHashtag - 1);
-
-            if (depth > lastDepth) {
-                parent = lastNode;
-            } else if (depth < lastDepth) {
-                int nDepth = depth;
-                // Prevents incorrect indent in the case:
-                // 1:
-                //   2:
-                //     3:
-                // 1:
-                while (lastDepth - nDepth < 0) {
-                    nDepth++;
-                    parent = parent.parent;
+                String trimmed = line.trim();
+                if (trimmed.startsWith("#")) {
+                    comments.add(trimmed);
+                    System.out.println("Comment");
+                    continue;
                 }
-            }
 
-            ConfigNode node = new ConfigNode(parent, valueWithoutComment);
-            node.setComment(new ArrayList<>(comments));
-            comments.clear();
-            lastNode = node;
-            lastDepth = depth;
-            parent.children.put(configKey, node);
+                System.out.print("Depth:" + depth + " | ");
+                if (depth > lastDepth) {
+                    System.out.print("+");
+                    parent = lastNode;
+                } else if (depth < lastDepth) {
+                    // Prevents incorrect indent in the case:
+                    // 1:
+                    //   2:
+                    //     3:
+                    // 1:
+                    int nDepth = lastDepth;
+                    while (nDepth > depth) {
+                        System.out.print("-" + nDepth);
+                        nDepth = parent.depth;
+                        parent = parent.parent;
+                    }
+                }
+                System.out.print(" | ");
+
+                String[] keyAndValue = trimmed.split(":", 2);
+                String configKey = keyAndValue[0];
+
+                String value = keyAndValue[1];
+                int indexOfHashtag = value.lastIndexOf(" #");
+                String valueWithoutComment = indexOfHashtag < 0 ? value : value.substring(0, indexOfHashtag);
+
+                ConfigNode node = new ConfigNode(configKey, parent, valueWithoutComment);
+                node.depth = depth;
+                node.setComment(new ArrayList<>(comments));
+                if (!comments.isEmpty()) {
+                    System.out.print("AddComments | ");
+                }
+                comments.clear();
+                lastNode = node;
+                lastDepth = depth;
+                System.out.println(node.getKey(true));
+                parent.addChild(configKey, node);
+            } catch (Exception e) {
+                throw new IllegalStateException("Malformed File (" + file.getName() + "), Error on line " + fileLines.indexOf(line) + ": " + line, e);
+            }
         }
     }
 
@@ -106,16 +120,17 @@ public class Config extends ConfigNode {
 
     private List<String> getLines(ConfigNode root, int depth) {
         List<String> lines = new ArrayList<>();
-        for (Map.Entry<String, ConfigNode> entry : root.children.entrySet()) {
-            String key = entry.getKey();
-            ConfigNode node = entry.getValue();
+        Map<String, ConfigNode> children = root.getChildren();
+
+        for (String key : root.childOrder) {
+            ConfigNode node = children.get(key);
             String value = node.getValue();
 
             for (String commentLine : node.getComment()) {
                 StringBuilder comment = new StringBuilder();
                 addIndentation(depth, comment);
-                comment.append("#").append(comment);
-                lines.add(commentLine);
+                comment.append(commentLine);
+                lines.add(comment.toString());
             }
 
             StringBuilder b = new StringBuilder();
@@ -136,7 +151,7 @@ public class Config extends ConfigNode {
                     lines.add(listBuilder.toString());
                 }
             } else {
-                b.append(key).append(": ").append(value);
+                b.append(key).append(":").append(value);
                 lines.add(b.toString());
             }
             lines.addAll(getLines(node, depth + 1));

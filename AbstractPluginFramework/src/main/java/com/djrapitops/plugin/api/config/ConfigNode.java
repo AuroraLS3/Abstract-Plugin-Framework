@@ -15,15 +15,20 @@ import java.util.stream.Collectors;
  */
 public class ConfigNode {
 
-    protected ConfigNode parent;
-    protected Map<String, ConfigNode> children;
+    private final String key;
+    ConfigNode parent;
+    List<String> childOrder;
+    int depth;
+    private Map<String, ConfigNode> children;
     private List<String> comment;
 
     private String value;
 
-    public ConfigNode(ConfigNode parent, String value) {
+    public ConfigNode(String key, ConfigNode parent, String value) {
+        this.key = key;
         this.parent = parent;
         this.value = value;
+        childOrder = new ArrayList<>();
         children = new HashMap<>();
         comment = new ArrayList<>();
     }
@@ -34,6 +39,10 @@ public class ConfigNode {
 
     public Map<String, ConfigNode> getChildren() {
         return children;
+    }
+
+    public List<String> getKeysInOrder() {
+        return childOrder;
     }
 
     public String getString() {
@@ -120,5 +129,27 @@ public class ConfigNode {
 
     public String getValue() {
         return value;
+    }
+
+    public void addChild(String name, ConfigNode node) {
+        children.put(name, node);
+        childOrder.add(name);
+    }
+
+    public String getKey(boolean deep) {
+        if (deep) {
+            if (parent != null) {
+                String s = parent.getKey(true) + "." + key;
+                if (s.startsWith(".")) {
+                    return s.substring(1);
+                }
+                return s;
+            }
+        }
+        return key;
+    }
+
+    public void sort() {
+        Collections.sort(childOrder);
     }
 }

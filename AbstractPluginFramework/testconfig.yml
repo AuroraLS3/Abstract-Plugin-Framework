@@ -1,12 +1,13 @@
 # Plan Config | More info at https://github.com/Rsl1122/Plan-PlayerAnalytics/blob/master/documentation/Configuration.md
+# ---------------------------------------------------------------------------------------------------------------------
 Server:
   ServerName: Plan
 # TestComment
 Plugin:
   Debug: true
   Locale: default
-  WriteNewLocaleFileOnEnable: false
   # AmazingComment
+  WriteNewLocaleFileOnEnable: false
   Bungee-Override:
     StandaloneMode: false
     CopyBungeeConfig: true
@@ -92,9 +93,7 @@ Theme:
     RAM: Default
     Chunks: Default
     Entities: Default'
-    WorldPie: '"#0099C6", "#66AA00", "#316395", "#994499", "#22AA99", "#AAAA11", "#6633CC",
-      "#E67300", "#329262", "#5574A6"'
+    WorldPie: '"#0099C6", "#66AA00", "#316395", "#994499", "#22AA99", "#AAAA11", "#6633CC", "#E67300", "#329262", "#5574A6"'
     GMDrilldown: '"#438c99", "#639A67", "#D8EBB5", "#D9BF77"'
     ActivityPie: '"#228B22", "#A9A9A9", "#808080", "#951800"'
-    ServerPreferencePie: '"#0099C6", "#66AA00", "#316395", "#994499", "#22AA99", "#AAAA11",
-      "#6633CC", "#E67300", "#329262", "#5574A6"'
+    ServerPreferencePie: '"#0099C6", "#66AA00", "#316395", "#994499", "#22AA99", "#AAAA11", "#6633CC", "#E67300", "#329262", "#5574A6"'

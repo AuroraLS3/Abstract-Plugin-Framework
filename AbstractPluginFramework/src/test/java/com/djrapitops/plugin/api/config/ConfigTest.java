@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -42,9 +44,25 @@ public class ConfigTest {
         Config config = new Config(testFile);
         File copyFromFile = new File("testconfig.yml");
         config.copyDefaults(copyFromFile);
+        System.out.println("");
         config.save();
 
-        assertEquals(Files.lines(testFile.toPath()), Files.lines(copyFromFile.toPath()));
+        List<String> original = Files.lines(copyFromFile.toPath()).collect(Collectors.toList());
+        List<String> test = Files.lines(testFile.toPath()).collect(Collectors.toList());
+        boolean different = false;
+        for (int i = 0; i < original.size(); i++) {
+            String origLine = original.get(i);
+            String testLine = test.get(i).replace("    ", "  ");
+            if (!origLine.equals(testLine)) {
+                System.out.println((i + 1) + "! " + origLine);
+                System.out.println((i + 1) + "! " + testLine);
+                different = true;
+            } else {
+                System.out.println((i + 1) + ": " + origLine);
+                System.out.println((i + 1) + ": " + testLine);
+            }
+        }
+        assertFalse(different);
     }
 
 }
