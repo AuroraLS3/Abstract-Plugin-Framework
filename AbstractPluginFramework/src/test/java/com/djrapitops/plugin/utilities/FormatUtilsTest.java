@@ -8,10 +8,10 @@ package com.djrapitops.plugin.utilities;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
- *
  * @author ristolah
  */
 public class FormatUtilsTest {
@@ -31,11 +31,11 @@ public class FormatUtilsTest {
 
     public FormatUtilsTest() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -88,5 +88,5 @@ public class FormatUtilsTest {
     @Test
     public void testCollectionToStringNoBrackets() {
     }
-    
+
 }

@@ -1,4 +1,4 @@
-package com.djrapitops.plugin.settings;
+package com.djrapitops.plugin.api.utility;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,8 +42,8 @@ public class Version {
     }
 
     public static boolean checkVersion(String version, String versionStringUrl) throws IOException {
-        boolean gitHub = versionStringUrl.contains("github.com");
-        boolean spigot = versionStringUrl.contains("spigot.org");
+        boolean gitHub = versionStringUrl.contains("raw.githubusercontent.com");
+        boolean spigot = versionStringUrl.contains("spigotmc.org");
         try {
             if (gitHub) {
                 return isNewVersionAvailable(version, getGitVersion(versionStringUrl));
@@ -51,14 +51,14 @@ public class Version {
                 return isNewVersionAvailable(version, getSpigotVersion(versionStringUrl));
             }
         } catch (NumberFormatException e) {
-            throw new IOException("Version can not be fetched from this address", e);
+            throw new IOException("Version fetch error, address: " + versionStringUrl, e);
         }
-        throw new IOException("Version can not be fetched from this address");
+        throw new IOException("Version can not be fetched from this address: " + versionStringUrl);
     }
 
     private static String getSpigotVersion(String versionStringUrl) throws IOException {
         String[] split = versionStringUrl.split("\\.");
-        String resourceID = split[split.length - 1];
+        String resourceID = split[split.length - 1].replace("/", "");
         String requestUrl = "https://api.spiget.org/v2/resources/" + resourceID + "/versions?size=1&sort=-name";
         URL url = new URL(requestUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -76,13 +76,11 @@ public class Version {
                 default:
                     try (InputStreamReader reader = new InputStreamReader(inputStream)) {
                         JsonElement element = new JsonParser().parse(reader);
-                        System.out.println(element);
                         if (element.isJsonArray()) {
                             return element.getAsJsonArray().get(0).getAsJsonObject().get("name").getAsString();
                         } else if (element.isJsonObject()) {
-                            element.getAsJsonObject().get("name").getAsString();
+                            return element.getAsJsonObject().get("name").getAsString();
                         }
-                        System.out.println(element);
                         return "0";
                     }
             }

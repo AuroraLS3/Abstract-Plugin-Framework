@@ -3,7 +3,7 @@ package com.djrapitops.plugin;
 import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
-import com.djrapitops.plugin.settings.Version;
+import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.api.systems.TaskCenter;
 
