@@ -65,6 +65,10 @@ public class Log {
         instance.log("ERROR", s);
     }
 
+    public static void debug(Class callingPlugin, String... lines) {
+        debug(Arrays.asList(lines), callingPlugin);
+    }
+
     public static void debug(String... lines) {
         debug(Arrays.asList(lines));
     }

@@ -1,66 +1,64 @@
 package com.djrapitops.plugin.utilities.status;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.djrapitops.plugin.api.utility.log.Log;
 import com.djrapitops.plugin.task.IRunnable;
 import com.djrapitops.plugin.task.ITask;
+import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.Verify;
 import com.djrapitops.plugin.utilities.status.obj.TaskInfo;
 
 /**
- *
  * @author Rsl1122
- * @param <T>
  */
 public class TaskCenter {
 
-    private final Map<String, List<TaskInfo>> taskInfo;
-    private final Map<String, List<IRunnable>> tasks;
+    private static final Map<Class, List<TaskInfo>> taskInfo = new HashMap<>();
+    private static final Map<Class, List<IRunnable>> tasks = new HashMap<>();
 
-    public TaskCenter() {
-        this.taskInfo = new HashMap<>();
-        tasks = new HashMap<>();
-    }
-
-    public void taskStarted(ITask task, String name, IRunnable run) {
+    public static void taskStarted(Class plugin, ITask task, String name, IRunnable run) {
         TaskInfo info = new TaskInfo(name, task.isSync(), "Started", task.getTaskId());
-        if (!taskInfo.containsKey(name)) {
-            taskInfo.put(name, new ArrayList<>());
-        }
-        taskInfo.get(name).add(info);
-        if (!tasks.containsKey(name)) {
-            tasks.put(name, new ArrayList<>());
-        }
-        tasks.get(name).add(run);
-        Log.debug("Started task " + info);
+
+        List<TaskInfo> taskInfoList = taskInfo.getOrDefault(plugin, new ArrayList<>());
+        taskInfoList.add(info);
+        taskInfo.put(plugin, taskInfoList);
+
+        List<IRunnable> taskList = tasks.getOrDefault(plugin, new ArrayList<>());
+        taskList.add(run);
+        tasks.put(plugin, taskList);
+        Log.debug(plugin, "Started task " + info);
     }
 
-    public void cancelAllKnownTasks() {
-        tasks.keySet().forEach((name) -> tasks.get(name).forEach(IRunnable::cancel));
+    public static void cancelAllKnownTasks() {
+        cancelAllKnownTasks(StackUtils.getCallingPlugin());
     }
 
-    public void taskCancelled(String name, int id) {
-        List<TaskInfo> task = taskInfo.get(name);
-        if (Verify.isEmpty(task)) {
-            return;
+    public static void cancelAllKnownTasks(Class plugin) {
+        List<IRunnable> taskList = tasks.getOrDefault(plugin, new ArrayList<>());
+        for (IRunnable iRunnable : taskList) {
+            try {
+                iRunnable.cancel();
+                taskCancelled(plugin, iRunnable.getTaskName(), iRunnable.getTaskId());
+            } catch (Exception ignored) {
+            }
         }
-        TaskInfo info = getMatchingTask(name, id);
-        if (info != null) {
-            Log.debug("Ended task " + info);
+        tasks.remove(plugin);
+        taskInfo.remove(plugin);
+    }
+
+    public static void taskCancelled(Class plugin, String name, int id) {
+        List<TaskInfo> task = taskInfo.get(plugin);
+        Optional<TaskInfo> first = task.stream().filter(t -> t.getName().equals(name) && t.getId() == id).findFirst();
+        if (first.isPresent()) {
+            TaskInfo info = first.get();
+            Log.debug(plugin, "Ended task " + info);
             task.remove(info);
         }
     }
 
-    public TaskInfo getMatchingTask(String name, int id) {
+    public static TaskInfo getMatchingTask(String name, int id) {
         List<TaskInfo> task = new ArrayList<>(taskInfo.get(name));
         for (TaskInfo i : task) {
             if (i.getId() == id && name.equals(i.getName())) {
@@ -70,30 +68,33 @@ public class TaskCenter {
         return null;
     }
 
-    public String getTaskName(int id) {
-        Set<TaskInfo> info = new HashSet<>();
-        for (List<TaskInfo> tInfo : new HashSet<>(taskInfo.values())) {
-            info.addAll(tInfo);
-        }
-        Optional<TaskInfo> task = info.stream().filter(i -> i.getId() == id).findFirst();
-        return task.map(TaskInfo::getName).orElse("Unknown");
+    public static String getTaskName(int id) {
+        return taskInfo.values().stream()
+                .flatMap(Collection::stream)
+                .filter(i -> i.getId() == id)
+                .findFirst()
+                .map(TaskInfo::getName)
+                .orElse("Unknown");
     }
 
-    public String[] getTasks() {
-        List<TaskInfo> info = new ArrayList<>();
-        for (List<TaskInfo> tInfo : new HashSet<>(taskInfo.values())) {
-            info.addAll(tInfo);
-        }
-        List<String> infos = info.stream().map(i -> "Task " + i).collect(Collectors.toList());
-        Collections.sort(infos);
-        String[] states = new String[info.size()];
-        for (int i = 0; i < info.size(); i++) {
+    public static String[] getTasks(Class plugin) {
+        List<String> infos = new ArrayList<>(taskInfo.get(plugin))
+                .stream()
+                .map(i -> "Task " + i)
+                .sorted()
+                .collect(Collectors.toList());
+
+        int length = infos.size();
+        String[] states = new String[length];
+
+        for (int i = 0; i < length; i++) {
             states[i] = infos.get(i);
         }
+
         return states;
     }
 
-    public int getTaskCount() {
-        return new HashSet<>(taskInfo.values()).stream().map(List::size).mapToInt(i -> i).sum();
+    public static int getTaskCount(Class plugin) {
+        return taskInfo.get(plugin).size();
     }
 }

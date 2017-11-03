@@ -15,20 +15,18 @@ import com.djrapitops.plugin.utilities.StackUtils;
 /**
  *
  * @author Rsl1122
- * @param <T>
  */
 public class RunnableFactory {
 
-    public IRunnable createNew(AbsRunnable runnable) {
+    public static IRunnable createNew(AbsRunnable runnable) {
         return createNew(runnable.getName(), runnable);
     }
 
-    public IRunnable createNew(String name, AbsRunnable runnable) {
+    public static IRunnable createNew(String name, AbsRunnable runnable) {
         Class callingPlugin = StackUtils.getCallingPlugin();
         Plugin instance = StaticHolder.getInstance(callingPlugin);
 
         if (Check.isBukkitAvailable()) {
-
             return new AbsBukkitRunnable(name, instance.getProvider()) {
                 @Override
                 public void run() {
