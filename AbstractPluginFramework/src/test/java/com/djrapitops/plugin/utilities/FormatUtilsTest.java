@@ -17,11 +17,16 @@ import static org.junit.Assert.*;
 public class FormatUtilsTest {
     @Test
     public void parseVersionNumber() throws Exception {
-        assertEquals(101010000000L, FormatUtils.parseVersionNumber("1.1.1"));
-        assertEquals(101010100000L, FormatUtils.parseVersionNumber("1.1.1-Dev1"));
-        assertEquals(102010100000L, FormatUtils.parseVersionNumber("1.2.1-Dev1"));
-        assertEquals(302010100000L, FormatUtils.parseVersionNumber("3.2.1-Dev1"));
-        assertEquals(302500100000L, FormatUtils.parseVersionNumber("3.2.50-Dev1"));
+        assertEquals(10101000000000000L, FormatUtils.parseVersionNumber("1.1.1"));
+        assertEquals(10101010000000000L, FormatUtils.parseVersionNumber("1.1.1-Dev1"));
+        assertEquals(10201010000000000L, FormatUtils.parseVersionNumber("1.2.1-Dev1"));
+        assertEquals(30201010000000000L, FormatUtils.parseVersionNumber("3.2.1-Dev1"));
+        assertEquals(30250010000000000L, FormatUtils.parseVersionNumber("3.2.50-Dev1"));
+        assertEquals(424643430000000000L, FormatUtils.parseVersionNumber("42.46.43.43"));
+        assertTrue(FormatUtils.parseVersionNumber("3.2.50-Dev1") < FormatUtils.parseVersionNumber("42.46.43.43"));
+        assertTrue(FormatUtils.parseVersionNumber("1.1.1") < FormatUtils.parseVersionNumber("1.1.1-Dev1"));
+        assertTrue(FormatUtils.parseVersionNumber("1.1.1-Dev1") < FormatUtils.parseVersionNumber("1.2.1-Dev1"));
+        assertTrue(FormatUtils.parseVersionNumber("3.2.1-Dev1") < FormatUtils.parseVersionNumber("3.2.50-Dev1"));
     }
 
     public FormatUtilsTest() {

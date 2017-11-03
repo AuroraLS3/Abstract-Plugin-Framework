@@ -1,8 +1,8 @@
 package com.djrapitops.plugin.utilities;
 
 import java.text.DecimalFormat;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 
@@ -84,16 +84,18 @@ public class FormatUtils {
      * @throws NumberFormatException When wrong format
      */
     public static long parseVersionNumber(String versionString) throws NumberFormatException {
-        String[] versionArray = versionString.split("[^a-zA-Z_\\s]");
+        String replaced = versionString.replaceAll("[^0-9]", ".");
+        String[] split = replaced.split("\\.");
+        List<String> version = Arrays.stream(split).filter(s -> !s.isEmpty()).collect(Collectors.toList());
 
         long versionNumber = 0;
-        for (int i = 0; i < versionArray.length; i++) {
+        for (int i = 0; i < version.size(); i++) {
             try {
-                int num = Integer.parseInt(versionArray[i]);
+                int num = Integer.parseInt(version.get(i));
                 long multiplier = (long) Math.pow(100, 8 - i);
                 versionNumber += num * multiplier;
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                System.out.println(e);
             }
         }
         return versionNumber;
