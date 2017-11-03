@@ -1,47 +1,28 @@
 package com.djrapitops.plugin.settings;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.Priority;
-import com.djrapitops.plugin.utilities.FormattingUtils;
+import com.djrapitops.plugin.utilities.FormatUtils;
+import com.djrapitops.plugin.utilities.StackUtils;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 /**
- * Utility method class containing various static methods.
+ * Utility class for checking newest version availability from different sources.
  *
  * @author Rsl1122
  */
 public class Version {
 
-    /**
-     * Checks the version and returns response String.
-     *
-     * @param <T>
-     * @param instance
-     * @return String informing about status of plugins version.
-     */
-    public static <T extends IPlugin> String checkVersion(T instance) {
-        try {
-            String currentVersion = instance.getVersion();
-            String gitVersion = getGitVersion(instance);
-            if (isNewVersionAvailable(currentVersion, gitVersion)) {
-                String message = "New Version (" + gitVersion + ") is available at" + instance.getUpdateUrl();
-                instance.getNotificationCenter().addNotification(Priority.HIGH, message);
-                return message;
-            } else {
-                return "You're running the latest version";
-            }
-        } catch (NumberFormatException e) {
-            instance.getPluginLogger().error("Failed to compare versions.");
-        } catch (IOException | NullPointerException e) {
-            instance.getPluginLogger().error("Failed to get newest version number.");
-        }
-        return "";
-    }
-
-    private static <T extends IPlugin> String getGitVersion(T instance) throws IOException, NullPointerException {
-        URL githubUrl = new URL(instance.getUpdateCheckUrl());
+    private static <T extends IPlugin> String getGitVersion(String url) throws IOException {
+        URL githubUrl = new URL(url);
         String lineWithVersion = "";
         Scanner websiteScanner = new Scanner(githubUrl.openStream());
         while (websiteScanner.hasNextLine()) {
@@ -54,23 +35,57 @@ public class Version {
         return lineWithVersion.split(": ")[1];
     }
 
-    /**
-     *
-     * @param <T>
-     * @param instance
-     * @return
-     * @throws java.io.IOException
-     * @throws NumberFormatException
-     */
-    public static <T extends IPlugin> boolean isUpToDate(T instance) throws IOException {
-        String currentVersion = instance.getVersion();
-        String gitVersion = getGitVersion(instance);
-        return !isNewVersionAvailable(currentVersion, gitVersion);
+    private static boolean isNewVersionAvailable(String currentVersion, String newVersion) {
+        long newestVersionNumber = FormatUtils.parseVersionNumber(newVersion);
+        long currentVersionNumber = FormatUtils.parseVersionNumber(currentVersion);
+        return newestVersionNumber > currentVersionNumber;
     }
 
-    private static boolean isNewVersionAvailable(String currentVersion, String gitVersion) throws NumberFormatException {
-        int newestVersionNumber = FormattingUtils.parseVersionNumber(gitVersion);
-        int currentVersionNumber = FormattingUtils.parseVersionNumber(currentVersion);
-        return newestVersionNumber > currentVersionNumber;
+    public static boolean checkVersion(String version, String versionStringUrl) throws IOException {
+        boolean gitHub = versionStringUrl.contains("github.com");
+        boolean spigot = versionStringUrl.contains("spigot.org");
+        try {
+            if (gitHub) {
+                return isNewVersionAvailable(version, getGitVersion(versionStringUrl));
+            } else if (spigot) {
+                return isNewVersionAvailable(version, getSpigotVersion(versionStringUrl));
+            }
+        } catch (NumberFormatException e) {
+            throw new IOException("Version can not be fetched from this address", e);
+        }
+        throw new IOException("Version can not be fetched from this address");
+    }
+
+    private static String getSpigotVersion(String versionStringUrl) throws IOException {
+        String[] split = versionStringUrl.split("\\.");
+        String resourceID = split[split.length - 1];
+        String requestUrl = "https://api.spiget.org/v2/resources/" + resourceID + "/versions?size=1&sort=-name";
+        URL url = new URL(requestUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.addRequestProperty("User-Agent", "AbstractPluginFramework: " + StackUtils.getCallingPlugin().getSimpleName());
+
+        int responseCode = connection.getResponseCode();
+        try (InputStream inputStream = connection.getInputStream()) {
+
+            switch (responseCode) {
+                case 500:
+                case 403:
+                case 404:
+                case 400:
+                    throw new IOException("Spiget API returned response code: " + responseCode);
+                default:
+                    try (InputStreamReader reader = new InputStreamReader(inputStream)) {
+                        JsonElement element = new JsonParser().parse(reader);
+                        System.out.println(element);
+                        if (element.isJsonArray()) {
+                            return element.getAsJsonArray().get(0).getAsJsonObject().get("name").getAsString();
+                        } else if (element.isJsonObject()) {
+                            element.getAsJsonObject().get("name").getAsString();
+                        }
+                        System.out.println(element);
+                        return "0";
+                    }
+            }
+        }
     }
 }

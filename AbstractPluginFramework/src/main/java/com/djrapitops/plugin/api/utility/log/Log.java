@@ -8,7 +8,7 @@ package com.djrapitops.plugin.api.utility.log;
 import com.djrapitops.plugin.Plugin;
 import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.api.Benchmark;
-import com.djrapitops.plugin.utilities.FormattingUtils;
+import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.Verify;
 
@@ -122,7 +122,7 @@ public class Log {
         File logsFolder = getLogsFolder(callingPlugin);
 
         String[] split = DEBUG_FILE_NAME.split("-");
-        String day = FormattingUtils.formatTimeStampYear(Benchmark.getTime()).split(",")[0];
+        String day = FormatUtils.formatTimeStampYear(Benchmark.getTime()).split(",")[0];
         String debugLogFileName = split[0] + "-" + day + ".txt";
 
         try {

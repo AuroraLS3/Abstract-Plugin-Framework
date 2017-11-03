@@ -6,7 +6,6 @@ package com.djrapitops.plugin.api.utility.log;
 
 import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.utilities.StackUtils;
-import com.djrapitops.plugin.utilities.log.DebugInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +61,14 @@ public class DebugLog {
         debugInfos.put(task, info);
         debugInfo.put(callingPlugin, debugInfos);
         return info;
+    }
+
+    public static Map<String, DebugInfo> getAllDebugInfo() {
+        return getAllDebugInfo(StackUtils.getCallingPlugin());
+    }
+
+    public static Map<String, DebugInfo> getAllDebugInfo(Class callingPlugin) {
+        return debugInfo.getOrDefault(callingPlugin, new HashMap<>());
     }
 
     /**

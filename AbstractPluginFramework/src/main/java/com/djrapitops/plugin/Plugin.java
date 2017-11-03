@@ -3,7 +3,9 @@ package com.djrapitops.plugin;
 import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
+import com.djrapitops.plugin.settings.Version;
 import com.djrapitops.plugin.task.RunnableFactory;
+import com.djrapitops.plugin.utilities.status.TaskCenter;
 
 import java.io.File;
 import java.net.URL;
@@ -31,6 +33,7 @@ public abstract class Plugin implements IPlugin {
         StaticHolder.unRegister(pluginClass);
         Benchmark.pluginDisabled(pluginClass);
         DebugLog.pluginDisabled(pluginClass);
+        TaskCenter.cancelAllKnownTasks(pluginClass);
         provider = null;
     }
 
@@ -85,8 +88,7 @@ public abstract class Plugin implements IPlugin {
     }
 
     protected boolean isNewVersionAvailable(String versionStringUrl) {
-        boolean gitHubAddress = versionStringUrl.contains("github.com");
-        return false;
+        return Version.checkVersion(getVersion(), versionStringUrl);
     }
 
     public IPlugin getProvider() {

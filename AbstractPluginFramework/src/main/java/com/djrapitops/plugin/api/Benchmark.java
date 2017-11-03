@@ -1,7 +1,6 @@
 package com.djrapitops.plugin.api;
 
-import com.djrapitops.plugin.utilities.Format;
-import com.djrapitops.plugin.utilities.FormattingUtils;
+import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.status.Timings;
 
@@ -16,15 +15,27 @@ public class Benchmark {
     private static final Map<Class, Map<String, Long>> STARTS = new HashMap<>();
     private static final Map<Class, Timings> TIMINGS = new HashMap<>();
 
-    public static void start(String source) {
+    /**
+     * Start a new benchmark.
+     *
+     * @param source Task/Source/Name
+     * @return Bench start Epoch ms.
+     */
+    public static long start(String source) {
         Class plugin = StackUtils.getCallingPlugin();
         Map<String, Long> pluginBenchStarts = STARTS.getOrDefault(plugin, new HashMap<>());
-        pluginBenchStarts.put(source, getTime());
+        long time = getTime();
+        pluginBenchStarts.put(source, time);
         STARTS.put(plugin, pluginBenchStarts);
+        return time;
+    }
+
+    public static String startAndFormat(String source) {
+        return source + ": Started " + FormatUtils.formatTimeStampSecond(start(source));
     }
 
     public static String stopAndFormat(String source) {
-        return FormattingUtils.formatBench(source, stop(source));
+        return FormatUtils.formatBench(source, stop(source));
     }
 
     public static long stop(String source) {
@@ -49,7 +60,7 @@ public class Benchmark {
         return bench;
     }
 
-    public Timings getAverages() {
+    public static Timings getAverages() {
         return TIMINGS.getOrDefault(StackUtils.getCallingPlugin(), new Timings());
     }
 

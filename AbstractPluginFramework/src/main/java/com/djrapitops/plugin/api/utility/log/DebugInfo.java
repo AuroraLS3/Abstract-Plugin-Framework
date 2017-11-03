@@ -1,12 +1,13 @@
-package com.djrapitops.plugin.utilities.log;
+/* 
+ * Licence is provided in the jar as license.yml also here:
+ * https://github.com/Rsl1122/Plan-PlayerAnalytics/blob/master/Plan/src/main/resources/license.yml
+ */
+package com.djrapitops.plugin.api.utility.log;
 
 import com.djrapitops.plugin.api.Benchmark;
-import com.djrapitops.plugin.api.utility.log.DebugLog;
-import com.djrapitops.plugin.api.utility.log.Log;
-import com.djrapitops.plugin.utilities.FormattingUtils;
+import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.Verify;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,7 +36,7 @@ public class DebugInfo {
     }
 
     private String timeStamp(long time) {
-        return FormattingUtils.formatTimeStampSecond(time);
+        return FormatUtils.formatTimeStampSecond(time);
     }
 
     public DebugInfo addLine(String line) {

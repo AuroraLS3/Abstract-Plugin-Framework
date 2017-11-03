@@ -24,17 +24,17 @@ public class Format {
     }
 
     public Format removeLetters() {
-        string = FormattingUtils.removeLetters(string);
+        string = FormatUtils.removeLetters(string);
         return this;
     }
 
     public Format removeSymbols() {
-        string = FormattingUtils.removeSymbols(string);
+        string = FormatUtils.removeSymbols(string);
         return this;
     }
 
     public Format removeSymbolsButDot() {
-        string = FormattingUtils.removeSymbolsButDot(string);
+        string = FormatUtils.removeSymbolsButDot(string);
         return this;
     }
 
@@ -44,17 +44,17 @@ public class Format {
     }
 
     public Format removeNumbers() {
-        string = FormattingUtils.removeNumbers(string);
+        string = FormatUtils.removeNumbers(string);
         return this;
     }
 
     public Format removeWhitespace() {
-        string = FormattingUtils.removeWhitespace(string);
+        string = FormatUtils.removeWhitespace(string);
         return this;
     }
 
     public Format spaceWhitespace() {
-        string = FormattingUtils.spaceWhitespace(string);
+        string = FormatUtils.spaceWhitespace(string);
         return this;
     }
 

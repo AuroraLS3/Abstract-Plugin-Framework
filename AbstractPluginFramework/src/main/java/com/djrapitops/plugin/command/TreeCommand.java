@@ -3,7 +3,7 @@ package com.djrapitops.plugin.command;
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
-import com.djrapitops.plugin.utilities.FormattingUtils;
+import com.djrapitops.plugin.utilities.FormatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +85,7 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
         if (args.length < 1) {
             command = "help";
         }
-        onCommand(sender, commandLabel, FormattingUtils.mergeArrays(new String[]{command}, args));
+        onCommand(sender, commandLabel, FormatUtils.mergeArrays(new String[]{command}, args));
     }
 
     /**

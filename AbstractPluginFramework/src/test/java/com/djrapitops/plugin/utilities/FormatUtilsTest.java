@@ -14,9 +14,17 @@ import static org.junit.Assert.*;
  *
  * @author ristolah
  */
-public class FormattingUtilsTest {
-    
-    public FormattingUtilsTest() {
+public class FormatUtilsTest {
+    @Test
+    public void parseVersionNumber() throws Exception {
+        assertEquals(101010000000L, FormatUtils.parseVersionNumber("1.1.1"));
+        assertEquals(101010100000L, FormatUtils.parseVersionNumber("1.1.1-Dev1"));
+        assertEquals(102010100000L, FormatUtils.parseVersionNumber("1.2.1-Dev1"));
+        assertEquals(302010100000L, FormatUtils.parseVersionNumber("3.2.1-Dev1"));
+        assertEquals(302500100000L, FormatUtils.parseVersionNumber("3.2.50-Dev1"));
+    }
+
+    public FormatUtilsTest() {
     }
     
     @Before
@@ -31,21 +39,21 @@ public class FormattingUtilsTest {
     public void testRemoveLetters() {
         String string = "ABCZabcz123490;?=) ";
         String exp = "123490;?=) ";
-        assertEquals(exp, FormattingUtils.removeLetters(string));
+        assertEquals(exp, FormatUtils.removeLetters(string));
     }
 
     @Test
     public void testRemoveNumbers() {
         String string = "ABCZabcz123490;?=) ";
         String exp = "ABCZabcz;?=) ";
-        assertEquals(exp, FormattingUtils.removeNumbers(string));
+        assertEquals(exp, FormatUtils.removeNumbers(string));
     }
 
     @Test
     public void testRemoveSymbols() {
         String string = "ABCZabcz123490;?=) ";
         String exp = "ABCZabcz123490 ";
-        assertEquals(exp, FormattingUtils.removeSymbols(string));
+        assertEquals(exp, FormatUtils.removeSymbols(string));
     }
 
     @Test

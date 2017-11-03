@@ -21,20 +21,16 @@ import java.util.stream.Collectors;
  */
 public class NotificationCenter {
 
-    private final Map<Class, Map<Priority, List<String>>> notifications;
+    private static final Map<Class, Map<Priority, List<String>>> notifications = new HashMap<>();
 
-    public NotificationCenter() {
-        notifications = new HashMap<>();
-    }
-
-    public void addNotification(Priority priority, String message) {
+    public static void addNotification(Priority priority, String message) {
         Class callingPlugin = StackUtils.getCallingPlugin();
         Map<Priority, List<String>> notificationMap = notifications.computeIfAbsent(callingPlugin, p -> new HashMap<>());
         notificationMap.computeIfAbsent(priority, p -> new ArrayList<>())
                 .add(message);
     }
 
-    public void checkNotifications(org.bukkit.entity.Player player) {
+    public static void checkNotifications(org.bukkit.entity.Player player) {
         if (player.isOp() || player.hasPermission("apf.notify")) {
             for (String msg : getNotifications()) {
                 player.sendMessage(msg);
@@ -42,8 +38,11 @@ public class NotificationCenter {
         }
     }
 
-    public List<String> getNotifications() {
-        Class callingPlugin = StackUtils.getCallingPlugin();
+    public static List<String> getNotifications() {
+        return getNotifications(StackUtils.getCallingPlugin());
+    }
+
+    public static List<String> getNotifications(Class callingPlugin) {
         String prefix = "[" + callingPlugin.getSimpleName() + "]";
 
         List<String> messages = new ArrayList<>();

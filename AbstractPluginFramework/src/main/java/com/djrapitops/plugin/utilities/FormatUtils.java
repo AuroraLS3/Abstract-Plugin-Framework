@@ -9,7 +9,7 @@ import org.bukkit.Location;
 /**
  * @author Rsl1122
  */
-public class FormattingUtils {
+public class FormatUtils {
 
     /**
      * @param epochMs
@@ -83,15 +83,20 @@ public class FormattingUtils {
      * @return parsed double - for example 1,11
      * @throws NumberFormatException When wrong format
      */
-    public static int parseVersionNumber(String versionString) throws NumberFormatException {
-        String[] versionArray = versionString.split("\\.");
-        if (versionArray.length != 3) {
-            throw new NumberFormatException("Wrong format used");
+    public static long parseVersionNumber(String versionString) throws NumberFormatException {
+        String[] versionArray = versionString.split("[^a-zA-Z_\\s]");
+
+        long versionNumber = 0;
+        for (int i = 0; i < versionArray.length; i++) {
+            try {
+                int num = Integer.parseInt(versionArray[i]);
+                long multiplier = (long) Math.pow(100, 8 - i);
+                versionNumber += num * multiplier;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
-        int main = Integer.parseInt(versionArray[0]) * 10000;
-        int major = Integer.parseInt(versionArray[1]) * 100;
-        int minor = Integer.parseInt(versionArray[2]);
-        return main + major + minor;
+        return versionNumber;
     }
 
     public static String[] removeFirstArgument(String... args) {
