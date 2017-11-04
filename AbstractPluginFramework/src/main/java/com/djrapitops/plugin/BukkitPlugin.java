@@ -49,17 +49,24 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
             case "INFO":
             case "I":
                 logger.info(s);
+                break;
+            case "INFO_COLOR":
+                getServer().getConsoleSender().sendMessage(s);
+                break;
             case "W":
             case "WARN":
             case "WARNING":
                 logger.warning(s);
+                break;
             case "E":
             case "ERR":
             case "ERROR":
             case "SEVERE":
                 logger.severe(s);
+                break;
             default:
                 logger.info(s);
+                break;
         }
     }
 

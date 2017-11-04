@@ -11,6 +11,7 @@ import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.Verify;
+import com.google.common.base.Strings;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +40,18 @@ public class Log extends DebugLog {
             return;
         }
         instance.log("INFO", s);
+    }
+
+    static void infoColor(String s) {
+        infoColor(s, StackUtils.getCallingPlugin());
+    }
+
+    static void infoColor(String s, Class c) {
+        IPlugin instance = StaticHolder.getInstance(c);
+        if (instance == null) {
+            return;
+        }
+        instance.log("INFO_COLOR", s);
     }
 
     public static void warn(String s) {

@@ -8,6 +8,7 @@ import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.command.bungee.BungeeCommand;
 import com.djrapitops.plugin.task.RunnableFactory;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Listener;
 
 import java.io.IOException;
@@ -60,17 +61,24 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends net.md_5.bung
             case "INFO":
             case "I":
                 logger.info(s);
+                break;
+            case "INFO_COLOR":
+                getProxy().getConsole().sendMessage(new TextComponent(s));
+                break;
             case "W":
             case "WARN":
             case "WARNING":
                 logger.warning(s);
+                break;
             case "E":
             case "ERR":
             case "ERROR":
             case "SEVERE":
                 logger.severe(s);
+                break;
             default:
                 logger.info(s);
+                break;
         }
     }
 
