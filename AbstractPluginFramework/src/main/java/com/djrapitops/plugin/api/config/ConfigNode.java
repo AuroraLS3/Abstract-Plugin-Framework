@@ -45,6 +45,10 @@ public class ConfigNode {
         return childOrder;
     }
 
+    public String getString(String path) {
+        return getConfigNode(path).getString();
+    }
+
     public String getString() {
 //        boolean surroundedWithSingleQuotes = value.startsWith("'") && value.endsWith("'");
 //        boolean surroundedWithDoubleQuotes = value.startsWith("\"") && value.endsWith("\"");
@@ -54,8 +58,16 @@ public class ConfigNode {
         return value;
     }
 
+    public boolean getBoolean(String path) {
+        return getConfigNode(path).getBoolean();
+    }
+
     public boolean getBoolean() {
         return "true".equals(value);
+    }
+
+    public int getInt(String path) {
+        return getConfigNode(path).getInt();
     }
 
     public int getInt() {
@@ -70,12 +82,20 @@ public class ConfigNode {
         }
     }
 
+    public long getLong(String path) {
+        return getConfigNode(path).getLong();
+    }
+
     public long getLong() {
         try {
             return Long.parseLong(value);
         } catch (NumberFormatException e) {
             return 0L;
         }
+    }
+
+    public double getDouble(String path) {
+        return getConfigNode(path).getDouble();
     }
 
     public double getDouble() {
@@ -86,9 +106,17 @@ public class ConfigNode {
         }
     }
 
+    public List<String> getStringList(String path) {
+        return getConfigNode(path).getStringList();
+    }
+
     public List<String> getStringList() {
         String[] lines = value.split(" APF_NEWLINE ");
         return Arrays.asList(lines);
+    }
+
+    public List<Integer> getIntList(String path) {
+        return getConfigNode(path).getIntList();
     }
 
     public List<Integer> getIntList() {
