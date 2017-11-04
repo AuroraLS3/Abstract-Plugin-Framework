@@ -31,7 +31,7 @@ public class StaticHolder {
         return notificationCenter;
     }
 
-    public static <T extends IPlugin> void register(T plugin) {
+    public static void register(IPlugin plugin) {
         plugins.put(plugin.getClass(), plugin);
     }
 
@@ -44,7 +44,11 @@ public class StaticHolder {
     }
 
     public static IPlugin getInstance(Class c) {
-        return plugins.get(c);
+        IPlugin iPlugin = plugins.get(c);
+        if (iPlugin == null) {
+            throw new IllegalStateException("Plugin has not been initialized: " + c.getSimpleName());
+        }
+        return iPlugin;
     }
 
     public static RunnableFactory getRunnableFactory() {

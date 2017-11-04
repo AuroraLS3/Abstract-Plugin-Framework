@@ -18,15 +18,9 @@ import java.util.logging.Logger;
 /**
  * @author Rsl1122
  */
-public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin implements IPlugin {
+public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
     protected boolean reloading;
-
-    protected final T plugin;
-
-    public BukkitPlugin(T plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public void onEnable() {
@@ -73,13 +67,13 @@ public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin im
     public void registerListener(Listener... listeners) {
         for (Listener listener : listeners) {
             getServer().getPluginManager().registerEvents(listener, this);
-            StaticHolder.saveInstance(listener.getClass(), plugin.getClass());
+            StaticHolder.saveInstance(listener.getClass(), getClass());
         }
     }
 
     public void registerCommand(String name, SubCommand command) {
         getCommand(name).setExecutor(new BukkitCommand(command));
-        StaticHolder.saveInstance(command.getClass(), plugin.getClass());
+        StaticHolder.saveInstance(command.getClass(), getClass());
     }
 
     protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {

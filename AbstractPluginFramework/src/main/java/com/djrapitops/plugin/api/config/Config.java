@@ -55,20 +55,22 @@ public class Config extends ConfigNode {
         ConfigNode parent = this;
         ConfigNode lastNode = this;
         for (String line : fileLines) {
-            System.out.print(fileLines.indexOf(line) + ": ");
             try {
                 int depth = FileLogger.getIndentation(line);
 
                 String trimmed = line.trim();
+                String[] keyAndValue = trimmed.split(":", 2);
+                if (keyAndValue.length <= 1) {
+                    lastNode.set(lastNode.getValue() + " " + trimmed);
+                    continue;
+                }
+                String configKey = keyAndValue[0];
                 if (trimmed.startsWith("#")) {
                     comments.add(trimmed);
-                    System.out.println("Comment");
                     continue;
                 }
 
-                System.out.print("Depth:" + depth + " | ");
                 if (depth > lastDepth) {
-                    System.out.print("+");
                     parent = lastNode;
                 } else if (depth < lastDepth) {
                     // Prevents incorrect indent in the case:
@@ -78,15 +80,11 @@ public class Config extends ConfigNode {
                     // 1:
                     int nDepth = lastDepth;
                     while (nDepth > depth) {
-                        System.out.print("-" + nDepth);
                         nDepth = parent.depth;
                         parent = parent.parent;
                     }
                 }
-                System.out.print(" | ");
 
-                String[] keyAndValue = trimmed.split(":", 2);
-                String configKey = keyAndValue[0];
 
                 String value = keyAndValue[1];
                 int indexOfHashtag = value.lastIndexOf(" #");
@@ -95,13 +93,9 @@ public class Config extends ConfigNode {
                 ConfigNode node = new ConfigNode(configKey, parent, valueWithoutComment);
                 node.depth = depth;
                 node.setComment(new ArrayList<>(comments));
-                if (!comments.isEmpty()) {
-                    System.out.print("AddComments | ");
-                }
                 comments.clear();
                 lastNode = node;
                 lastDepth = depth;
-                System.out.println(node.getKey(true));
                 parent.addChild(configKey, node);
             } catch (Exception e) {
                 throw new IllegalStateException("Malformed File (" + file.getName() + "), Error on line " + fileLines.indexOf(line) + ": " + line, e);

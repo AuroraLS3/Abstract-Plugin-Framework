@@ -26,7 +26,7 @@ public class DebugLog {
      * @param message Single message to add to the debug log.
      * @return full debug complex so far.
      */
-    public static DebugInfo debug(String task, String message) {
+    public static DebugInfo logDebug(String task, String message) {
         return getDebug(task).addLine(message, Benchmark.getTime());
     }
 
@@ -37,7 +37,7 @@ public class DebugLog {
      * @param messages All messages to add to the debug log.
      * @return full debug complex so far.
      */
-    public static DebugInfo debug(String task, String... messages) {
+    public static DebugInfo logDebug(String task, String... messages) {
         DebugInfo debug = getDebug(task);
         long time = Benchmark.getTime();
         for (String message : messages) {

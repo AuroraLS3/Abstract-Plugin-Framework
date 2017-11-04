@@ -1,5 +1,6 @@
 package com.djrapitops.plugin.api;
 
+import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.status.Timings;
@@ -36,6 +37,12 @@ public class Benchmark {
 
     public static String stopAndFormat(String source) {
         return FormatUtils.formatBench(source, stop(source));
+    }
+
+    public static String stop(String logDebug, String source) {
+        String message = stopAndFormat(source);
+        DebugLog.logDebug(logDebug, message);
+        return message;
     }
 
     public static long stop(String source) {

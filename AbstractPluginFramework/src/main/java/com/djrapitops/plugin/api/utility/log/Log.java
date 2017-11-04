@@ -34,7 +34,7 @@ public class Log extends DebugLog {
         info(s, StackUtils.getCallingPlugin());
     }
 
-    static void info(String s, Class c) {
+    private static void info(String s, Class c) {
         IPlugin instance = StaticHolder.getInstance(c);
         if (instance == null) {
             return;
@@ -42,11 +42,11 @@ public class Log extends DebugLog {
         instance.log("INFO", s);
     }
 
-    static void infoColor(String s) {
+    public static void infoColor(String s) {
         infoColor(s, StackUtils.getCallingPlugin());
     }
 
-    static void infoColor(String s, Class c) {
+    private static void infoColor(String s, Class c) {
         IPlugin instance = StaticHolder.getInstance(c);
         if (instance == null) {
             return;

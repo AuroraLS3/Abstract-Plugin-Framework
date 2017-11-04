@@ -2,6 +2,7 @@ package com.djrapitops.plugin.utilities;
 
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
+import com.djrapitops.plugin.api.utility.log.Log;
 
 /**
  * Class for getting information about the current StackTrace.
@@ -19,13 +20,23 @@ public class StackUtils {
     public static Class getCallingPlugin() {
         StackTraceElement[] stack = Thread.currentThread().getStackTrace();
         for (int i = 0; i < stack.length; i++) {
-            Class c = stack[i].getClass();
+            Class c = null;
+            try {
+                c = Class.forName(stack[i].getClassName());
+            } catch (ClassNotFoundException e) {
+                continue;
+            }
             if (IPlugin.class.isAssignableFrom(c)) {
                 return c;
             }
         }
         for (int i = 0; i < stack.length; i++) {
-            Class c = stack[i].getClass();
+            Class c = null;
+            try {
+                c = Class.forName(stack[i].getClassName());
+            } catch (ClassNotFoundException e) {
+                continue;
+            }
             Class provider = StaticHolder.getProvidingPlugin(c);
             if (provider != null) {
                 return provider;

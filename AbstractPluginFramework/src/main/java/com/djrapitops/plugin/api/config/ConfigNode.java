@@ -143,6 +143,10 @@ public class ConfigNode {
         this.comment = comment;
     }
 
+    public void set(String path, Object value) {
+        getConfigNode(path).set(value);
+    }
+
     public void set(Object value) {
         this.value = value.toString();
     }

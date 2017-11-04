@@ -17,15 +17,9 @@ import java.util.logging.Logger;
 /**
  * @author Rsl1122
  */
-public abstract class BungeePlugin<T extends BungeePlugin> extends net.md_5.bungee.api.plugin.Plugin implements IPlugin {
+public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements IPlugin {
 
     protected boolean reloading;
-
-    protected final T plugin;
-
-    public BungeePlugin(T plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public void onEnable() {
@@ -85,13 +79,13 @@ public abstract class BungeePlugin<T extends BungeePlugin> extends net.md_5.bung
     public void registerListener(Listener... listeners) {
         for (Listener listener : listeners) {
             getProxy().getPluginManager().registerListener(this, listener);
-            StaticHolder.saveInstance(listener.getClass(), plugin.getClass());
+            StaticHolder.saveInstance(listener.getClass(), getClass());
         }
     }
 
     public void registerCommand(String name, SubCommand command) {
         getProxy().getPluginManager().registerCommand(this, new BungeeCommand(command));
-        StaticHolder.saveInstance(command.getClass(), plugin.getClass());
+        StaticHolder.saveInstance(command.getClass(), getClass());
     }
 
     protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {
