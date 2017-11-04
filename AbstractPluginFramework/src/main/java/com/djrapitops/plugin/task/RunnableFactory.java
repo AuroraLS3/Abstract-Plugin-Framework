@@ -5,7 +5,7 @@
  */
 package com.djrapitops.plugin.task;
 
-import com.djrapitops.plugin.Plugin;
+import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.api.Check;
 import com.djrapitops.plugin.task.bukkit.AbsBukkitRunnable;
@@ -23,11 +23,11 @@ public class RunnableFactory {
 
     public static IRunnable createNew(String name, AbsRunnable runnable) {
         Class callingPlugin = StackUtils.getCallingPlugin();
-        Plugin instance = StaticHolder.getInstance(callingPlugin);
+        IPlugin instance = StaticHolder.getInstance(callingPlugin);
         StaticHolder.saveInstance(runnable.getClass(), callingPlugin);
 
         if (Check.isBukkitAvailable()) {
-            return new AbsBukkitRunnable(name, instance.getProvider()) {
+            return new AbsBukkitRunnable(name, instance) {
                 @Override
                 public void run() {
                     runnable.setCancellable(this);
@@ -35,7 +35,7 @@ public class RunnableFactory {
                 }
             };
         } else if (Check.isBungeeAvailable()) {
-            return new AbsBungeeRunnable(name, instance.getProvider()) {
+            return new AbsBungeeRunnable(name, instance) {
                 @Override
                 public void run() {
                     runnable.setCancellable(this);

@@ -5,7 +5,7 @@
  */
 package com.djrapitops.plugin.api.utility.log;
 
-import com.djrapitops.plugin.Plugin;
+import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.utilities.FormatUtils;
@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * @author Rsl1122
  */
-public class Log {
+public class Log extends DebugLog {
 
     public static final String DEBUG_FILE_NAME = "DebugLog-.txt";
     public static final String ERROR_FILE_NAME = "ErrorLog.txt";
@@ -34,7 +34,7 @@ public class Log {
     }
 
     static void info(String s, Class c) {
-        Plugin instance = StaticHolder.getInstance(c);
+        IPlugin instance = StaticHolder.getInstance(c);
         if (instance == null) {
             return;
         }
@@ -46,7 +46,7 @@ public class Log {
     }
 
     private static void warn(String s, Class c) {
-        Plugin instance = StaticHolder.getInstance(c);
+        IPlugin instance = StaticHolder.getInstance(c);
         if (instance == null) {
             return;
         }
@@ -58,7 +58,7 @@ public class Log {
     }
 
     private static void error(String s, Class c) {
-        Plugin instance = StaticHolder.getInstance(c);
+        IPlugin instance = StaticHolder.getInstance(c);
         if (instance == null) {
             return;
         }
@@ -110,7 +110,7 @@ public class Log {
     }
 
     private static File getLogsFolder(Class callingPlugin) {
-        Plugin instance = StaticHolder.getInstance(callingPlugin);
+        IPlugin instance = StaticHolder.getInstance(callingPlugin);
         File dataFolder = instance.getDataFolder();
         File logsFolder = new File(dataFolder, "logs");
         logsFolder.mkdirs();

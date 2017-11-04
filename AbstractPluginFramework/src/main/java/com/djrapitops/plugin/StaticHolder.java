@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class StaticHolder {
 
-    private static final Map<Class, Plugin> plugins = new HashMap<>();
+    private static final Map<Class, IPlugin> plugins = new HashMap<>();
     private static final Map<Class, Class> classMap = new HashMap<>();
 
     private static final NotificationCenter notificationCenter = new NotificationCenter();
@@ -31,11 +31,11 @@ public class StaticHolder {
         return notificationCenter;
     }
 
-    public static <T extends Plugin> void register(T plugin) {
+    public static <T extends IPlugin> void register(T plugin) {
         plugins.put(plugin.getClass(), plugin);
     }
 
-    public static void unRegister(Class<? extends Plugin> c) {
+    public static void unRegister(Class<? extends IPlugin> c) {
         plugins.remove(c);
     }
 
@@ -43,7 +43,7 @@ public class StaticHolder {
         return taskCenter;
     }
 
-    public static Plugin getInstance(Class c) {
+    public static IPlugin getInstance(Class c) {
         return plugins.get(c);
     }
 

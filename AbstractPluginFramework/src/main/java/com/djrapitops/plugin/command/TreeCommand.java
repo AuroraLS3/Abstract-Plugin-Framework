@@ -159,8 +159,9 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
         return cs;
     }
 
-    public void setColorScheme(ColorScheme cs) {
+    public TreeCommand<T> setColorScheme(ColorScheme cs) {
         this.cs = cs;
+        return this;
     }
 }
 

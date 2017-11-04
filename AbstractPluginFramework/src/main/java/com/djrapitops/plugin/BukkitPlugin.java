@@ -1,38 +1,45 @@
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.api.Benchmark;
+import com.djrapitops.plugin.api.systems.NotificationCenter;
+import com.djrapitops.plugin.api.systems.TaskCenter;
+import com.djrapitops.plugin.api.utility.Version;
+import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
+import com.djrapitops.plugin.task.RunnableFactory;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.event.Level;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
  * @author Rsl1122
  */
-public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
+public abstract class BukkitPlugin<T extends BukkitPlugin> extends JavaPlugin implements IPlugin {
 
-    private final Plugin plugin;
+    protected boolean reloading;
 
-    public BukkitPlugin(Plugin plugin) {
+    protected final T plugin;
+
+    public BukkitPlugin(T plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public void onEnable() {
-        plugin.enable(this);
+        StaticHolder.register(this);
     }
 
     @Override
     public void onDisable() {
-        plugin.onDisable();
-        plugin.disable();
-    }
-
-    @Override
-    public void reloadPlugin(boolean full) {
-        plugin.reloadPlugin(full);
+        Class<? extends IPlugin> pluginClass = getClass();
+        StaticHolder.unRegister(pluginClass);
+        Benchmark.pluginDisabled(pluginClass);
+        DebugLog.pluginDisabled(pluginClass);
+        TaskCenter.cancelAllKnownTasks(pluginClass);
     }
 
     @Override
@@ -56,13 +63,42 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         }
     }
 
-    public void registerListener(Listener listener) {
-        getServer().getPluginManager().registerEvents(listener, this);
-        StaticHolder.saveInstance(listener.getClass(), plugin.getClass());
+    public void registerListener(Listener... listeners) {
+        for (Listener listener : listeners) {
+            getServer().getPluginManager().registerEvents(listener, this);
+            StaticHolder.saveInstance(listener.getClass(), plugin.getClass());
+        }
     }
 
     public void registerCommand(String name, SubCommand command) {
         getCommand(name).setExecutor(new BukkitCommand(command));
         StaticHolder.saveInstance(command.getClass(), plugin.getClass());
     }
+
+    protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {
+        return Version.checkVersion(getVersion(), versionStringUrl);
+    }
+
+    public NotificationCenter getNotificationCenter() {
+        return StaticHolder.getNotificationCenter();
+    }
+
+    public RunnableFactory getRunnableFactory() {
+        return StaticHolder.getRunnableFactory();
+    }
+
+    @Override
+    public void reloadPlugin(boolean full) {
+        reloading = true;
+        if (full) {
+            onDisable();
+            onReload();
+            onEnable();
+        } else {
+            onReload();
+        }
+        reloading = false;
+    }
+
+    public abstract void onReload();
 }

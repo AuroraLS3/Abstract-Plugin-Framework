@@ -1,6 +1,6 @@
 package com.djrapitops.plugin.utilities;
 
-import com.djrapitops.plugin.Plugin;
+import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
 
 /**
@@ -20,7 +20,7 @@ public class StackUtils {
         StackTraceElement[] stack = Thread.currentThread().getStackTrace();
         for (int i = 0; i < stack.length; i++) {
             Class c = stack[i].getClass();
-            if (Plugin.class.isAssignableFrom(c)) {
+            if (IPlugin.class.isAssignableFrom(c)) {
                 return c;
             }
         }
@@ -31,6 +31,6 @@ public class StackUtils {
                 return provider;
             }
         }
-        return Plugin.class;
+        return IPlugin.class;
     }
 }
