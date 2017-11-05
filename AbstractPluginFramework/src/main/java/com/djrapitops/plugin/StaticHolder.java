@@ -31,8 +31,12 @@ public class StaticHolder {
         return notificationCenter;
     }
 
+    public static void register(Class<? extends IPlugin> c, IPlugin plugin) {
+        plugins.put(c, plugin);
+    }
+
     public static void register(IPlugin plugin) {
-        plugins.put(plugin.getClass(), plugin);
+        register(plugin.getClass(), plugin);
     }
 
     public static void unRegister(Class<? extends IPlugin> c) {

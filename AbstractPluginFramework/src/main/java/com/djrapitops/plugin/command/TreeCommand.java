@@ -23,7 +23,7 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
 
     protected final T plugin;
 
-    protected final List<SubCommand> commands;
+    private final List<SubCommand> commands;
     private String defaultCommand = "help";
     private String helpPrefix = "";
     private ColorScheme cs = new ColorScheme("§7", "§f", "§8");

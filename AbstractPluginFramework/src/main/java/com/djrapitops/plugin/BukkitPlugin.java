@@ -30,10 +30,10 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     @Override
     public void onDisable() {
         Class<? extends IPlugin> pluginClass = getClass();
-        StaticHolder.unRegister(pluginClass);
         Benchmark.pluginDisabled(pluginClass);
         DebugLog.pluginDisabled(pluginClass);
         TaskCenter.cancelAllKnownTasks(pluginClass);
+        StaticHolder.unRegister(pluginClass);
     }
 
     @Override

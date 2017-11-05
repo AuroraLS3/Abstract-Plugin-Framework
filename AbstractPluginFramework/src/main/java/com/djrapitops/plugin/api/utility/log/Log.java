@@ -15,10 +15,7 @@ import com.google.common.base.Strings;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +38,9 @@ public class Log extends DebugLog {
             return;
         }
         instance.log("INFO", s);
+        if (debugToFile(c)) {
+            toDebugLog(Collections.singletonList(s), c);
+        }
     }
 
     public static void infoColor(String s) {
@@ -94,7 +94,11 @@ public class Log extends DebugLog {
     static void debug(List<String> lines, Class callingPlugin) {
         if (debugToConsole(callingPlugin)) {
             for (String line : lines) {
-                info("[DEBUG] " + line);
+                if (line.startsWith("|")) {
+                    info("[DEBUG] "+line.substring(19));
+                } else {
+                    info("[DEBUG] " + line);
+                }
             }
         }
         if (debugToFile(callingPlugin)) {
@@ -128,6 +132,9 @@ public class Log extends DebugLog {
 
     private static File getLogsFolder(Class callingPlugin) {
         IPlugin instance = StaticHolder.getInstance(callingPlugin);
+        if (instance == null) {
+            return new File("APF_plugin_errorlogs");
+        }
         File dataFolder = instance.getDataFolder();
         File logsFolder = new File(dataFolder, "logs");
         logsFolder.mkdirs();

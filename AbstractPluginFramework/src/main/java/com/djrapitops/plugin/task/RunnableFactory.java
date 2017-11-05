@@ -17,34 +17,43 @@ import com.djrapitops.plugin.utilities.StackUtils;
  */
 public class RunnableFactory {
 
+    private static boolean testMode = false;
+
     public static IRunnable createNew(AbsRunnable runnable) {
         return createNew(runnable.getName(), runnable);
     }
 
     public static IRunnable createNew(String name, AbsRunnable runnable) {
-        Class callingPlugin = StackUtils.getCallingPlugin();
-        IPlugin instance = StaticHolder.getInstance(callingPlugin);
-        StaticHolder.saveInstance(runnable.getClass(), callingPlugin);
+        if (!testMode) {
+            try {
+                Class callingPlugin = StackUtils.getCallingPlugin();
+                IPlugin instance = StaticHolder.getInstance(callingPlugin);
+                StaticHolder.saveInstance(runnable.getClass(), callingPlugin);
 
-        if (Check.isBukkitAvailable()) {
-            return new AbsBukkitRunnable(name, instance) {
-                @Override
-                public void run() {
-                    runnable.setCancellable(this);
-                    runnable.run();
+                if (Check.isBukkitAvailable()) {
+                    return new AbsBukkitRunnable(name, instance) {
+                        @Override
+                        public void run() {
+                            runnable.setCancellable(this);
+                            runnable.run();
+                        }
+                    };
+                } else if (Check.isBungeeAvailable()) {
+                    return new AbsBungeeRunnable(name, instance) {
+                        @Override
+                        public void run() {
+                            runnable.setCancellable(this);
+                            runnable.run();
+                        }
+                    };
                 }
-            };
-        } else if (Check.isBungeeAvailable()) {
-            return new AbsBungeeRunnable(name, instance) {
-                @Override
-                public void run() {
-                    runnable.setCancellable(this);
-                    runnable.run();
-                }
-            };
-        } else {
-            // TODO new Thread runnable.
-            return null;
+            } catch (NullPointerException ignored) {
+            }
         }
+        return new ThreadRunnable(name, 0, runnable);
+    }
+
+    public static void activateTestMode() {
+        testMode = true;
     }
 }

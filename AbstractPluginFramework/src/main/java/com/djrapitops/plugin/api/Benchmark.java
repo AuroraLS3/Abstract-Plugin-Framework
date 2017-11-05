@@ -31,18 +31,23 @@ public class Benchmark {
         return time;
     }
 
+    public static void start(String logDebug, String source) {
+        DebugLog.logDebug(logDebug, startAndFormat(source));
+    }
+
     public static String startAndFormat(String source) {
-        return source + ": Started " + FormatUtils.formatTimeStampSecond(start(source));
+        start(source);
+        return "started   " + source;
     }
 
     public static String stopAndFormat(String source) {
         return FormatUtils.formatBench(source, stop(source));
     }
 
-    public static String stop(String logDebug, String source) {
-        String message = stopAndFormat(source);
-        DebugLog.logDebug(logDebug, message);
-        return message;
+    public static long stop(String logDebug, String source) {
+        long time = stop(source);
+        DebugLog.logDebug(logDebug, FormatUtils.formatBench(source, time));
+        return time;
     }
 
     public static long stop(String source) {
