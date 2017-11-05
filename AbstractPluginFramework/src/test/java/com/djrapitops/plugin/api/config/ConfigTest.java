@@ -171,6 +171,12 @@ public class ConfigTest {
     }
 
     @Test
+    public void unWrapQuotes() {
+        assertEquals("\"#0099C6\", \"#66AA00\", \"#316395\", \"#994499\", \"#22AA99\", \"#AAAA11\", \"#6633CC\", \"#E67300\", \"#329262\", \"#5574A6\"",
+                config.getString("Theme.Graphs.WorldPie"));
+    }
+
+    @Test
     public void copyDefaults() throws IOException {
         config.save();
         List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5);

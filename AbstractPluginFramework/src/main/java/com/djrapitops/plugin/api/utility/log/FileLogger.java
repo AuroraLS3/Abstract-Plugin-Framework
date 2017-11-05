@@ -31,9 +31,7 @@ public class FileLogger {
 
     public static void appendToFile(File file, List<String> lines) throws IOException {
         if (!file.exists()) {
-            if (file.createNewFile()) {
-                throw new FileNotFoundException("Failed to create a new file!: " + file.getAbsolutePath());
-            }
+            file.createNewFile();
         }
         Files.write(file.toPath(), lines, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
     }

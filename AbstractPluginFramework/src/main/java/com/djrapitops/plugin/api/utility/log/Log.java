@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Rsl1122
@@ -141,8 +142,12 @@ public class Log extends DebugLog {
         String day = FormatUtils.formatTimeStampYear(Benchmark.getTime()).split(",")[0].replace(" ", "-");
         String debugLogFileName = split[0] + "-" + day + ".txt";
 
+        String timeStamp = FormatUtils.formatTimeStampSecond(Benchmark.getTime());
+        List<String> timeStamped = lines.stream().map(l -> "| " + timeStamp + " | " + l)
+                .collect(Collectors.toList());
+
         try {
-            FileLogger.appendToFile(new File(logsFolder, debugLogFileName), lines);
+            FileLogger.appendToFile(new File(logsFolder, debugLogFileName), timeStamped);
         } catch (IOException e) {
             Log.toLog("com.djrapitops.plugin.api.utility.log.Log", e);
         }

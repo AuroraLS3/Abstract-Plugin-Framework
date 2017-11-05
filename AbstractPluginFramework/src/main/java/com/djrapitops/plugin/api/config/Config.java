@@ -91,7 +91,12 @@ public class Config extends ConfigNode {
                     if (isListItem && wasListItem) {
                         lastNode.set(lastValue + " APF_NEWLINE " + trimmed);
                     } else {
-                        lastNode.set(lastValue + " " + trimmed);
+                        if ((lastValue.startsWith("\"") && trimmed.endsWith("\""))
+                                || (lastValue.startsWith("'") && trimmed.endsWith("'"))) {
+                            lastNode.set(lastValue.substring(1) + " " + trimmed.substring(0, trimmed.length() - 1));
+                        } else {
+                            lastNode.set(lastValue + " " + trimmed);
+                        }
                     }
                     continue;
                 }
