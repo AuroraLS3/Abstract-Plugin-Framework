@@ -4,6 +4,8 @@
  */
 package com.djrapitops.plugin.api.config;
 
+import com.djrapitops.plugin.utilities.Verify;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,12 +52,17 @@ public class ConfigNode {
     }
 
     public String getString() {
-//        boolean surroundedWithSingleQuotes = value.startsWith("'") && value.endsWith("'");
-//        boolean surroundedWithDoubleQuotes = value.startsWith("\"") && value.endsWith("\"");
-//        if (surroundedWithSingleQuotes || surroundedWithDoubleQuotes) {
-//            value = value.substring(1, value.length() - 2);
-//        }
-        return value;
+        return getStringFrom(value);
+    }
+
+    private String getStringFrom(String value) {
+        String s = value.trim();
+        boolean surroundedWithSingleQuotes = s.startsWith("'") && s.endsWith("'");
+        boolean surroundedWithDoubleQuotes = s.startsWith("\"") && s.endsWith("\"");
+        if (surroundedWithSingleQuotes || surroundedWithDoubleQuotes) {
+            s = s.substring(1, s.length() - 1);
+        }
+        return s;
     }
 
     public boolean getBoolean(String path) {
@@ -63,7 +70,7 @@ public class ConfigNode {
     }
 
     public boolean getBoolean() {
-        return "true".equals(value);
+        return Verify.equalsOne(value, "true", "'true'", "\"true\"");
     }
 
     public int getInt(String path) {
@@ -102,7 +109,11 @@ public class ConfigNode {
         try {
             return Double.parseDouble(value);
         } catch (NumberFormatException e) {
-            return 0.0;
+            try {
+                return Double.parseDouble(value.replace(',', '.'));
+            } catch (NumberFormatException e2) {
+                return 0.0;
+            }
         }
     }
 
@@ -112,7 +123,26 @@ public class ConfigNode {
 
     public List<String> getStringList() {
         String[] lines = value.split(" APF_NEWLINE ");
-        return Arrays.asList(lines);
+        List<String> values = new ArrayList<>();
+        for (String line : lines) {
+            String trim = line.trim();
+            if (trim.isEmpty()) {
+                continue;
+            }
+            if (trim.startsWith("-")) {
+                String s = trim.substring(1).trim();
+                values.add(getStringFrom(s));
+            } else {
+                if (values.isEmpty()) {
+                    values.add(trim);
+                } else {
+                    String oldValue = values.get(values.size() - 1);
+                    values.remove(oldValue);
+                    values.add(getStringFrom(oldValue + trim));
+                }
+            }
+        }
+        return values;
     }
 
     public List<Integer> getIntList(String path) {
@@ -127,9 +157,12 @@ public class ConfigNode {
         String[] split = path.split("\\.");
         ConfigNode node = this;
         for (String key : split) {
+            ConfigNode parent = node;
             node = node.children.get(key);
             if (node == null) {
-                return null;
+                ConfigNode newN = new ConfigNode(key, parent, "");
+                parent.addChild(key, newN);
+                node = newN;
             }
         }
         return node;
@@ -144,11 +177,27 @@ public class ConfigNode {
     }
 
     public void set(String path, Object value) {
-        getConfigNode(path).set(value);
+        String[] split = path.split("\\.");
+        ConfigNode node = getConfigNode(path);
+        node.set(value);
     }
 
     public void set(Object value) {
-        this.value = value.toString();
+        if (value instanceof List) {
+            StringBuilder valueBuilder = new StringBuilder();
+            for (Object o : ((List) value)) {
+                valueBuilder.append(" APF_NEWLINE - ").append(o.toString());
+            }
+            this.value = valueBuilder.toString();
+        } else {
+            String s = value.toString();
+            if (s.startsWith("'") && s.endsWith("'")) {
+                s = '"' + s + '"';
+            } else if (s.startsWith("#") || (s.startsWith("\"") && s.endsWith("\""))) {
+                s = "'" + s + "'";
+            }
+            this.value = s;
+        }
     }
 
     public void save() throws IOException {
@@ -163,9 +212,12 @@ public class ConfigNode {
         return value;
     }
 
+
     public void addChild(String name, ConfigNode node) {
         children.put(name, node);
-        childOrder.add(name);
+        if (!childOrder.contains(name)) {
+            childOrder.add(name);
+        }
     }
 
     public String getKey(boolean deep) {
@@ -183,5 +235,15 @@ public class ConfigNode {
 
     public void sort() {
         Collections.sort(childOrder);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder toString = new StringBuilder(key);
+        toString.append(":\n");
+        for (String key : childOrder) {
+            toString.append(this.key).append(".").append(children.get(key).toString());
+        }
+        return toString.toString();
     }
 }

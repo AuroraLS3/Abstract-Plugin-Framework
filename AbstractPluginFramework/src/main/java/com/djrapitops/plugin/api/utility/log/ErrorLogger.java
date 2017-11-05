@@ -40,6 +40,6 @@ public class ErrorLogger {
         }
         List<String> stackTrace = getStackTrace(e);
         stackTrace.add("Error was logged: " + FormatUtils.formatTimeStampSecond(Benchmark.getTime()));
-        FileLogger.appendToFile(logsFolder, stackTrace);
+        FileLogger.appendToFile(errorFile, stackTrace);
     }
 }

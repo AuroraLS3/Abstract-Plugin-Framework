@@ -5,6 +5,7 @@
 package com.djrapitops.plugin.api.config;
 
 import com.djrapitops.plugin.api.utility.log.FileLogger;
+import com.djrapitops.plugin.api.utility.log.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * //TODO Class Javadoc Comment
@@ -27,29 +29,42 @@ public class Config extends ConfigNode {
     public Config(File file) {
         super("", null, "");
         this.file = file;
+        try {
+            read();
+        } catch (IOException e) {
+            Log.toLog(this.getClass().getName(), e);
+        }
     }
 
-    public Config(File file, List<String> currentValues) {
+    public Config(File file, List<String> defaults) {
         this(file);
-        copyDefaults(currentValues);
+        copyDefaults(defaults);
     }
 
     public void read() throws IOException {
         if (!file.exists()) {
             file.createNewFile();
         }
-        copyDefaults(file);
+        childOrder.clear();
+        this.getChildren().clear();
+        processLines(readLines(file), true);
     }
 
     public void copyDefaults(File from) throws IOException {
-        copyDefaults(Files.lines(from.toPath(), Charset.forName("UTF-8")).collect(Collectors.toList()));
+        copyDefaults(readLines(from));
+    }
+
+    private List<String> readLines(File from) throws IOException {
+        try (Stream<String> s = Files.lines(from.toPath(), Charset.forName("UTF-8"))) {
+            return s.collect(Collectors.toList());
+        }
     }
 
     public void copyDefaults(List<String> lines) {
-        processLines(lines);
+        processLines(lines, false);
     }
 
-    private void processLines(List<String> fileLines) {
+    private void processLines(List<String> fileLines, boolean override) {
         List<String> comments = new ArrayList<>();
         int lastDepth = 0;
         ConfigNode parent = this;
@@ -59,16 +74,28 @@ public class Config extends ConfigNode {
                 int depth = FileLogger.getIndentation(line);
 
                 String trimmed = line.trim();
-                String[] keyAndValue = trimmed.split(":", 2);
-                if (keyAndValue.length <= 1) {
-                    lastNode.set(lastNode.getValue() + " " + trimmed);
-                    continue;
-                }
-                String configKey = keyAndValue[0];
+                // Comment
                 if (trimmed.startsWith("#")) {
                     comments.add(trimmed);
                     continue;
                 }
+
+                String[] keyAndValue = trimmed.split(":", 2);
+                // Split row String value, List value
+                if (keyAndValue.length <= 1) {
+                    String lastValue = lastNode.getValue();
+
+                    boolean isListItem = trimmed.startsWith("-");
+                    boolean wasListItem = lastValue.contains("APF_NEWLINE") || lastValue.trim().isEmpty();
+
+                    if (isListItem && wasListItem) {
+                        lastNode.set(lastValue + " APF_NEWLINE " + trimmed);
+                    } else {
+                        lastNode.set(lastValue + " " + trimmed);
+                    }
+                    continue;
+                }
+                String configKey = keyAndValue[0];
 
                 if (depth > lastDepth) {
                     parent = lastNode;
@@ -86,11 +113,14 @@ public class Config extends ConfigNode {
                 }
 
 
-                String value = keyAndValue[1];
+                String value = keyAndValue[1].trim();
                 int indexOfHashtag = value.lastIndexOf(" #");
                 String valueWithoutComment = indexOfHashtag < 0 ? value : value.substring(0, indexOfHashtag);
 
-                ConfigNode node = new ConfigNode(configKey, parent, valueWithoutComment);
+                ConfigNode node = parent.getChildren().get(configKey);
+                if (override || node == null) {
+                    node = new ConfigNode(configKey, parent, valueWithoutComment);
+                }
                 node.depth = depth;
                 node.setComment(new ArrayList<>(comments));
                 comments.clear();
@@ -129,11 +159,11 @@ public class Config extends ConfigNode {
 
             StringBuilder b = new StringBuilder();
             addIndentation(depth, b);
-            if (value.startsWith("-")) {
+            if (value.startsWith(" APF_NEWLINE ")) {
                 // Keyline
                 lines.add(b.append(key).append(":").toString());
                 // List
-                String[] list = value.split("-");
+                String[] list = value.split(" APF_NEWLINE ");
                 for (String listValue : list) {
                     String v = listValue.trim();
                     if (v.isEmpty()) {
@@ -141,11 +171,15 @@ public class Config extends ConfigNode {
                     }
                     StringBuilder listBuilder = new StringBuilder();
                     addIndentation(depth + 1, listBuilder);
-                    listBuilder.append("- ").append(v);
+                    listBuilder.append(v);
                     lines.add(listBuilder.toString());
                 }
             } else {
-                b.append(key).append(":").append(value);
+                if (value.isEmpty()) {
+                    b.append(key).append(":");
+                } else {
+                    b.append(key).append(": ").append(value);
+                }
                 lines.add(b.toString());
             }
             lines.addAll(getLines(node, depth + 1));

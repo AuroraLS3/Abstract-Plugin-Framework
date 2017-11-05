@@ -114,7 +114,10 @@ public class Log extends DebugLog {
             ErrorLogger.logThrowable(e, logsFolder);
         } catch (IOException ioException) {
             System.out.println("Failed to log error to file because of " + ioException);
+            System.out.println("Error:");
             e.printStackTrace();
+            System.out.println("Fail Reason:");
+            ioException.printStackTrace();
         }
     }
 
@@ -135,7 +138,7 @@ public class Log extends DebugLog {
         File logsFolder = getLogsFolder(callingPlugin);
 
         String[] split = DEBUG_FILE_NAME.split("-");
-        String day = FormatUtils.formatTimeStampYear(Benchmark.getTime()).split(",")[0];
+        String day = FormatUtils.formatTimeStampYear(Benchmark.getTime()).split(",")[0].replace(" ", "-");
         String debugLogFileName = split[0] + "-" + day + ".txt";
 
         try {
