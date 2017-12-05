@@ -1,14 +1,16 @@
 package com.djrapitops.plugin.command.defaultcmds;
 
 import com.djrapitops.plugin.IPlugin;
+import com.djrapitops.plugin.api.Benchmark;
+import com.djrapitops.plugin.api.utility.log.DebugInfo;
+import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.CommandType;
 import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
-import com.djrapitops.plugin.utilities.NotificationCenter;
-import com.djrapitops.plugin.utilities.log.DebugInfo;
-import com.djrapitops.plugin.utilities.status.TaskStatus;
+import com.djrapitops.plugin.api.systems.NotificationCenter;
+import com.djrapitops.plugin.api.systems.TaskCenter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,46 +26,44 @@ import java.util.Map;
 public class StatusCommand<T extends IPlugin> extends SubCommand {
 
     private final T plugin;
+    private final ColorScheme cs;
 
-    public StatusCommand(T plugin, String permission) {
-        super("status", CommandType.CONSOLE, permission, "Check the status of plugin's processes.", "[timings]");
+    public StatusCommand(T plugin, String permission, ColorScheme cs) {
+        super("status", CommandType.ALL, permission, "Check the status of plugin's processes.", "[timings]");
         this.plugin = plugin;
+        this.cs = cs;
     }
 
     @Override
     public boolean onCommand(ISender sender, String commandLabel, String[] args) {
-        ColorScheme cs = plugin.getColorScheme();
         String oColor = cs.getMainColor();
         String sColor = cs.getSecondaryColor();
         String tColor = cs.getTertiaryColor();
 
-        sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse() + oColor + " " + plugin.getClass().getSimpleName() + " Status");
+        Class<? extends IPlugin> pluginClass = plugin.getClass();
+        sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse() + oColor + " " + pluginClass.getSimpleName() + " Status");
 
         if (args.length >= 1 && "timings".equals(args[0].toLowerCase())) {
-            sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Benchmark Averages: ");
-            Arrays.stream(plugin.benchmark().getTimings().getTimings())
+            sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " BenchmarkObj Averages: ");
+            Arrays.stream(Benchmark.getAverages().asStringArray())
                     .map(benchmark -> tColor + "   " + benchmark)
                     .forEach(sender::sendMessage);
             return true;
         }
 
-        NotificationCenter notificationCenter = plugin.getNotificationCenter();
-
-        List<String> notifications = notificationCenter.getNotifications();
+        List<String> notifications = NotificationCenter.getNotifications(pluginClass);
         if (!notifications.isEmpty()) {
             sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Notifications: ");
             for (String notification : notifications) {
-                sender.sendMessage("   " + notification.replace(plugin.getPrefix() + " ", ""));
+                sender.sendMessage("   " + notification.replace(pluginClass.getSimpleName() + " ", ""));
             }
         }
-        TaskStatus taskStatus = plugin.taskStatus();
-
-        sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Tasks running: " + sColor + taskStatus.getTaskCount());
+        sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Tasks running: " + sColor + TaskCenter.getTaskCount(pluginClass));
         sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Processes: ");
-        Map<String, DebugInfo> debugs = plugin.getPluginLogger().getAllDebugs();
-        debugs.entrySet().forEach(entry -> sender.sendMessage(tColor + "   " + entry.getKey() + ": " + entry.getValue().getLastLine()));
+        Map<String, DebugInfo> debugs = DebugLog.getAllDebugInfo(pluginClass);
+        debugs.forEach((key, value) -> sender.sendMessage(tColor + "   " + key + ": " + value.getLastLine()));
         sender.sendMessage(sColor + " " + DefaultMessages.BALL.toString() + oColor + " Tasks: ");
-        Arrays.stream(taskStatus.getTasks())
+        Arrays.stream(TaskCenter.getTasks(pluginClass))
                 .map(task -> tColor + "   " + task)
                 .forEach(sender::sendMessage);
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse());

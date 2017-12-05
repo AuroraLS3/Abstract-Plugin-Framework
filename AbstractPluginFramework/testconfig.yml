@@ -1,0 +1,109 @@
+# Plan Config | More info at https://github.com/Rsl1122/Plan-PlayerAnalytics/blob/master/documentation/Configuration.md
+# ---------------------------------------------------------------------------------------------------------------------
+Server:
+  ServerName: Plan
+# TestComment
+Double: 0.043
+Double2: 0,043
+StringBool: 'true'
+Plugin:
+  Debug: true
+  Locale: default
+  # AmazingComment
+  WriteNewLocaleFileOnEnable: false
+  Bungee-Override:
+    StandaloneMode: false
+    CopyBungeeConfig: true
+  Dev:
+WebServer:
+  Port: 8804
+  InternalIP: 0.0.0.0
+  Security:
+    SSL-Certificate:
+      KeyStorePath: Cert.keystore
+      KeyPass: MnD3bU5HpmPXag0e
+      StorePass: wDwwf663NLTm73gL
+      Alias: DefaultPlanCert
+Database:
+  Type: Sqlite
+  MySQL:
+    Host: mysql.hostinger.fi
+    Port: 3306
+    User: u225338597_rsl
+    Password: xrKeTPX7sT8ZiM
+    Database: u225338597_Plan
+Commands:
+  AlternativeIP:
+    Enabled: false
+    Link: your.domain.here:%port%
+  Colors:
+    Main: '&2'
+    Secondary: '&7'
+    Highlight: '&f'
+Analysis:
+  AutoRefreshPeriod: 60
+  LogProgress: true
+  Export:
+    Enabled: false
+    ExternalWebServerLinkProtocol: http
+    DestinationFolder: Analysis Results
+Data:
+  Commands:
+    LogUnknownCommands: false
+    CombineCommandAliases: true
+Customization:
+  UseServerTime: true
+  Formatting:
+    DecimalPoints: '#.##'
+    TimeAmount:
+      Year: '1 year, '
+      Years: '%years% years, '
+      Month: '1 month, '
+      Months: '%months% months, '
+      Day: '1d '
+      Days: '%days%d '
+      Hours: '%hours%h '
+      Minutes: '%minutes%m '
+      Seconds: '%seconds%s'
+      Zero: 0s
+Theme:
+  Base: Default
+  Font:
+    FontStyleSheet: https://fonts.googleapis.com/css?family=Quicksand:300,400
+    FontFamily: Verdana, sans-serif
+    Color:
+      Dark: Base
+      Light: Base
+  Colors:
+    Main: base
+    Main-Dark: Base
+    Secondary: ff75f3
+    Secondary-Dark: Base
+    Tertiary: Base
+    Background: base
+    Table-Light: Base
+    Table-Dark: Base
+  Graphs:
+    PunchCard: Default
+    PlayersOnline: Default
+    TPS:
+      High-Threshold: 18
+      Medium-Threshold: 10
+      High: Default
+      Medium: Default
+      Low: Default
+    CPU: Default
+    RAM: Default
+    Chunks: Default
+    Entities: Default'
+    WorldPie: '"#0099C6", "#66AA00", "#316395", "#994499", "#22AA99", "#AAAA11", "#6633CC", "#E67300", "#329262", "#5574A6"'
+    GMDrilldown: '"#438c99", "#639A67", "#D8EBB5", "#D9BF77"'
+    ActivityPie: '"#228B22", "#A9A9A9", "#808080", "#951800"'
+    ServerPreferencePie: '"#0099C6", "#66AA00", "#316395", "#994499", "#22AA99", "#AAAA11", "#6633CC", "#E67300", "#329262", "#5574A6"'
+Plugins:
+  Example:
+    Block:
+      - This
+      - That
+  Example3:
+    Test: Yes - T

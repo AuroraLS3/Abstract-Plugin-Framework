@@ -43,6 +43,9 @@ public class BukkitCMDSender implements ISender {
             String leftover = lastCols + string.substring(i);
             sendMessage(leftover);
         } else {
+            if (ChatColor.stripColor(string).isEmpty()) {
+                return;
+            }
             cs.sendMessage(string);
         }
     }
@@ -60,7 +63,7 @@ public class BukkitCMDSender implements ISender {
             BaseComponent[] link =
                     new ComponentBuilder(linkMsg)
                             .underlined(true)
-                            .event(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
+                            .event(new ClickEvent(ClickEvent.Action.OPEN_URL, url.replace(" ", "%20")))
                             .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(url).create()))
                             .create();
 

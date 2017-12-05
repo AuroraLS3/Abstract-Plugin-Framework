@@ -1,7 +1,8 @@
 package com.djrapitops.plugin.utilities.status;
 
-import com.djrapitops.plugin.utilities.FormattingUtils;
-import com.djrapitops.plugin.utilities.status.obj.Benchmark;
+import com.djrapitops.plugin.utilities.FormatUtils;
+import com.djrapitops.plugin.utilities.status.obj.BenchmarkObj;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -15,22 +16,22 @@ import java.util.stream.Collectors;
  */
 public class Timings {
 
-    private final Map<String, Benchmark> avgTimings;
+    private final Map<String, BenchmarkObj> avgTimings;
 
     public Timings() {
         avgTimings = new HashMap<>();
     }
 
     public void markExecution(String benchmark, long time) {
-        avgTimings.computeIfAbsent(benchmark, computedBench -> new Benchmark())
+        avgTimings.computeIfAbsent(benchmark, computedBench -> new BenchmarkObj())
                 .addBenchmark(time);
     }
 
-    public String[] getTimings() {
+    public String[] asStringArray() {
         String[] states = new String[avgTimings.size()];
         int i = 0;
         List<String> msgs = avgTimings.keySet().stream()
-                .map(bench -> FormattingUtils.formatBench(bench, avgTimings.get(bench).getAverage()))
+                .map(bench -> FormatUtils.formatBench(bench, avgTimings.get(bench).getAverage()))
                 .collect(Collectors.toList());
         Collections.sort(msgs);
         for (String msg : msgs) {

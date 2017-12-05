@@ -14,6 +14,10 @@ public class ColorScheme {
 
     private final List<String> colors;
 
+    public ColorScheme(String... colors) {
+        this.colors = Arrays.asList(colors);
+    }
+
     public ColorScheme(org.bukkit.ChatColor... colors) {
         this.colors = Arrays.stream(colors).map(org.bukkit.ChatColor::toString).collect(Collectors.toList());
     }

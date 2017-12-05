@@ -1,49 +1,61 @@
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.api.systems.NotificationCenter;
+import com.djrapitops.plugin.task.RunnableFactory;
+import com.djrapitops.plugin.api.systems.TaskCenter;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Rsl1122
- * @since 2.0.0
  */
 public class StaticHolder {
 
-    private static final String apfVersion = "2.0.5";
-    private static final Map<Class, BukkitPlugin> INSTANCES_BUKKIT = new HashMap<>();
-    private static final Map<Class, BungeePlugin> INSTANCES_BUNGEE = new HashMap<>();
-    private static Class utilityProvider = null;
+    private static final Map<Class, IPlugin> plugins = new HashMap<>();
+    private static final Map<Class, Class> classMap = new HashMap<>();
 
-    public final static void setInstance(Class c, BukkitPlugin instance) {
-        utilityProvider = c;
-        INSTANCES_BUKKIT.put(c, instance);
+    private static final NotificationCenter notificationCenter = new NotificationCenter();
+    private static final TaskCenter taskCenter = new TaskCenter();
+    private static final RunnableFactory runnableFactory = new RunnableFactory();
+
+    public static void saveInstance(Class c, Class plugin) {
+        classMap.put(c, plugin);
     }
 
-    public final static void setInstance(Class c, BungeePlugin instance) {
-        utilityProvider = c;
-        INSTANCES_BUNGEE.put(c, instance);
+    public static Class getProvidingPlugin(Class c) {
+        return classMap.get(c);
     }
 
-    public final static <T extends IPlugin> T getInstance(Class<T> c) {
-        if (c != null) {
-            BukkitPlugin pluginBukkit = INSTANCES_BUKKIT.get(c);
-            if (pluginBukkit != null) {
-                return (T) pluginBukkit;
-            }
-            BungeePlugin pluginBungee = INSTANCES_BUNGEE.get(c);
-            if (pluginBungee != null) {
-                return (T) pluginBungee;
-            }
+    public static NotificationCenter getNotificationCenter() {
+        return notificationCenter;
+    }
+
+    public static void register(Class<? extends IPlugin> c, IPlugin plugin) {
+        plugins.put(c, plugin);
+    }
+
+    public static void register(IPlugin plugin) {
+        register(plugin.getClass(), plugin);
+    }
+
+    public static void unRegister(Class<? extends IPlugin> c) {
+        plugins.remove(c);
+    }
+
+    public static TaskCenter getTaskCenter() {
+        return taskCenter;
+    }
+
+    public static IPlugin getInstance(Class c) {
+        IPlugin iPlugin = plugins.get(c);
+        if (iPlugin == null) {
+            throw new IllegalStateException("Plugin has not been initialized: " + c.getSimpleName());
         }
-        return null;
+        return iPlugin;
     }
 
-    public final static String getAPFVersion() {
-        return apfVersion;
-    }
-
-    public static Class getUtilityProviderClass() {
-        return utilityProvider;
+    public static RunnableFactory getRunnableFactory() {
+        return runnableFactory;
     }
 }

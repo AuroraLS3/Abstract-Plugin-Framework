@@ -5,8 +5,8 @@
  */
 package com.djrapitops.plugin.utilities;
 
-import com.djrapitops.plugin.api.SelfValidating;
 import com.djrapitops.plugin.command.ISender;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 /**
- *
  * @author Rsl1122
  */
 public class Verify {
@@ -50,7 +49,7 @@ public class Verify {
     /**
      * Checks if the given parameter is empty if it is not null.
      *
-     * @param <T> Object type variable
+     * @param <T>  Object type variable
      * @param coll Collection
      * @return true if null, coll.isEmpty() if not
      */
@@ -73,9 +72,9 @@ public class Verify {
     /**
      * Checks if the collection contains the object if collection is not null.
      *
-     * @param <T> Object type variable
+     * @param <T>     Object type variable
      * @param lookFor object to look for
-     * @param coll Collection to check the object for
+     * @param coll    Collection to check the object for
      * @return false if collection is null or Stream#anyMatch(Verify.equals)
      */
     public static <T> boolean contains(T lookFor, Collection<T> coll) {
@@ -85,9 +84,9 @@ public class Verify {
     /**
      * Checks if the stream contains the object.
      *
-     * @param <T> Object type variable
+     * @param <T>     Object type variable
      * @param lookFor object to look for
-     * @param stream stream of objects
+     * @param stream  stream of objects
      * @return Does the array contain the object.
      */
     public static <T> boolean contains(T lookFor, Stream<T> stream) {
@@ -97,7 +96,7 @@ public class Verify {
     /**
      * Checks if the array contains the object.
      *
-     * @param <T> Object type variable
+     * @param <T>     Object type variable
      * @param lookFor object to look for
      * @param objects objects
      * @return Does the array contain the object.
@@ -108,7 +107,6 @@ public class Verify {
     }
 
     /**
-     *
      * @param <T>
      * @param lookFor
      * @param map
@@ -119,7 +117,6 @@ public class Verify {
     }
 
     /**
-     *
      * @param one
      * @param two
      * @return
@@ -128,8 +125,23 @@ public class Verify {
         return notNull(one) && one.equalsIgnoreCase(two);
     }
 
+    public static boolean equalsOne(String toCheck, String... isEqual) {
+        if (isEqual == null) {
+            return false;
+        }
+        if (toCheck == null && containsNull(new Object[]{isEqual})) {
+            return true;
+        }
+        for (String s : isEqual) {
+            if (s.equals(toCheck)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     /**
-     *
      * @param <T>
      * @param <K>
      * @param object
@@ -140,26 +152,26 @@ public class Verify {
         return notNull(object) && object.equals(object2);
     }
 
-    public static boolean isValid(SelfValidating validate) {
-        return notNull(validate) && validate.isValid();
-    }
-    
     public static boolean notNull(Object... object) {
         if (object == null) {
             return false;
         }
+        return !containsNull(object);
+    }
+
+    public static boolean containsNull(Object... object) {
         for (Object t : object) {
             if (t == null) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
      * Checks if the given object is null, throws exception if null.
      *
-     * @param <T> Object type variable
+     * @param <T>    Object type variable
      * @param object Object to check
      * @return the original object
      * @throws NullPointerException If the object is null.
@@ -182,7 +194,6 @@ public class Verify {
     }
 
     /**
-     *
      * @param permission
      * @param sender
      * @return
