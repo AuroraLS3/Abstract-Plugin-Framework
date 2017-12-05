@@ -32,6 +32,11 @@ public class AbsBukkitTask implements BukkitTask, ITask<BukkitTask> {
     }
 
     @Override
+    public boolean isCancelled() {
+        return task.isCancelled();
+    }
+
+    @Override
     public void cancel() {
         task.cancel();
     }
