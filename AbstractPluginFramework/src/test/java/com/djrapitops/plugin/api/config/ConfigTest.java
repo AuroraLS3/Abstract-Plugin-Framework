@@ -177,16 +177,19 @@ public class ConfigTest {
     }
 
     @Test
-    public void copyDefaults() throws IOException {
+    public void copyDefaultsNoOverride() throws IOException {
         config.save();
         List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5);
         config.set("Test.IntList", expected);
         config.set("Plugin.Locale", "EN");
+        List<String> expected2 = Arrays.asList("This", "That", "Thot");
+        config.set("Plugins.Example.Block", expected2);
         assertEquals(expected, config.getIntList("Test.IntList"));
         config.copyDefaults(copyFromFile);
         config.save();
         readLines().forEach(System.out::println);
         assertEquals(expected, config.getIntList("Test.IntList"));
+        assertEquals(expected2, config.getStringList("Plugins.Example.Block"));
         assertEquals("EN", config.getString("Plugin.Locale"));
     }
 
@@ -201,5 +204,33 @@ public class ConfigTest {
         assertTrue(config.getBoolean("Plugin.Debug"));
         assertTrue(config.getBoolean("StringBool"));
         assertFalse(config.getBoolean("Plugin.D"));
+    }
+
+    @Test
+    public void testStringListItemDuplication() throws IOException {
+        config.save();
+        assertEquals(2, config.getStringList("Plugins.Example.Block").size());
+        config.read();
+        assertEquals(2, config.getStringList("Plugins.Example.Block").size());
+        config.save();
+        assertEquals(2, config.getStringList("Plugins.Example.Block").size());
+        config.read();
+        assertEquals(2, config.getStringList("Plugins.Example.Block").size());
+        config.copyDefaults(copyFromFile);
+        assertEquals(2, config.getStringList("Plugins.Example.Block").size());
+    }
+
+    @Test
+    public void containsTest() {
+        assertTrue(config.contains("Plugins"));
+        assertTrue(config.contains("Plugins.Example"));
+        assertTrue(config.contains("Plugins.Example.Block"));
+    }
+
+    @Test
+    public void dashNameBoolean() throws IOException {
+        testStringListItemDuplication();
+        assertTrue(config.getBoolean("Plugin.Bungee-Override.CopyBungeeConfig"));
+        assertFalse(config.getBoolean("Plugin.Bungee-Override.StandaloneMode"));
     }
 }

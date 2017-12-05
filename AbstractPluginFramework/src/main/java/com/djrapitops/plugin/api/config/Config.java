@@ -8,9 +8,11 @@ import com.djrapitops.plugin.api.utility.log.FileLogger;
 import com.djrapitops.plugin.api.utility.log.Log;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,17 +20,21 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * //TODO Class Javadoc Comment
+ * Config class for config management.
  *
  * @author Rsl1122
  */
 public class Config extends ConfigNode {
 
-    private final File file;
+    private final Path path;
 
     public Config(File file) {
         super("", null, "");
-        this.file = file;
+        File folder = file.getParentFile();
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        this.path = file.toPath();
         try {
             read();
         } catch (IOException e) {
@@ -41,27 +47,41 @@ public class Config extends ConfigNode {
         copyDefaults(defaults);
     }
 
+    private Config(List<String> defaults) {
+        super("", null, "");
+        path = null;
+        processLines(defaults, true);
+    }
+
+    private File getFile() {
+        return path != null ? path.toFile() : null;
+    }
+
     public void read() throws IOException {
+        File file = getFile();
+        if (file == null) {
+            throw new FileNotFoundException("File was null");
+        }
         if (!file.exists()) {
             file.createNewFile();
         }
         childOrder.clear();
         this.getChildren().clear();
-        processLines(readLines(file), true);
+        processLines(readLines(path), true);
     }
 
     public void copyDefaults(File from) throws IOException {
-        copyDefaults(readLines(from));
+        copyDefaults(readLines(from.toPath()));
     }
 
-    private List<String> readLines(File from) throws IOException {
-        try (Stream<String> s = Files.lines(from.toPath(), Charset.forName("UTF-8"))) {
+    private List<String> readLines(Path from) throws IOException {
+        try (Stream<String> s = Files.lines(from, Charset.forName("UTF-8"))) {
             return s.collect(Collectors.toList());
         }
     }
 
     public void copyDefaults(List<String> lines) {
-        processLines(lines, false);
+        copyDefaults(new Config(lines));
     }
 
     private void processLines(List<String> fileLines, boolean override) {
@@ -81,8 +101,8 @@ public class Config extends ConfigNode {
                 }
 
                 String[] keyAndValue = trimmed.split(":", 2);
-                // Split row String value, List value
                 if (keyAndValue.length <= 1) {
+                    // Check if Split row String value or List value
                     String lastValue = lastNode.getValue();
 
                     boolean isListItem = trimmed.startsWith("-");
@@ -98,6 +118,7 @@ public class Config extends ConfigNode {
                             lastNode.set(lastValue + " " + trimmed);
                         }
                     }
+
                     continue;
                 }
                 String configKey = keyAndValue[0];
@@ -133,14 +154,14 @@ public class Config extends ConfigNode {
                 lastDepth = depth;
                 parent.addChild(configKey, node);
             } catch (Exception e) {
-                throw new IllegalStateException("Malformed File (" + file.getName() + "), Error on line " + fileLines.indexOf(line) + ": " + line, e);
+                throw new IllegalStateException("Malformed File (" + path + "), Error on line " + fileLines.indexOf(line) + ": " + line, e);
             }
         }
     }
 
     @Override
     public void save() throws IOException {
-        Files.write(file.toPath(), processTree(), Charset.forName("UTF-8"));
+        Files.write(path, processTree(), Charset.forName("UTF-8"));
     }
 
     private List<String> processTree() {

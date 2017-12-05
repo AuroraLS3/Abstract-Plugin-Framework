@@ -22,7 +22,7 @@
         </repository>
         <repository>
             <id>paper-repo</id>
-            <url>https://repo.destroystokyo.com/content/repositories/snapshots/</url>
+            <url>https://repo.destroystokyo.com/repository/maven-public/</url>
         </repository>
         <repository>
             <id>sponge</id>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>LATEST</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -11,7 +11,6 @@ import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.Verify;
-import com.google.common.base.Strings;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +27,8 @@ public class Log extends DebugLog {
 
     private static final Map<Class, String> debugMode = new HashMap<>();
 
+    private static final Map<Class, List<String>> debugLogs = new HashMap<>();
+
     public static void info(String s) {
         info(s, StackUtils.getCallingPlugin());
     }
@@ -38,8 +39,8 @@ public class Log extends DebugLog {
             return;
         }
         instance.log("INFO", s);
-        if (debugToFile(c)) {
-            toDebugLog(Collections.singletonList(s), c);
+        if (!s.startsWith("[DEBUG]")) {
+            debug(Collections.singletonList(s), c);
         }
     }
 
@@ -92,15 +93,27 @@ public class Log extends DebugLog {
     }
 
     static void debug(List<String> lines, Class callingPlugin) {
-        if (debugToConsole(callingPlugin)) {
-            for (String line : lines) {
+        List<String> log = debugLogs.getOrDefault(callingPlugin, new ArrayList<>());
+        boolean debugToConsole = debugToConsole(callingPlugin);
+
+        for (String line : lines) {
+            if (log.size() >= 750) {
+                log.remove(0);
+            }
+            log.add(line);
+            if (debugToConsole) {
                 if (line.startsWith("|")) {
-                    info("[DEBUG] "+line.substring(19));
+                    info("[DEBUG] " + line.substring(19));
                 } else {
                     info("[DEBUG] " + line);
                 }
             }
         }
+
+        if (callingPlugin != null) {
+            debugLogs.put(callingPlugin, log);
+        }
+
         if (debugToFile(callingPlugin)) {
             toDebugLog(lines, callingPlugin);
         }
@@ -112,17 +125,16 @@ public class Log extends DebugLog {
     }
 
     private static void toLog(String source, Throwable e, Class callingPlugin) {
-        File logsFolder = getLogsFolder(callingPlugin);
-
         try {
+            File logsFolder = getLogsFolder(callingPlugin);
             warn(source + " Caught: " + e, callingPlugin);
             ErrorLogger.logThrowable(e, logsFolder);
-        } catch (IOException ioException) {
-            System.out.println("Failed to log error to file because of " + ioException);
+        } catch (Exception exception) {
+            System.out.println("Failed to log error to file because of " + exception);
             System.out.println("Error:");
             e.printStackTrace();
             System.out.println("Fail Reason:");
-            ioException.printStackTrace();
+            exception.printStackTrace();
         }
     }
 
@@ -133,7 +145,9 @@ public class Log extends DebugLog {
     private static File getLogsFolder(Class callingPlugin) {
         IPlugin instance = StaticHolder.getInstance(callingPlugin);
         if (instance == null) {
-            return new File("APF_plugin_errorlogs");
+            File apf_plugin_errorlogs = new File("APF_plugin_errorlogs");
+            apf_plugin_errorlogs.mkdirs();
+            return apf_plugin_errorlogs;
         }
         File dataFolder = instance.getDataFolder();
         File logsFolder = new File(dataFolder, "logs");
@@ -150,7 +164,7 @@ public class Log extends DebugLog {
         String debugLogFileName = split[0] + "-" + day + ".txt";
 
         String timeStamp = FormatUtils.formatTimeStampSecond(Benchmark.getTime());
-        List<String> timeStamped = lines.stream().map(l -> "| " + timeStamp + " | " + l)
+        List<String> timeStamped = lines.stream().map(line -> "| " + timeStamp + " | " + line)
                 .collect(Collectors.toList());
 
         try {
@@ -163,16 +177,30 @@ public class Log extends DebugLog {
 
     private static boolean debugToFile(Class c) {
         String debugMode = Log.debugMode.get(c);
+        if (debugMode == null) {
+            return false;
+        }
         return Verify.equalsOne(debugMode.toLowerCase(), "true", "both", "file");
     }
 
     private static boolean debugToConsole(Class c) {
         String debugMode = Log.debugMode.get(c);
+        if (debugMode == null) {
+            return false;
+        }
         return Verify.equalsOne(debugMode.toLowerCase(), "true", "both", "console");
     }
 
     public static void setDebugMode(String mode) {
         Class callingPlugin = StackUtils.getCallingPlugin();
         debugMode.put(callingPlugin, mode);
+    }
+
+    public static List<String> getDebugLogInMemory() {
+        return getDebugLogInMemory(StackUtils.getCallingPlugin());
+    }
+
+    private static List<String> getDebugLogInMemory(Class callingPlugin) {
+        return debugLogs.getOrDefault(callingPlugin, new ArrayList<>());
     }
 }

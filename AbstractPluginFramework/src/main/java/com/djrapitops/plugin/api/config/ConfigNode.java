@@ -246,4 +246,32 @@ public class ConfigNode {
         }
         return toString.toString();
     }
+
+    public boolean contains(String key) {
+        String[] split = key.split("\\.", 2);
+        ConfigNode child = children.get(split[0]);
+        if (child == null) {
+            return false;
+        }
+        if (split.length <= 1) {
+            return true;
+        }
+        return child.contains(split[1]);
+    }
+
+    public void copyDefaults(ConfigNode config) {
+        for (String key : config.childOrder) {
+            ConfigNode copyFromNode = config.getConfigNode(key);
+            if (!contains(key)) {
+                this.addChild(key, copyFromNode);
+            } else {
+                ConfigNode thisNode = this.getConfigNode(key);
+                List<String> copyComment = copyFromNode.comment;
+                if (!copyComment.isEmpty()) {
+                    thisNode.comment = copyComment;
+                }
+                thisNode.copyDefaults(copyFromNode);
+            }
+        }
+    }
 }

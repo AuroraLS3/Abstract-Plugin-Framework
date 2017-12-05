@@ -14,7 +14,7 @@ Plugin:
   Bungee-Override:
     StandaloneMode: false
     CopyBungeeConfig: true
-  Dev: true
+  Dev:
 WebServer:
   Port: 8804
   InternalIP: 0.0.0.0

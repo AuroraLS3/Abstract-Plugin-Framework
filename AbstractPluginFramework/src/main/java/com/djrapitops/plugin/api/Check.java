@@ -29,6 +29,10 @@ public class Check {
         return SPIGOT_AVAILABLE;
     }
 
+    public static boolean isPaperAvailable() {
+        return PAPER_AVAILABLE;
+    }
+
     public static boolean isBungeeAvailable() {
         return BUNGEE_AVAILABLE;
     }
