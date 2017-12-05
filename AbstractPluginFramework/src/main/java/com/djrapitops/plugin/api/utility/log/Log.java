@@ -8,6 +8,8 @@ package com.djrapitops.plugin.api.utility.log;
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.api.Benchmark;
+import com.djrapitops.plugin.api.utility.log.errormanager.DefaultErrorManager;
+import com.djrapitops.plugin.api.utility.log.errormanager.ErrorManager;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.Verify;
@@ -28,6 +30,9 @@ public class Log extends DebugLog {
     private static final Map<Class, String> debugMode = new HashMap<>();
 
     private static final Map<Class, List<String>> debugLogs = new HashMap<>();
+
+    private static final Map<Class, ErrorManager> errorManagers = new HashMap<>();
+    private static DefaultErrorManager defaultErrorManager = new DefaultErrorManager();
 
     public static void info(String s) {
         info(s, StackUtils.getCallingPlugin());
@@ -60,7 +65,7 @@ public class Log extends DebugLog {
         warn(s, StackUtils.getCallingPlugin());
     }
 
-    private static void warn(String s, Class c) {
+    public static void warn(String s, Class c) {
         IPlugin instance = StaticHolder.getInstance(c);
         if (instance == null) {
             return;
@@ -119,6 +124,10 @@ public class Log extends DebugLog {
         }
     }
 
+    public static void toLog(Class clazz, Throwable e) {
+        toLog(clazz.getClass().getName(), e);
+    }
+
     public static void toLog(String source, Throwable e) {
         Class callingPlugin = StackUtils.getCallingPlugin();
         toLog(source, e, callingPlugin);
@@ -138,11 +147,19 @@ public class Log extends DebugLog {
         }
     }
 
+    private static ErrorManager getErrorManager(Class callingPlugin) {
+        return errorManagers.getOrDefault(callingPlugin, defaultErrorManager);
+    }
+
+    public static void setErrorManager(ErrorManager errorManager) {
+        errorManagers.put(StackUtils.getCallingPlugin(), errorManager);
+    }
+
     public static File getLogsFolder() {
         return getLogsFolder(StackUtils.getCallingPlugin());
     }
 
-    private static File getLogsFolder(Class callingPlugin) {
+    public static File getLogsFolder(Class callingPlugin) {
         IPlugin instance = StaticHolder.getInstance(callingPlugin);
         if (instance == null) {
             File apf_plugin_errorlogs = new File("APF_plugin_errorlogs");

@@ -40,7 +40,7 @@ public class ErrorLogger {
         return trace;
     }
 
-    static void logThrowable(Throwable e, File logsFolder) throws IOException {
+    public static void logThrowable(Throwable e, File logsFolder) throws IOException {
         File errorFile = new File(logsFolder, Log.ERROR_FILE_NAME);
         if (!errorFile.exists()) {
             errorFile.createNewFile();
