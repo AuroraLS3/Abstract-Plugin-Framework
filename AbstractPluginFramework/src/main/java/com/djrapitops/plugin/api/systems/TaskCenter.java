@@ -11,6 +11,8 @@ import com.djrapitops.plugin.utilities.Verify;
 import com.djrapitops.plugin.utilities.status.obj.TaskInfo;
 
 /**
+ * Manages information about different Runnables and Tasks related to them.
+ *
  * @author Rsl1122
  */
 public class TaskCenter {

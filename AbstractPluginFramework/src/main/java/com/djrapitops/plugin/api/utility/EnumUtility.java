@@ -21,9 +21,9 @@ public class EnumUtility {
      * Method for version compatibility - enums can have different values with
      * different versions.
      *
-     * @param <T>   Enum class with values() & name() method.
      * @param clazz Class of the enum
      * @param names Names of the enum variables to get
+     * @param <T>   Enum class with values() and name() method.
      * @return List of Enum variables that were found
      * @throws NullPointerException If class or names is null
      */

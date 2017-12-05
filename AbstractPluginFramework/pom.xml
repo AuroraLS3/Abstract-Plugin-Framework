@@ -6,11 +6,40 @@
     <artifactId>AbstractPluginFramework</artifactId>
     <version>3.0.1</version>
     <packaging>jar</packaging>
+
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>An abstraction framework for Bukkit and Bungee plugins</description>
+    <url>https://github.com/Rsl1122/Abstract-Plugin-Framework</url>
+
+    <licenses>
+        <license>
+            <name>GNU General Public Licence v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Risto Lahtela (Rsl1122)</name>
+            <email>djrapitops@hotmail.com</email>
+            <organization>None</organization>
+            <organizationUrl>https://github.com/Rsl1122</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/Rsl1122/Abstract-Plugin-Framework.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Rsl1122/Abstract-Plugin-Framework.git</developerConnection>
+        <url>https://github.com/Rsl1122/Abstract-Plugin-Framework</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
+    <!--    Repositories are required due to the nature of the framework being for these systems-->
     <repositories>
         <repository>
             <id>bungeecord-repo</id>
@@ -29,6 +58,22 @@
             <url>https://repo.spongepowered.org/maven</url>
         </repository>
     </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>net.md-5</groupId>

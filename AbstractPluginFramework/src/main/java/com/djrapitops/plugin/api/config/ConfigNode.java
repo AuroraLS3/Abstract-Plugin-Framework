@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * //TODO Class Javadoc Comment
+ * Represents a single node in the Config.
  *
  * @author Rsl1122
  */
