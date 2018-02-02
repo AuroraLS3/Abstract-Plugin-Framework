@@ -125,7 +125,7 @@ public class Log extends DebugLog {
     }
 
     public static void toLog(Class clazz, Throwable e) {
-        toLog(clazz.getClass().getName(), e);
+        toLog(clazz.getName(), e);
     }
 
     public static void toLog(String source, Throwable e) {
@@ -134,17 +134,7 @@ public class Log extends DebugLog {
     }
 
     private static void toLog(String source, Throwable e, Class callingPlugin) {
-        try {
-            File logsFolder = getLogsFolder(callingPlugin);
-            warn(source + " Caught: " + e, callingPlugin);
-            ErrorLogger.logThrowable(e, logsFolder);
-        } catch (Exception exception) {
-            System.out.println("Failed to log error to file because of " + exception);
-            System.out.println("Error:");
-            e.printStackTrace();
-            System.out.println("Fail Reason:");
-            exception.printStackTrace();
-        }
+        getErrorManager(callingPlugin).toLog(source, e, callingPlugin);
     }
 
     private static ErrorManager getErrorManager(Class callingPlugin) {
