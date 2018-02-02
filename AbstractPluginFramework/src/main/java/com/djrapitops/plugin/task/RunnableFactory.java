@@ -10,6 +10,7 @@ import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.api.Check;
 import com.djrapitops.plugin.task.bukkit.AbsBukkitRunnable;
 import com.djrapitops.plugin.task.bungee.AbsBungeeRunnable;
+import com.djrapitops.plugin.task.sponge.AbsSpongeRunnable;
 import com.djrapitops.plugin.utilities.StackUtils;
 
 /**
@@ -40,6 +41,14 @@ public class RunnableFactory {
                     };
                 } else if (Check.isBungeeAvailable()) {
                     return new AbsBungeeRunnable(name, instance) {
+                        @Override
+                        public void run() {
+                            runnable.setCancellable(this);
+                            runnable.run();
+                        }
+                    };
+                } else if (Check.isSpongeAvailable()) {
+                    return new AbsSpongeRunnable(name, instance) {
                         @Override
                         public void run() {
                             runnable.setCancellable(this);

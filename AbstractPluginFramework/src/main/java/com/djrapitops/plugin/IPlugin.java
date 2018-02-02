@@ -17,6 +17,8 @@ public interface IPlugin {
 
     void onDisable();
 
+    void onReload();
+
     void reloadPlugin(boolean full);
 
     boolean isReloading();

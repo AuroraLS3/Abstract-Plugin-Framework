@@ -100,8 +100,6 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         reloading = false;
     }
 
-    public abstract void onReload();
-
     @Override
     public boolean isReloading() {
         return reloading;

@@ -16,7 +16,7 @@ import com.djrapitops.plugin.utilities.Verify;
  *
  * @author Rsl1122
  */
-public abstract class AbsRunnable {
+public abstract class AbsRunnable implements Runnable {
 
     private IRunnable runnable;
     private final String name;
@@ -41,6 +41,7 @@ public abstract class AbsRunnable {
         return runnable.getTaskId();
     }
 
+    @Override
     public abstract void run();
 
     public void setCancellable(IRunnable cancellable) {
