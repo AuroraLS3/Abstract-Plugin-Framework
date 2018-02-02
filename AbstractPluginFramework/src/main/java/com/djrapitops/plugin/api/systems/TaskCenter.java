@@ -1,14 +1,13 @@
 package com.djrapitops.plugin.api.systems;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.djrapitops.plugin.api.utility.log.Log;
 import com.djrapitops.plugin.task.IRunnable;
 import com.djrapitops.plugin.task.ITask;
 import com.djrapitops.plugin.utilities.StackUtils;
-import com.djrapitops.plugin.utilities.Verify;
 import com.djrapitops.plugin.utilities.status.obj.TaskInfo;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Manages information about different Runnables and Tasks related to them.
@@ -53,18 +52,18 @@ public class TaskCenter {
     public static void taskCancelled(Class plugin, String name, int id) {
         List<TaskInfo> task = taskInfo.get(plugin);
         Optional<TaskInfo> first = task.stream().filter(t -> t.getName().equals(name) && t.getId() == id).findFirst();
-        if (first.isPresent()) {
-            TaskInfo info = first.get();
+        first.ifPresent(info -> {
             Log.debug(plugin, "Ended task " + info);
             task.remove(info);
-        }
+        });
     }
 
     public static TaskInfo getMatchingTask(String name, int id) {
-        List<TaskInfo> task = new ArrayList<>(taskInfo.get(name));
-        for (TaskInfo i : task) {
-            if (i.getId() == id && name.equals(i.getName())) {
-                return i;
+        for (List<TaskInfo> tasks : taskInfo.values()) {
+            for (TaskInfo task : tasks) {
+                if (task.getId() == id && name.equals(task.getName())) {
+                    return task;
+                }
             }
         }
         return null;

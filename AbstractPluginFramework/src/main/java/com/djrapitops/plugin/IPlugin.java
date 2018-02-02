@@ -19,6 +19,8 @@ public interface IPlugin {
 
     void reloadPlugin(boolean full);
 
+    boolean isReloading();
+
     void log(String level, String s);
 
     File getDataFolder();

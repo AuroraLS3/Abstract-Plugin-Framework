@@ -10,7 +10,6 @@ import com.djrapitops.plugin.command.bukkit.BukkitCommand;
 import com.djrapitops.plugin.task.RunnableFactory;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.slf4j.event.Level;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -102,4 +101,9 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     }
 
     public abstract void onReload();
+
+    @Override
+    public boolean isReloading() {
+        return reloading;
+    }
 }

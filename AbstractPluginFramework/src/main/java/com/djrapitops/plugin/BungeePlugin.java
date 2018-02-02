@@ -101,4 +101,9 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
     }
 
     public abstract void onReload();
+
+    @Override
+    public boolean isReloading() {
+        return reloading;
+    }
 }

@@ -1,10 +1,14 @@
 package com.djrapitops.plugin.utilities;
 
-import java.text.DecimalFormat;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import com.djrapitops.plugin.api.utility.log.Log;
 import org.bukkit.Location;
+
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Rsl1122
@@ -95,7 +99,7 @@ public class FormatUtils {
                 long multiplier = (long) Math.pow(100, 8 - i);
                 versionNumber += num * multiplier;
             } catch (NumberFormatException e) {
-                System.out.println(e);
+                Log.toLog(FormatUtils.class, e);
             }
         }
         return versionNumber;
