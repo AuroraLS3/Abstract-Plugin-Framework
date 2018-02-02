@@ -3,7 +3,6 @@ package com.djrapitops.plugin.command.bukkit;
 import com.djrapitops.plugin.command.CommandUtils;
 import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.SenderType;
-import net.md_5.bungee.api.chat.*;
 import org.bukkit.ChatColor;
 import org.bukkit.block.CommandBlock;
 import org.bukkit.command.CommandSender;
@@ -57,24 +56,15 @@ public class BukkitCMDSender implements ISender {
 
     @Override
     public void sendLink(String pretext, String linkMsg, String url) {
-        if (CommandUtils.isPlayer(this)) {
-            BaseComponent message = new TextComponent(TextComponent.fromLegacyText(pretext));
-
-            BaseComponent[] link =
-                    new ComponentBuilder(linkMsg)
-                            .underlined(true)
-                            .event(new ClickEvent(ClickEvent.Action.OPEN_URL, url.replace(" ", "%20")))
-                            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(url).create()))
-                            .create();
-
-            for (BaseComponent baseComponent : link) {
-                message.addExtra(baseComponent);
+        try {
+            if (CommandUtils.isPlayer(this)) {
+                LinkSender.send(cs, pretext, linkMsg, url);
+                return;
             }
-
-            ((Player) cs).spigot().sendMessage(message);
-        } else {
-            cs.sendMessage(url);
+        } catch (NoClassDefFoundError ignore) {
+            /* Using CraftBukkit */
         }
+        cs.sendMessage(url);
     }
 
     @Override
