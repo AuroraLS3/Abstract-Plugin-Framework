@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  */
 public class Config extends ConfigNode {
 
-    private final Path path;
+    private final String absolutePath;
 
     public Config(File file) {
         super("", null, "");
@@ -34,7 +34,7 @@ public class Config extends ConfigNode {
         if (!folder.exists()) {
             folder.mkdirs();
         }
-        this.path = file.toPath();
+        this.absolutePath = file.getAbsolutePath();
         try {
             read();
         } catch (IOException e) {
@@ -49,12 +49,12 @@ public class Config extends ConfigNode {
 
     private Config(List<String> defaults) {
         super("", null, "");
-        path = null;
+        absolutePath = null;
         processLines(defaults, true);
     }
 
     private File getFile() {
-        return path != null ? path.toFile() : null;
+        return absolutePath != null ? new File(absolutePath) : null;
     }
 
     public void read() throws IOException {
@@ -67,7 +67,7 @@ public class Config extends ConfigNode {
         }
         childOrder.clear();
         this.getChildren().clear();
-        processLines(readLines(path), true);
+        processLines(readLines(new File(absolutePath).toPath()), true);
     }
 
     public void copyDefaults(File from) throws IOException {
@@ -154,14 +154,14 @@ public class Config extends ConfigNode {
                 lastDepth = depth;
                 parent.addChild(configKey, node);
             } catch (Exception e) {
-                throw new IllegalStateException("Malformed File (" + path + "), Error on line " + fileLines.indexOf(line) + ": " + line, e);
+                throw new IllegalStateException("Malformed File (" + absolutePath + "), Error on line " + fileLines.indexOf(line) + ": " + line, e);
             }
         }
     }
 
     @Override
     public void save() throws IOException {
-        Files.write(path, processTree(), Charset.forName("UTF-8"));
+        Files.write(new File(absolutePath).toPath(), processTree(), Charset.forName("UTF-8"));
     }
 
     private List<String> processTree() {
