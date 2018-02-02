@@ -3,7 +3,6 @@ package com.djrapitops.plugin.utilities.status;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.status.obj.BenchmarkObj;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +30,14 @@ public class Timings {
         String[] states = new String[avgTimings.size()];
         int i = 0;
         List<String> msgs = avgTimings.keySet().stream()
-                .map(bench -> FormatUtils.formatBench(bench, avgTimings.get(bench).getAverage()))
-                .collect(Collectors.toList());
-        Collections.sort(msgs);
+                .sorted()
+                .map(bench -> {
+                    try {
+                        return FormatUtils.formatBench(bench, avgTimings.get(bench).getAverage());
+                    } catch (NullPointerException e) {
+                        return FormatUtils.formatBench(bench, -1);
+                    }
+                }).collect(Collectors.toList());
         for (String msg : msgs) {
             states[i] = msg;
             i++;

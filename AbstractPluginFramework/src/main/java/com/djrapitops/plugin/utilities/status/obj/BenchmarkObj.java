@@ -7,6 +7,7 @@ package com.djrapitops.plugin.utilities.status.obj;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class representing a BenchmarkObj times given by BenchUtil.
@@ -26,6 +27,6 @@ public class BenchmarkObj {
     }
 
     public long getAverage() {
-        return benchmarks.stream().mapToLong(i -> i).sum() / benchmarks.size();
+        return benchmarks.stream().filter(Objects::nonNull).mapToLong(i -> i).sum() / benchmarks.size();
     }
 }
