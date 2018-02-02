@@ -8,7 +8,7 @@ public class Check {
 
     private static final boolean BUKKIT_AVAILABLE = isAvailable("org.bukkit.plugin.java.JavaPlugin");
     private static final boolean SPIGOT_AVAILABLE = isAvailable("org.spigotmc.CustomTimingsHandler");
-    private static final boolean PAPER_AVAILABLE = isAvailable("org.bukkit.event.player.PlayerLocaleChangeEvent");
+    private static final boolean PAPER_AVAILABLE = isAvailable("co.aikar.timings.Timing");
     private static final boolean BUNGEE_AVAILABLE = isAvailable("net.md_5.bungee.api.plugin.Plugin");
     private static final boolean SPONGE_AVAILABLE = isAvailable("org.spongepowered.api.plugin.Plugin");
 
