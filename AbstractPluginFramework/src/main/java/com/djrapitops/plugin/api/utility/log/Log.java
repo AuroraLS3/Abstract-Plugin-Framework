@@ -7,7 +7,7 @@ package com.djrapitops.plugin.api.utility.log;
 
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
-import com.djrapitops.plugin.api.Benchmark;
+import com.djrapitops.plugin.api.TimeAmount;
 import com.djrapitops.plugin.api.utility.log.errormanager.DefaultErrorManager;
 import com.djrapitops.plugin.api.utility.log.errormanager.ErrorManager;
 import com.djrapitops.plugin.utilities.FormatUtils;
@@ -167,10 +167,10 @@ public class Log extends DebugLog {
         File logsFolder = getLogsFolder(callingPlugin);
 
         String[] split = DEBUG_FILE_NAME.split("-");
-        String day = FormatUtils.formatTimeStampYear(Benchmark.getTime()).split(",")[0].replace(" ", "-");
+        String day = FormatUtils.formatTimeStampYear(TimeAmount.currentMs()).split(",")[0].replace(" ", "-");
         String debugLogFileName = split[0] + "-" + day + ".txt";
 
-        String timeStamp = FormatUtils.formatTimeStampSecond(Benchmark.getTime());
+        String timeStamp = FormatUtils.formatTimeStampSecond(TimeAmount.currentMs());
         List<String> timeStamped = lines.stream().map(line -> "| " + timeStamp + " | " + line)
                 .collect(Collectors.toList());
 

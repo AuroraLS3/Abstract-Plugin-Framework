@@ -4,7 +4,7 @@
  */
 package com.djrapitops.plugin.api.utility.log;
 
-import com.djrapitops.plugin.api.Benchmark;
+import com.djrapitops.plugin.api.TimeAmount;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.Verify;
 
@@ -40,7 +40,7 @@ public class DebugInfo {
     }
 
     public DebugInfo addLine(String line) {
-        addLine(line, Benchmark.getTime());
+        addLine(line, TimeAmount.currentMs());
         return this;
     }
 

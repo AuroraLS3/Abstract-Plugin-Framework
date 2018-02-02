@@ -38,4 +38,8 @@ public enum TimeAmount {
     public static long ticksToMillis(long ticks) {
         return ticks * 1000 / 20;
     }
+
+    public static long currentMs() {
+        return System.currentTimeMillis();
+    }
 }

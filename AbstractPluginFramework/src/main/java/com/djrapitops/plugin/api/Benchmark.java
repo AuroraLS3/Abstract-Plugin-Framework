@@ -25,7 +25,7 @@ public class Benchmark {
     public static long start(String source) {
         Class plugin = StackUtils.getCallingPlugin();
         Map<String, Long> pluginBenchStarts = STARTS.getOrDefault(plugin, new HashMap<>());
-        long time = getTime();
+        long time = TimeAmount.currentMs();
         pluginBenchStarts.put(source, time);
         STARTS.put(plugin, pluginBenchStarts);
         return time;
@@ -52,7 +52,7 @@ public class Benchmark {
 
     public static long stop(String source) {
         Class plugin = StackUtils.getCallingPlugin();
-        long stop = getTime();
+        long stop = TimeAmount.currentMs();
 
         Map<String, Long> pluginBenchStarts = STARTS.getOrDefault(plugin, new HashMap<>());
         Long start = pluginBenchStarts.get(source);
@@ -80,6 +80,10 @@ public class Benchmark {
         STARTS.remove(c);
     }
 
+    /**
+     * @deprecated Use TimeAmount.currentMs instead.
+     */
+    @Deprecated
     public static long getTime() {
         return System.currentTimeMillis();
     }

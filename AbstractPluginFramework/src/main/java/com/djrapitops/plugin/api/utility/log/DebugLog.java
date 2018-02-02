@@ -4,7 +4,7 @@
  */
 package com.djrapitops.plugin.api.utility.log;
 
-import com.djrapitops.plugin.api.Benchmark;
+import com.djrapitops.plugin.api.TimeAmount;
 import com.djrapitops.plugin.utilities.StackUtils;
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class DebugLog {
      * @return full debug complex so far.
      */
     public static DebugInfo logDebug(String task, String message) {
-        return getDebug(task).addLine(message, Benchmark.getTime());
+        return getDebug(task).addLine(message, TimeAmount.currentMs());
     }
 
     /**
@@ -39,7 +39,7 @@ public class DebugLog {
      */
     public static DebugInfo logDebug(String task, String... messages) {
         DebugInfo debug = getDebug(task);
-        long time = Benchmark.getTime();
+        long time = TimeAmount.currentMs();
         for (String message : messages) {
             debug.addLine(message, time);
         }
@@ -56,7 +56,7 @@ public class DebugLog {
         Class callingPlugin = StackUtils.getCallingPlugin();
 
         Map<String, DebugInfo> debugInfos = debugInfo.getOrDefault(callingPlugin, new HashMap<>());
-        DebugInfo info = debugInfos.getOrDefault(task, new DebugInfo(callingPlugin, Benchmark.getTime(), task));
+        DebugInfo info = debugInfos.getOrDefault(task, new DebugInfo(callingPlugin, TimeAmount.currentMs(), task));
 
         debugInfos.put(task, info);
         debugInfo.put(callingPlugin, debugInfos);

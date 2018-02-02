@@ -5,9 +5,8 @@
 package com.djrapitops.plugin.api.utility.log;
 
 import com.djrapitops.plugin.IPlugin;
-import com.djrapitops.plugin.api.Benchmark;
+import com.djrapitops.plugin.api.TimeAmount;
 import com.djrapitops.plugin.utilities.FormatUtils;
-import com.djrapitops.plugin.utilities.Verify;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +45,7 @@ public class ErrorLogger {
             errorFile.createNewFile();
         }
         List<String> stackTrace = getStackTrace(e);
-        stackTrace.add("Error was logged: " + FormatUtils.formatTimeStampSecond(Benchmark.getTime()));
+        stackTrace.add("Error was logged: " + FormatUtils.formatTimeStampSecond(TimeAmount.currentMs()));
         FileLogger.appendToFile(errorFile, stackTrace);
     }
 
