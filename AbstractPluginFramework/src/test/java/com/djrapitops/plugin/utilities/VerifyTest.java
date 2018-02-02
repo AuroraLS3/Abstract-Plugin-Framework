@@ -4,7 +4,8 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * //TODO Class Javadoc Comment
@@ -13,75 +14,75 @@ import static org.junit.Assert.*;
  */
 public class VerifyTest {
     @Test
-    public void exists() throws Exception {
+    public void exists() {
         assertFalse(Verify.exists(null));
         assertFalse(Verify.exists(new File("Nonexistent")));
         assertTrue(Verify.exists(new File("pom.xml")));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void existCheck() throws Exception {
+    public void existCheck() {
         Verify.existCheck(new File("Nonexistent"));
     }
 
     @Test
-    public void isEmpty() throws Exception {
+    public void isEmpty() {
     }
 
     @Test
-    public void isEmpty1() throws Exception {
+    public void isEmpty1() {
     }
 
     @Test
-    public void isEmpty2() throws Exception {
+    public void isEmpty2() {
     }
 
     @Test
-    public void contains() throws Exception {
+    public void contains() {
     }
 
     @Test
-    public void contains1() throws Exception {
+    public void contains1() {
     }
 
     @Test
-    public void contains2() throws Exception {
+    public void contains2() {
     }
 
     @Test
-    public void contains3() throws Exception {
+    public void contains3() {
     }
 
     @Test
-    public void equalsIgnoreCase() throws Exception {
+    public void equalsIgnoreCase() {
     }
 
     @Test
-    public void equalsOne() throws Exception {
+    public void equalsOne() {
     }
 
     @Test
-    public void equals() throws Exception {
+    public void equals() {
     }
 
     @Test
-    public void notNull() throws Exception {
+    public void notNull() {
     }
 
     @Test
-    public void containsNull() throws Exception {
+    public void containsNull() {
     }
 
     @Test
-    public void nullCheck() throws Exception {
+    public void nullCheck() {
     }
 
     @Test
-    public void nullCheck1() throws Exception {
+    public void nullCheck1() {
     }
 
     @Test
-    public void hasPermission() throws Exception {
+    public void hasPermission() {
     }
 
 }

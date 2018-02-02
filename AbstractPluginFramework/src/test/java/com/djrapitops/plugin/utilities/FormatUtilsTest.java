@@ -9,14 +9,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author ristolah
  */
 public class FormatUtilsTest {
     @Test
-    public void parseVersionNumber() throws Exception {
+    public void parseVersionNumber() {
         assertEquals(10101000000000000L, FormatUtils.parseVersionNumber("1.1.1"));
         assertEquals(10101010000000000L, FormatUtils.parseVersionNumber("1.1.1-Dev1"));
         assertEquals(10201010000000000L, FormatUtils.parseVersionNumber("1.2.1-Dev1"));

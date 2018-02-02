@@ -41,43 +41,47 @@ public class ThreadRunnable implements IRunnable, Runnable {
 
     @Override
     public ITask runTask() {
-        run();
+        runThis();
         return null;
     }
 
     @Override
     public ITask runTaskAsynchronously() {
-        run();
+        runThis();
         return null;
     }
 
     @Override
     public ITask runTaskLater(long delay) {
-        run();
+        runThis();
         return null;
     }
 
     @Override
     public ITask runTaskLaterAsynchronously(long delay) {
-        run();
+        runThis();
         return null;
     }
 
     @Override
     public ITask runTaskTimer(long delay, long period) {
-        run();
+        runThis();
         return null;
     }
 
     @Override
     public ITask runTaskTimerAsynchronously(long delay, long period) {
-        run();
+        runThis();
         return null;
+    }
+
+    public void runThis() {
+        thread = new Thread(this);
+        thread.start();
     }
 
     @Override
     public void run() {
-        thread = new Thread(this);
-        thread.start();
+        runnable.run();
     }
 }

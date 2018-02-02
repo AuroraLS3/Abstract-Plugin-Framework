@@ -13,5 +13,5 @@ public enum CommandType {
     ALL_WITH_ARGS,
     PLAYER_OR_ARGS,
     CONSOLE,
-    PLAYER;
+    PLAYER
 }

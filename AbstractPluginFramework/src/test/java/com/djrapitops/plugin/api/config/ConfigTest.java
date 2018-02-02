@@ -144,7 +144,7 @@ public class ConfigTest {
     }
 
     @Test
-    public void tDouble() throws IOException {
+    public void tDouble() {
         double aDouble = config.getDouble("Double");
         double bDouble = config.getDouble("Double2");
         assertTrue(aDouble + "", 0.043 == aDouble);
