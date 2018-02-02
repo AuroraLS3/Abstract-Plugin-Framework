@@ -29,11 +29,15 @@ public class Verify {
     }
 
     public static File existCheck(File file) throws IllegalArgumentException {
-        nullCheck(file);
+        return existCheck(file, () -> new IllegalArgumentException("File did not exist"));
+    }
+
+    public static <K extends Throwable> File existCheck(File file, ErrorLoader<K> exception) throws K {
+        nullCheck(file, exception);
         if (exists(file)) {
             return file;
         }
-        throw new IllegalArgumentException("File did not exist");
+        throw exception.load();
     }
 
     /**
@@ -177,20 +181,41 @@ public class Verify {
      * @throws NullPointerException If the object is null.
      */
     public static <T> T nullCheck(T object) throws IllegalArgumentException {
+        return nullCheck(object, () -> new IllegalArgumentException(object.getClass().getSimpleName() + " was null!"));
+    }
+
+    public static <T, K extends Throwable> T nullCheck(T object, ErrorLoader<K> exception) throws K {
         if (!notNull(object)) {
-            throw new IllegalArgumentException(object.getClass().getSimpleName() + " was null!");
+            throw exception.load();
         }
         return object;
     }
 
     @SafeVarargs
     public static <T> T[] nullCheck(T... objects) throws IllegalArgumentException {
+        return nullCheck(
+                () -> new IllegalArgumentException(objects.getClass().getSimpleName() + " contained a null object!"),
+                objects
+        );
+    }
+
+    public static <T, K extends Throwable> T[] nullCheck(ErrorLoader<K> exception, T... objects) throws K {
         for (T obj : objects) {
             if (!notNull(obj)) {
-                throw new IllegalArgumentException(objects.getClass().getSimpleName() + " contained a null object!");
+                throw exception.load();
             }
         }
         return objects;
+    }
+
+    public static <K extends Throwable> void checkCondition(boolean condition, ErrorLoader<K> exception) throws K {
+        if (!condition) {
+            throw exception.load();
+        }
+    }
+
+    public interface ErrorLoader<K extends Throwable> {
+        K load();
     }
 
     /**
