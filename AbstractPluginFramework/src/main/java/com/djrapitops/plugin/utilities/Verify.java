@@ -181,7 +181,7 @@ public class Verify {
      * @throws NullPointerException If the object is null.
      */
     public static <T> T nullCheck(T object) throws IllegalArgumentException {
-        return nullCheck(object, () -> new IllegalArgumentException(object.getClass().getSimpleName() + " was null!"));
+        return nullCheck(object, () -> new IllegalArgumentException("Something was null!"));
     }
 
     public static <T, K extends Throwable> T nullCheck(T object, ErrorLoader<K> exception) throws K {
@@ -194,7 +194,7 @@ public class Verify {
     @SafeVarargs
     public static <T> T[] nullCheck(T... objects) throws IllegalArgumentException {
         return nullCheck(
-                () -> new IllegalArgumentException(objects.getClass().getSimpleName() + " contained a null object!"),
+                () -> new IllegalArgumentException("Contained a null object!"),
                 objects
         );
     }

@@ -4,13 +4,12 @@ import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
+import com.djrapitops.plugin.utilities.Format;
 import com.djrapitops.plugin.utilities.FormatUtils;
+import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.ChatColor;
 
 /**
  * Abstract class for any command that has multiple subcommands.
@@ -188,7 +187,7 @@ class HelpCommand<T extends IPlugin> extends SubCommand {
         String sColor = cs.getSecondaryColor();
         String tColor = cs.getTertiaryColor();
 
-        sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse() + oColor + " " + StringUtils.capitalize(command.getFirstName()) + " Help");
+        sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse() + oColor + " " + new Format(command.getFirstName()).capitalize() + " Help");
         List<SubCommand> commands = this.command.getCommands();
 
         commands.stream()
