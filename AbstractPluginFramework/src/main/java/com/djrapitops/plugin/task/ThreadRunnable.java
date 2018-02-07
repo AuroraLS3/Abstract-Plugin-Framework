@@ -20,6 +20,7 @@ public class ThreadRunnable implements IRunnable, Runnable {
         this.name = name;
         this.id = id;
         this.runnable = runnable;
+        runnable.setCancellable(this);
     }
 
     @Override
