@@ -5,8 +5,6 @@
  */
 package com.djrapitops.plugin.task;
 
-import com.djrapitops.plugin.utilities.Verify;
-
 /**
  * This class is an abstraction class used to contain run information for Bukkit
  * and Bungee runnables.
@@ -49,7 +47,8 @@ public abstract class AbsRunnable implements Runnable {
     }
 
     public void cancel() {
-        Verify.nullCheck(runnable);
-        runnable.cancel();
+        if (runnable != null) {
+            runnable.cancel();
+        }
     }
 }
