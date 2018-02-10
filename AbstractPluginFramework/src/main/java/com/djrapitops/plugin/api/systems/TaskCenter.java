@@ -7,7 +7,6 @@ import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.status.obj.TaskInfo;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Manages information about different Runnables and Tasks related to them.
@@ -38,7 +37,8 @@ public class TaskCenter {
 
     public static void cancelAllKnownTasks(Class plugin) {
         List<IRunnable> taskList = tasks.getOrDefault(plugin, new ArrayList<>());
-        for (IRunnable iRunnable : taskList) {
+        // taskList is copied to new ArrayList to avoid Concurrent Modification
+        for (IRunnable iRunnable : new ArrayList<>(taskList)) {
             try {
                 iRunnable.cancel();
                 taskCancelled(plugin, iRunnable.getTaskName(), iRunnable.getTaskId());
@@ -79,20 +79,10 @@ public class TaskCenter {
     }
 
     public static String[] getTasks(Class plugin) {
-        List<String> infos = new ArrayList<>(taskInfo.get(plugin))
+        return new ArrayList<>(taskInfo.get(plugin))
                 .stream()
-                .map(i -> "Task " + i)
-                .sorted()
-                .collect(Collectors.toList());
-
-        int length = infos.size();
-        String[] states = new String[length];
-
-        for (int i = 0; i < length; i++) {
-            states[i] = infos.get(i);
-        }
-
-        return states;
+                .map(task -> "Task " + task)
+                .sorted().toArray(String[]::new);
     }
 
     public static int getTaskCount(Class plugin) {
