@@ -266,8 +266,9 @@ public class ConfigNode {
                 this.addChild(key, copyFromNode);
             } else {
                 ConfigNode thisNode = this.getConfigNode(key);
+                List<String> comment = thisNode.comment;
                 List<String> copyComment = copyFromNode.comment;
-                if (!copyComment.isEmpty()) {
+                if (comment.size() < copyComment.size()) {
                     thisNode.comment = copyComment;
                 }
                 thisNode.copyDefaults(copyFromNode);

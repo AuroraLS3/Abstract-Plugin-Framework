@@ -1,4 +1,4 @@
-/* 
+/*
  * Licence is provided in the jar as license.yml also here:
  * https://github.com/Rsl1122/Plan-PlayerAnalytics/blob/master/Plan/src/main/resources/license.yml
  */
@@ -138,10 +138,13 @@ public class Config extends ConfigNode {
                     }
                 }
 
-
                 String value = keyAndValue[1].trim();
-                int indexOfHashtag = value.lastIndexOf(" #");
-                String valueWithoutComment = indexOfHashtag < 0 ? value : value.substring(0, indexOfHashtag);
+                int indexOfHashTag = value.lastIndexOf(" #");
+                String valueWithoutComment = indexOfHashTag < 0 ? value : value.substring(0, indexOfHashTag);
+                if (indexOfHashTag > 0) {
+                    String comment = value.substring(indexOfHashTag + 1, value.length());
+                    comments.add(comment);
+                }
 
                 ConfigNode node = parent.getChildren().get(configKey);
                 if (override || node == null) {
