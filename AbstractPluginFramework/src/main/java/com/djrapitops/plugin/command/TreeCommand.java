@@ -6,7 +6,6 @@ import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.settings.DefaultMessages;
 import com.djrapitops.plugin.utilities.Format;
 import com.djrapitops.plugin.utilities.FormatUtils;
-import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,18 +121,18 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
         boolean console = !CommandUtils.isPlayer(sender);
 
         if (!command.hasPermission(sender)) {
-            sender.sendMessage(ChatColor.RED + "[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_NO_PERMISSION);
+            sender.sendMessage("§c[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_NO_PERMISSION);
             return true;
         }
 
         CommandType cType = command.getCommandType();
         if (cType == CommandType.ALL_WITH_ARGS || console && args.length < 2 && cType == CommandType.PLAYER_OR_ARGS) {
-            sender.sendMessage(ChatColor.RED + "[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_REQUIRES_ARGUMENTS.parse("1") + " " + command.getArguments());
+            sender.sendMessage("§c[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_REQUIRES_ARGUMENTS.parse("1") + " " + command.getArguments());
             return true;
         }
 
         if (console && cType == CommandType.PLAYER) {
-            sender.sendMessage(ChatColor.RED + "[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_SENDER_NOT_PLAYER);
+            sender.sendMessage("§c[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_SENDER_NOT_PLAYER);
 
             return true;
         }
@@ -146,7 +145,15 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
         String[] realArgs = new String[args.length - 1];
         System.arraycopy(args, 1, realArgs, 0, args.length - 1);
 
-        command.onCommand(sender, commandLabel, realArgs);
+        try {
+            command.onCommand(sender, commandLabel, realArgs);
+        } catch (NumberFormatException e) {
+            sender.sendMessage("§c[" + plugin.getClass().getSimpleName() + "] Number Required: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage("§c[" + plugin.getClass().getSimpleName() + "] Bad Argument: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            sender.sendMessage("§c[" + plugin.getClass().getSimpleName() + "] Bad State: " + e.getMessage());
+        }
         return true;
     }
 
