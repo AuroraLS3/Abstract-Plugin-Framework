@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  */
 public class Config extends ConfigNode {
 
-    private final String absolutePath;
+    private String absolutePath;
 
     public Config(File file) {
         super("", null, "");
@@ -34,8 +34,12 @@ public class Config extends ConfigNode {
         if (!folder.exists()) {
             folder.mkdirs();
         }
-        this.absolutePath = file.getAbsolutePath();
         try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            this.absolutePath = file.getAbsolutePath();
+
             read();
         } catch (IOException e) {
             Log.toLog(this.getClass().getName(), e);
