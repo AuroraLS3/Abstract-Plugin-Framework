@@ -66,6 +66,8 @@ Customization:
       Minutes: '%minutes%m '
       Seconds: '%seconds%s'
       Zero: 0s
+  TestCopyOverHead: true
+    Under: true
 Theme:
   Base: Default
   Font:

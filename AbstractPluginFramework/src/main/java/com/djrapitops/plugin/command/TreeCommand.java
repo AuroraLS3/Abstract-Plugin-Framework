@@ -126,7 +126,8 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
         }
 
         CommandType cType = command.getCommandType();
-        if (cType == CommandType.ALL_WITH_ARGS || console && args.length < 2 && cType == CommandType.PLAYER_OR_ARGS) {
+        if ((cType == CommandType.ALL_WITH_ARGS && args.length < 2)
+                || console && args.length < 2 && cType == CommandType.PLAYER_OR_ARGS) {
             sender.sendMessage("§c[" + plugin.getClass().getSimpleName() + "] " + DefaultMessages.COMMAND_REQUIRES_ARGUMENTS.parse("1") + " " + command.getArguments());
             return true;
         }
