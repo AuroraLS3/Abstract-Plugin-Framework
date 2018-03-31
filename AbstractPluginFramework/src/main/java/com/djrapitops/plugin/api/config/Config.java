@@ -6,6 +6,7 @@ package com.djrapitops.plugin.api.config;
 
 import com.djrapitops.plugin.api.utility.log.FileLogger;
 import com.djrapitops.plugin.api.utility.log.Log;
+import com.djrapitops.plugin.utilities.Verify;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,15 +35,15 @@ public class Config extends ConfigNode {
         if (!folder.exists()) {
             folder.mkdirs();
         }
+
+        this.absolutePath = file.getAbsolutePath();
         try {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            this.absolutePath = file.getAbsolutePath();
-
             read();
         } catch (IOException e) {
-            Log.toLog(this.getClass().getName(), e);
+            Log.toLog(this.getClass(), e);
         }
     }
 
@@ -71,7 +72,7 @@ public class Config extends ConfigNode {
         }
         childOrder.clear();
         this.getChildren().clear();
-        processLines(readLines(new File(absolutePath).toPath()), true);
+        processLines(readLines(getFile().toPath()), true);
     }
 
     public void copyDefaults(File from) throws IOException {
@@ -168,7 +169,9 @@ public class Config extends ConfigNode {
 
     @Override
     public void save() throws IOException {
-        Files.write(new File(absolutePath).toPath(), processTree(), Charset.forName("UTF-8"));
+        File file = getFile();
+        Verify.nullCheck(file, () -> new IllegalStateException("Absolute Path was null (Not defined)"));
+        Files.write(file.toPath(), processTree(), Charset.forName("UTF-8"));
     }
 
     private List<String> processTree() {

@@ -2,7 +2,10 @@ package com.djrapitops.plugin.api.config;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +18,13 @@ import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
-/**
- * //TODO Class Javadoc Comment
- *
- * @author Rsl1122
- */
 public class ConfigTest {
+
+    @Rule
+    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     private Config config;
     private File testFile;
@@ -28,26 +32,14 @@ public class ConfigTest {
 
     @Before
     public void setUp() throws Exception {
-        File tempTestFolder = new File("TempTestFolder");
-        if (tempTestFolder.exists() && tempTestFolder.isDirectory()) {
-            for (File f : tempTestFolder.listFiles()) {
-                Files.deleteIfExists(f.toPath());
-            }
-        }
-        testFile = new File("TempTestFolder", "test.yml");
+        testFile = new File(temporaryFolder.getRoot(), "test.yml");
         config = new Config(testFile);
-        copyFromFile = new File("testconfig.yml");
+        copyFromFile = new File("src/test/resources/testconfig.yml");
         config.copyDefaults(copyFromFile);
     }
 
     @After
-    public void tearDown() throws Exception {
-        File tempTestFolder = new File("TempTestFolder");
-        if (tempTestFolder.exists() && tempTestFolder.isDirectory()) {
-            for (File f : tempTestFolder.listFiles()) {
-                Files.deleteIfExists(f.toPath());
-            }
-        }
+    public void tearDown() {
     }
 
     @Test
@@ -232,5 +224,54 @@ public class ConfigTest {
         testStringListItemDuplication();
         assertTrue(config.getBoolean("Plugin.Bungee-Override.CopyBungeeConfig"));
         assertFalse(config.getBoolean("Plugin.Bungee-Override.StandaloneMode"));
+    }
+
+    @Test
+    public void nullFileConstructorProducesNPE() throws IOException {
+        exception.expect(NullPointerException.class);
+        Config config = new Config(null);
+        config.save();
+    }
+
+    @Test
+    public void nonexistentConfigFileDoesNotProduceNPE() throws IOException {
+        File nonExistent = new File(temporaryFolder.getRoot(), "nonexistent.yml");
+        Config config = new Config(nonExistent);
+        ConfigNode node = config.getConfigNode("Test");
+        node.set("Example.Test", true);
+        node.save();
+
+        assertTrue(config.getBoolean("Test.Example.Test"));
+        assertTrue(nonExistent.exists());
+    }
+
+    @Test
+    public void nonexistentFolderDoesNotProduceNPE() throws IOException {
+        File nonExistentFolder = new File(temporaryFolder.getRoot(), "NoFolder");
+        File nonExistent = new File(nonExistentFolder, "nonexistent.yml");
+        Config config = new Config(nonExistent);
+        ConfigNode node = config.getConfigNode("Test");
+        node.set("Example.Test", true);
+        node.save();
+
+        assertTrue(config.getBoolean("Test.Example.Test"));
+        assertTrue(nonExistent.exists());
+        assertTrue(nonExistentFolder.exists());
+    }
+
+    @Test
+    public void nonexistentFolderDoesNotProduceNPEAfterCopyingDefaults() throws IOException {
+        File nonExistentFolder = new File(temporaryFolder.getRoot(), "NoFolder");
+        File nonExistent = new File(nonExistentFolder, "nonexistent.yml");
+        Config config = new Config(nonExistent);
+        config.copyDefaults(copyFromFile);
+        config.save();
+        ConfigNode node = config.getConfigNode("Test");
+        node.set("Example.Test", true);
+        node.save();
+
+        assertTrue(config.getBoolean("Test.Example.Test"));
+        assertTrue(nonExistent.exists());
+        assertTrue(nonExistentFolder.exists());
     }
 }
