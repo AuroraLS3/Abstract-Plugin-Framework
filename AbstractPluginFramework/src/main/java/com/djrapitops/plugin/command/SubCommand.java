@@ -6,6 +6,7 @@ package com.djrapitops.plugin.command;
  * @author Rsl1122
  * @since 2.0.0
  */
+@Deprecated
 public abstract class SubCommand {
 
     final private CommandType commandType;

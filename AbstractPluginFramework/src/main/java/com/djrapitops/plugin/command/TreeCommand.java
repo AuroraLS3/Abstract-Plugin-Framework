@@ -17,6 +17,7 @@ import java.util.List;
  * @author Rsl1122
  * @since 2.0.0
  */
+@Deprecated
 public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
 
     protected final T plugin;
@@ -172,6 +173,7 @@ public abstract class TreeCommand<T extends IPlugin> extends SubCommand {
     }
 }
 
+@Deprecated
 class HelpCommand<T extends IPlugin> extends SubCommand {
 
     private final TreeCommand<T> command;

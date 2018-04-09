@@ -4,6 +4,7 @@ import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.systems.TaskCenter;
 import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
+import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
 import org.bukkit.event.Listener;
@@ -68,7 +69,13 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         }
     }
 
+    @Deprecated
     public void registerCommand(String name, SubCommand command) {
+        getCommand(name).setExecutor(new BukkitCommand(command));
+        StaticHolder.saveInstance(command.getClass(), getClass());
+    }
+
+    public void registerCommand(String name, CommandNode command) {
         getCommand(name).setExecutor(new BukkitCommand(command));
         StaticHolder.saveInstance(command.getClass(), getClass());
     }
