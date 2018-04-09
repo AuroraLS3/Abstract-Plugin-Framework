@@ -6,6 +6,7 @@ package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
+import org.slf4j.Logger;
 
 /**
  * //TODO Class Javadoc Comment
@@ -31,15 +32,38 @@ public abstract class SpongePlugin implements IPlugin {
 
     @Override
     public void reloadPlugin(boolean full) {
-        reloading = true;
-        if (full) {
-            onDisable();
-            onReload();
-            onEnable();
-        } else {
-            onReload();
-        }
-        reloading = false;
+        PluginCommon.reload(this, full);
     }
 
+    @Override
+    public void log(String level, String s) {
+        Logger logger = getLogger();
+        switch (level.toUpperCase()) {
+            case "INFO":
+            case "I":
+            case "INFO_COLOR":
+                logger.info(s);
+                break;
+            case "W":
+            case "WARN":
+            case "WARNING":
+                logger.warn(s);
+                break;
+            case "E":
+            case "ERR":
+            case "ERROR":
+            case "SEVERE":
+                logger.error(s);
+                break;
+            default:
+                logger.info(s);
+                break;
+        }
+    }
+
+    protected abstract Logger getLogger();
+
+    void setReloading(boolean reloading) {
+        this.reloading = reloading;
+    }
 }

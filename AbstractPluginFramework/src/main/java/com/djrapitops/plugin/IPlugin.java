@@ -28,5 +28,4 @@ public interface IPlugin {
     File getDataFolder();
 
     String getVersion();
-
 }

@@ -9,15 +9,15 @@ import net.md_5.bungee.api.plugin.Command;
  * command by Bungee.
  *
  * @author Rsl1122
- * @since 2.0.0
  * @see SubCommand
+ * @since 2.0.0
  */
 public class BungeeCommand extends Command {
 
     private final SubCommand subCmd;
 
-    public BungeeCommand(SubCommand subCmd) {
-        super(subCmd.getFirstName());
+    public BungeeCommand(String name, SubCommand subCmd) {
+        super(name);
         this.subCmd = subCmd;
     }
 

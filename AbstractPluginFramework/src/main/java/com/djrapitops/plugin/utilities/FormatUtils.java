@@ -96,7 +96,7 @@ public class FormatUtils {
         for (int i = 0; i < version.size(); i++) {
             try {
                 int num = Integer.parseInt(version.get(i));
-                long multiplier = (long) Math.pow(100, 8 - i);
+                long multiplier = (long) Math.pow(100, 8.0 - i);
                 versionNumber += num * multiplier;
             } catch (NumberFormatException e) {
                 Log.toLog(FormatUtils.class, e);

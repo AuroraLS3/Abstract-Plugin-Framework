@@ -89,15 +89,11 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
     @Override
     public void reloadPlugin(boolean full) {
-        reloading = true;
-        if (full) {
-            onDisable();
-            onReload();
-            onEnable();
-        } else {
-            onReload();
-        }
-        reloading = false;
+        PluginCommon.reload(this, full);
+    }
+
+    void setReloading(boolean reloading) {
+        this.reloading = reloading;
     }
 
     @Override

@@ -37,15 +37,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
 
     @Override
     public void reloadPlugin(boolean full) {
-        reloading = true;
-        if (full) {
-            onDisable();
-            onReload();
-            onEnable();
-        } else {
-            onReload();
-        }
-        reloading = false;
+        PluginCommon.reload(this, full);
     }
 
     @Override
@@ -84,7 +76,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
     }
 
     public void registerCommand(String name, SubCommand command) {
-        getProxy().getPluginManager().registerCommand(this, new BungeeCommand(command));
+        getProxy().getPluginManager().registerCommand(this, new BungeeCommand(name, command));
         StaticHolder.saveInstance(command.getClass(), getClass());
     }
 
@@ -103,5 +95,9 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
     @Override
     public boolean isReloading() {
         return reloading;
+    }
+
+    void setReloading(boolean reloading) {
+        this.reloading = reloading;
     }
 }

@@ -27,6 +27,7 @@ import java.util.stream.Stream;
  */
 public class Config extends ConfigNode {
 
+    private static final String APF_NEWLINE = " APF_NEWLINE ";
     private String absolutePath;
 
     public Config(File file) {
@@ -72,7 +73,7 @@ public class Config extends ConfigNode {
         }
         childOrder.clear();
         this.getChildren().clear();
-        processLines(readLines(getFile().toPath()), true);
+        processLines(readLines(file.toPath()), true);
     }
 
     public void copyDefaults(File from) throws IOException {
@@ -111,10 +112,10 @@ public class Config extends ConfigNode {
                     String lastValue = lastNode.getValue();
 
                     boolean isListItem = trimmed.startsWith("-");
-                    boolean wasListItem = lastValue.contains("APF_NEWLINE") || lastValue.trim().isEmpty();
+                    boolean wasListItem = lastValue.contains(APF_NEWLINE.trim()) || lastValue.trim().isEmpty();
 
                     if (isListItem && wasListItem) {
-                        lastNode.set(lastValue + " APF_NEWLINE " + trimmed);
+                        lastNode.set(lastValue + APF_NEWLINE + trimmed);
                     } else {
                         if ((lastValue.startsWith("\"") && trimmed.endsWith("\""))
                                 || (lastValue.startsWith("'") && trimmed.endsWith("'"))) {
@@ -195,11 +196,11 @@ public class Config extends ConfigNode {
 
             StringBuilder b = new StringBuilder();
             addIndentation(depth, b);
-            if (value.startsWith(" APF_NEWLINE ")) {
+            if (value.startsWith(APF_NEWLINE)) {
                 // Keyline
                 lines.add(b.append(key).append(":").toString());
                 // List
-                String[] list = value.split(" APF_NEWLINE ");
+                String[] list = value.split(APF_NEWLINE);
                 for (String listValue : list) {
                     String v = listValue.trim();
                     if (v.isEmpty()) {

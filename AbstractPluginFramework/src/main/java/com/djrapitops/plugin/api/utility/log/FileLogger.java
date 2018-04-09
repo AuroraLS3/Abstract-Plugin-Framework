@@ -1,11 +1,10 @@
-/* 
+/*
  * Licence is provided in the jar as license.yml also here:
  * https://github.com/Rsl1122/Plan-PlayerAnalytics/blob/master/Plan/src/main/resources/license.yml
  */
 package com.djrapitops.plugin.api.utility.log;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -13,6 +12,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * //TODO Class Javadoc Comment
@@ -26,18 +26,20 @@ public class FileLogger {
     }
 
     public static void logToFile(File file, List<String> lines) throws IOException {
-        Files.write(file.toPath(), lines, Charset.forName("UTF-8"));
+        Files.write(file.toPath(), lines, getCharset());
     }
 
     public static void appendToFile(File file, List<String> lines) throws IOException {
         if (!file.exists()) {
             file.createNewFile();
         }
-        Files.write(file.toPath(), lines, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
+        Files.write(file.toPath(), lines, getCharset(), StandardOpenOption.APPEND);
     }
 
     public static List<String> readContents(File file) throws IOException {
-        return Files.lines(file.toPath(), Charset.forName("UTF-8")).collect(Collectors.toList());
+        try (Stream<String> lines = Files.lines(file.toPath(), getCharset())) {
+            return lines.collect(Collectors.toList());
+        }
     }
 
     public static int getIndentation(String line) {
@@ -50,5 +52,9 @@ public class FileLogger {
             }
         }
         return indentation;
+    }
+
+    private static Charset getCharset() {
+        return Charset.forName("UTF-8");
     }
 }
