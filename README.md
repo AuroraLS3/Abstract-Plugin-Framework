@@ -1,5 +1,8 @@
 # Abstract Plugin Framework
 
+[![Build Status](https://travis-ci.org/Rsl1122/Abstract-Plugin-Framework.svg?branch=master)](https://travis-ci.org/Rsl1122/Abstract-Plugin-Framework)
+[![Quality Gate](https://sonarcloud.io/api/badges/gate?key=com.djrapitops%3AAbstractPluginFramework)](https://sonarcloud.io/dashboard?id=com.djrapitops%3AAbstractPluginFramework)
+
 Abstract Plugin Framework (APF) is a framework for creating Bukkit & Bungee plugins faster removing some Abstraction work.
 APF also adds Utilities for multiple different things.
 
