@@ -2,6 +2,8 @@ package com.djrapitops.plugin.command;
 
 import com.djrapitops.plugin.command.defaultcmds.HelpCommand;
 import com.djrapitops.plugin.settings.ColorScheme;
+import com.djrapitops.plugin.utilities.FormatUtils;
+import com.djrapitops.plugin.utilities.Verify;
 
 import java.util.Arrays;
 
@@ -16,6 +18,7 @@ public class TreeCmdNode extends CommandNode {
     private final CommandNode parent;
     private ColorScheme colorScheme;
 
+    private String defaultCommand = "help";
     private CommandNode[][] nodeGroups;
 
     public TreeCmdNode(String name, String permission, CommandType commandType, CommandNode parent) {
@@ -44,6 +47,7 @@ public class TreeCmdNode extends CommandNode {
     }
 
     public void setNodeGroups(CommandNode[]... nodeGroups) {
+        Verify.nullCheck(nodeGroups);
         this.nodeGroups = nodeGroups;
     }
 
@@ -55,40 +59,61 @@ public class TreeCmdNode extends CommandNode {
         this.colorScheme = colorScheme;
     }
 
+    public void setDefaultCommand(String defaultCommand) {
+        Verify.nullCheck(defaultCommand);
+        this.defaultCommand = defaultCommand;
+    }
+
     @Override
     public void onCommand(ISender sender, String commandLabel, String[] args) {
         try {
+            if (args.length == 0) {
+                helpCommand.onCommand(sender, commandLabel, args);
+                return;
+            }
             CommandNode command = getCommand(args);
 
             boolean console = !CommandUtils.isPlayer(sender);
             String permission = command.getPermission();
             if (!"".equals(permission) && !sender.hasPermission(permission)) {
-                throw new IllegalStateException("You do not have the required permission.");
+                throw new IllegalAccessException("You do not have the required permission.");
             }
 
+            boolean isDefaultCommandWithArgs = command.getName().equals(defaultCommand) && args.length <= 1;
+
             CommandType cType = command.getCommandType();
-            if ((cType == CommandType.ALL_WITH_ARGS && args.length < 2)
-                    || console && args.length < 2 && cType == CommandType.PLAYER_OR_ARGS) {
-                throw new IllegalStateException("Too few arguments! " + Arrays.toString(getArguments()));
+            if (!isDefaultCommandWithArgs
+                    && ((cType == CommandType.ALL_WITH_ARGS && args.length < 2)
+                    || console && args.length < 2 && cType == CommandType.PLAYER_OR_ARGS)) {
+                throw new IllegalAccessException("Too few arguments! " + Arrays.toString(getArguments()));
             }
 
             if (console && cType == CommandType.PLAYER) {
-                throw new IllegalStateException("Command can only be used as a player.");
+                throw new IllegalAccessException("Command can only be used as a player.");
             }
             if (args[args.length - 1].equals("?")) {
-                sender.sendMessage(command.getInDepthHelp());
-                sender.sendMessage("Aliases: " + Arrays.toString(getAliases()));
+                if (args.length == 1) {
+                    sender.sendMessage(getInDepthHelp());
+                    sender.sendMessage("Aliases: " + Arrays.toString(getAliases()));
+                } else {
+                    sender.sendMessage(command.getInDepthHelp());
+                    sender.sendMessage("Aliases: " + Arrays.toString(command.getAliases()));
+                }
+                return;
             }
 
-            String[] realArgs = new String[args.length - 1];
-            System.arraycopy(args, 1, realArgs, 0, args.length - 1);
+            String[] realArgs = args;
+            if (!isDefaultCommandWithArgs) {
+                realArgs = new String[args.length - 1];
+                System.arraycopy(args, 1, realArgs, 0, args.length - 1);
+            }
 
             command.onCommand(sender, commandLabel, realArgs);
         } catch (NumberFormatException e) {
             sender.sendMessage("§cNumber Required: " + e.getMessage());
         } catch (IllegalArgumentException e) {
             sender.sendMessage("§cBad Argument: " + e.getMessage());
-        } catch (IllegalStateException e) {
+        } catch (IllegalAccessException e) {
             sender.sendMessage("§c" + e.getMessage());
         }
     }
@@ -100,18 +125,26 @@ public class TreeCmdNode extends CommandNode {
 
         String name = args[0];
         CommandNode cmd = getMatchingCommand(name);
-
-        return cmd != null ? cmd : helpCommand;
+        if (cmd != null) {
+            return cmd;
+        }
+        if (!defaultCommand.equals(args[0])) {
+            return getCommand(FormatUtils.mergeArrays(new String[]{defaultCommand}, args));
+        }
+        return helpCommand;
     }
 
     private CommandNode getMatchingCommand(String name) {
         for (CommandNode[] nodeGroup : nodeGroups) {
-            for (CommandNode cmd : nodeGroup) {
-                String[] aliases = cmd.getAliases();
+            for (CommandNode node : nodeGroup) {
+                if (node == null) {
+                    continue;
+                }
+                String[] aliases = node.getAliases();
 
                 for (String alias : aliases) {
                     if (alias.trim().equalsIgnoreCase(name)) {
-                        return cmd;
+                        return node;
                     }
                 }
             }

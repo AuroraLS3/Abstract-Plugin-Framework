@@ -82,7 +82,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
 
     public void registerCommand(String name, CommandNode command) {
         getProxy().getPluginManager().registerCommand(this, new BungeeCommand(name, command));
-        StaticHolder.saveInstance(command.getClass(), getClass());
+        PluginCommon.saveCommandInstances(command, this.getClass());
     }
 
     protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {

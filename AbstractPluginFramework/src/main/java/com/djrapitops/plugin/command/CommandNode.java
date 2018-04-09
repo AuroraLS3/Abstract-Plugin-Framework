@@ -11,8 +11,8 @@ public abstract class CommandNode {
     private final String permission;
     private final CommandType commandType;
 
-    private String[] arguments;
-    private String[] tabComplete;
+    private String[] arguments = new String[0];
+    private String[] tabComplete = new String[0];
     private String onHover;
     private String shortHelp = "";
     private String[] inDepthHelp;
@@ -21,6 +21,12 @@ public abstract class CommandNode {
         this.aliases = aliases;
         this.permission = permission;
         this.commandType = commandType;
+    }
+
+    public CommandNode(String name, CommandType type, String permission, String usage, String arguments) {
+        this(name, permission, type);
+        this.shortHelp = usage;
+        this.arguments = arguments.split(" ");
     }
 
     public abstract void onCommand(ISender sender, String commandLabel, String[] args);

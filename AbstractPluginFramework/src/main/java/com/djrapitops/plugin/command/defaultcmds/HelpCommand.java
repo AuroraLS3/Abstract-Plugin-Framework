@@ -27,15 +27,18 @@ public class HelpCommand extends CommandNode {
         String cSec = colorScheme.getSecondaryColor();
         String cTer = colorScheme.getTertiaryColor();
         sender.sendMessage(cTer + "> SubCommands " + cMain + treeCmdNode.getCommandString());
-        sender.sendMessage("");
+        sender.sendMessage("  ");
 
         for (CommandNode[] commandNodes : treeCmdNode.getNodeGroups()) {
             int desiredLength = getIndent(commandNodes);
 
             for (CommandNode node : commandNodes) {
-                sender.sendMessage(cMain + "  " + getWithSpaces(getNameAndArgs(node), desiredLength) + " " + node.getShortHelp());
+                if (node == null) {
+                    continue;
+                }
+                sender.sendMessage(cMain + "  " + getNameAndArgs(node) + " " + cTer + node.getShortHelp());
             }
-            sender.sendMessage("");
+            sender.sendMessage("  ");
         }
 
         sender.sendMessage("  " + cSec + "Add ? to the end of the command for more help");
@@ -54,6 +57,9 @@ public class HelpCommand extends CommandNode {
         double maxIndent = 0.0;
 
         for (CommandNode node : commandNodes) {
+            if (node == null) {
+                continue;
+            }
             double indent = 0.0;
             String nameAndArgs = getNameAndArgs(node);
             for (char c : nameAndArgs.toCharArray()) {
