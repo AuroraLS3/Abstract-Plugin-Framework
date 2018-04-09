@@ -1,0 +1,21 @@
+language: java
+sudo: false
+install: true
+before_install:
+  - pwd
+  - cd AbstractPluginFramework
+install:
+  - mvn clean install -DskipTests
+addons:
+  sonarcloud:
+    organization: "rsl1122-github"
+    token:
+      secure: "i4MvXoHoQQBBjsaZR5EEa4uAiGEkFYgHyPThiPQz/n03MK35w3E0UqTaZqaROnjFIshIEElU4FwhRhJcrqZrMTWDG/QYUfHXM1grCFVtS3/sZedTRH+ejm7coNoqXGlXNz0TQn/3uwl4CDoGBHI70j5nocK6Mca/87tAPffwNlUPtqNSYDt38oyeB5hfz5LlO4YkWrj6b0t1G7qvn+kZuxu5T7IbXakXTU8wZPhVApNrHre2aqpfd+SiZKrpkjMpFgiLFuRk7P8lEY31aSsAkddRNMLUdTU1uVM5M+wYQl+FINsqEghmiKMQmmfLBRanIsV+TujBv+ynk6osWqGG6Ux/59aa/QLIVb2ZzdNDflE1fb+tw6HXMLCvorznBxOkE+brppEAnaHilJIyMSP8oW9hqwv2rFeUabbiJFxF01kZA8/yQI8Ld8UhZQcQqeOEWGt8OuY9Z5ovEVDUkL1u8VHgTqcLEuQNT7FKwfPtUSVcyQ6+t0sPM1u9fJesKo/RfvzqXnKmhZz+8AxFQyMyLNjk1QD+JhP782wt8SMDmqEKsWa1McurAReC8LT30D2Whh+RQ7mywbd+pb2fw7ytFhVyrAbK6P0JXZJLNjJeYtOzC6VKuCfC2PFOGCt7ss3+j0AI5NjIUH7twYpdgka9ucxRn1BZ5bRCC1rL7/pOz/w="
+jdk:
+  - oraclejdk8
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
