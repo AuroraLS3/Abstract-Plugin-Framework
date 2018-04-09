@@ -1,13 +1,11 @@
 package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.api.Benchmark;
-import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.api.systems.TaskCenter;
 import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
-import com.djrapitops.plugin.task.RunnableFactory;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -77,14 +75,6 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
     protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {
         return Version.checkVersion(getVersion(), versionStringUrl);
-    }
-
-    public NotificationCenter getNotificationCenter() {
-        return StaticHolder.getNotificationCenter();
-    }
-
-    public RunnableFactory getRunnableFactory() {
-        return StaticHolder.getRunnableFactory();
     }
 
     @Override

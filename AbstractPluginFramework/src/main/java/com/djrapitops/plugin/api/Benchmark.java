@@ -87,4 +87,8 @@ public class Benchmark {
     public static long getTime() {
         return System.currentTimeMillis();
     }
+
+    private Benchmark() {
+        /* Hide constructor */
+    }
 }

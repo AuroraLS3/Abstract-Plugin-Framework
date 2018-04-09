@@ -8,6 +8,8 @@ import com.djrapitops.plugin.api.utility.log.ErrorLogger;
 import com.djrapitops.plugin.api.utility.log.Log;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * //TODO Class Javadoc Comment
@@ -23,10 +25,9 @@ public class DefaultErrorManager extends ErrorManager {
             Log.warn(source + " Caught: " + e, callingPlugin);
             ErrorLogger.logThrowable(e, logsFolder);
         } catch (Exception exception) {
-            System.out.println("Failed to log error to file because of " + exception);
-            System.out.println("Error:");
-            e.printStackTrace();
-            System.out.println("Fail Reason:");
+            System.err.println("Failed to log error to file because of " + exception);
+            Logger.getGlobal().log(Level.SEVERE, "Error:", e);
+            System.err.println("Fail Reason:");
             exception.printStackTrace();
         }
     }

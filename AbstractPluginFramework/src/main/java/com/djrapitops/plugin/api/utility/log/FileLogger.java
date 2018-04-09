@@ -57,4 +57,8 @@ public class FileLogger {
     private static Charset getCharset() {
         return Charset.forName("UTF-8");
     }
+
+    private FileLogger() {
+        /* Hide constructor */
+    }
 }
