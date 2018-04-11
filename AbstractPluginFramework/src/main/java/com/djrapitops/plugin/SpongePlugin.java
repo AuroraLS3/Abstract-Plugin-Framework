@@ -10,6 +10,7 @@ import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.sponge.SpongeCommand;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.event.Listener;
 
 /**
  * //TODO Class Javadoc Comment
@@ -74,5 +75,12 @@ public abstract class SpongePlugin implements IPlugin {
     public void registerCommand(String name, CommandNode command) {
         Sponge.getCommandManager().register(this, new SpongeCommand(command), name);
         PluginCommon.saveCommandInstances(command, this.getClass());
+    }
+
+    public void registerListener(Listener... listeners) {
+        for (Listener listener : listeners) {
+            Sponge.getEventManager().registerListeners(this, listener);
+            StaticHolder.saveInstance(listener.getClass(), getClass());
+        }
     }
 }
