@@ -78,8 +78,8 @@ public abstract class SpongePlugin implements IPlugin {
         PluginCommon.saveCommandInstances(command, this.getClass());
     }
 
-    public void registerListener(Listener... listeners) {
-        for (Listener listener : listeners) {
+    public void registerListener(Object... listeners) {
+        for (Object listener : listeners) {
             Sponge.getEventManager().registerListeners(this, listener);
             StaticHolder.saveInstance(listener.getClass(), getClass());
         }

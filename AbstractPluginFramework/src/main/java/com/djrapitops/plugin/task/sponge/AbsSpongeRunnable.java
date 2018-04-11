@@ -47,18 +47,20 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
 
     @Override
     public int getTaskId() {
-        return 0;
+        return -1;
     }
 
     @Override
     public ITask runTask() {
         task = new AbsSpongeTask(Task.builder().execute(this).submit(plugin));
+        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
     @Override
     public ITask runTaskAsynchronously() {
         task = new AbsSpongeTask(Task.builder().execute(this).async().submit(plugin));
+        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
@@ -67,6 +69,7 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
         task = new AbsSpongeTask(Task.builder().execute(this)
                 .delayTicks(delay)
                 .submit(plugin));
+        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
@@ -75,6 +78,7 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
         task = new AbsSpongeTask(Task.builder().execute(this).async()
                 .delayTicks(delay)
                 .submit(plugin));
+        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
@@ -84,6 +88,7 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
                 .delayTicks(delay)
                 .intervalTicks(period)
                 .submit(plugin));
+        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
@@ -93,6 +98,7 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
                 .delayTicks(delay)
                 .intervalTicks(period)
                 .submit(plugin));
+        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 }

@@ -78,7 +78,7 @@ public class TaskInfo {
 
     @Override
     public String toString() {
-        return id + ": " + name + ", " + runType;
+        return "Task" + (id != -1 ? " " + id : "") + ": " + name + ", " + runType;
     }
 
 }

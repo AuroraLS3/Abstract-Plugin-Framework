@@ -31,8 +31,12 @@ public class SpongeCommand implements CommandCallable {
 
     @Override
     public CommandResult process(CommandSource source, String arguments) {
-        String[] args = arguments.split(" ");
-        command.onCommand(new SpongeCMDSender(source), "", args);
+        if (arguments.isEmpty()) {
+            command.onCommand(new SpongeCMDSender(source), "", new String[]{});
+        } else {
+            String[] args = arguments.split(" ");
+            command.onCommand(new SpongeCMDSender(source), "", args);
+        }
         return CommandResult.success();
     }
 

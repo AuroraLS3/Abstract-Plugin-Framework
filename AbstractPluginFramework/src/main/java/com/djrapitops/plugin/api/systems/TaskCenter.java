@@ -51,7 +51,9 @@ public class TaskCenter {
 
     public static void taskCancelled(Class plugin, String name, int id) {
         List<TaskInfo> task = taskInfo.get(plugin);
-        Optional<TaskInfo> first = task.stream().filter(t -> t.getName().equals(name) && t.getId() == id).findFirst();
+        Optional<TaskInfo> first = task.stream()
+                .filter(t -> t.getName().equals(name) && t.getId() == id)
+                .findFirst();
         first.ifPresent(info -> {
             Log.debug(plugin, "Ended task " + info);
             task.remove(info);
@@ -81,7 +83,7 @@ public class TaskCenter {
     public static String[] getTasks(Class plugin) {
         return new ArrayList<>(taskInfo.get(plugin))
                 .stream()
-                .map(task -> "Task " + task)
+                .map(TaskInfo::toString)
                 .sorted().toArray(String[]::new);
     }
 
