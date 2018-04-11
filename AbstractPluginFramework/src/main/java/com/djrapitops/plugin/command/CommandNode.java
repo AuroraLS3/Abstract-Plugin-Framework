@@ -21,12 +21,30 @@ public abstract class CommandNode {
         this.aliases = aliases;
         this.permission = permission;
         this.commandType = commandType;
+        setInDepthHelp(addHelp());
     }
 
+    @Deprecated
     public CommandNode(String name, CommandType type, String permission, String usage, String arguments) {
         this(name, permission, type);
         this.shortHelp = usage;
         this.arguments = arguments.split(" ");
+    }
+
+    @Deprecated
+    public CommandNode(String name, CommandType type) {
+        this(name, "", type);
+    }
+
+    @Deprecated
+    public CommandNode(String name, CommandType type, String permission) {
+        this(name, permission, type);
+    }
+
+    @Deprecated
+    public CommandNode(String name, CommandType type, String permission, String shortHelp) {
+        this(name, permission, type);
+        setShortHelp(shortHelp);
     }
 
     public abstract void onCommand(ISender sender, String commandLabel, String[] args);
@@ -92,7 +110,15 @@ public abstract class CommandNode {
     }
 
     protected CommandNode setInDepthHelp(String... inDepthHelp) {
+        if (inDepthHelp == null || inDepthHelp.length == 0) {
+            return this;
+        }
         this.inDepthHelp = inDepthHelp;
         return this;
+    }
+
+    @Deprecated
+    public String[] addHelp() {
+        return null;
     }
 }
