@@ -60,6 +60,11 @@ public class PluginCommonTest {
             public String getVersion() {
                 return null;
             }
+
+            @Override
+            public void registerCommand(String name, CommandNode command) {
+
+            }
         };
     }
 
