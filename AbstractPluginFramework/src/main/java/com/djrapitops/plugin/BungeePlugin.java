@@ -5,7 +5,6 @@ import com.djrapitops.plugin.api.systems.TaskCenter;
 import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.CommandNode;
-import com.djrapitops.plugin.command.SubCommand;
 import com.djrapitops.plugin.command.bungee.BungeeCommand;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -72,12 +71,6 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
             getProxy().getPluginManager().registerListener(this, listener);
             StaticHolder.saveInstance(listener.getClass(), getClass());
         }
-    }
-
-    @Deprecated
-    public void registerCommand(String name, SubCommand command) {
-        getProxy().getPluginManager().registerCommand(this, new BungeeCommand(name, command));
-        StaticHolder.saveInstance(command.getClass(), getClass());
     }
 
     public void registerCommand(String name, CommandNode command) {

@@ -2,15 +2,15 @@ package com.djrapitops.plugin.command.defaultcmds;
 
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.Benchmark;
-import com.djrapitops.plugin.api.utility.log.DebugInfo;
-import com.djrapitops.plugin.api.utility.log.DebugLog;
-import com.djrapitops.plugin.command.CommandType;
-import com.djrapitops.plugin.command.ISender;
-import com.djrapitops.plugin.command.SubCommand;
-import com.djrapitops.plugin.settings.ColorScheme;
-import com.djrapitops.plugin.settings.DefaultMessages;
 import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.api.systems.TaskCenter;
+import com.djrapitops.plugin.api.utility.log.DebugInfo;
+import com.djrapitops.plugin.api.utility.log.DebugLog;
+import com.djrapitops.plugin.command.CommandNode;
+import com.djrapitops.plugin.command.CommandType;
+import com.djrapitops.plugin.command.ISender;
+import com.djrapitops.plugin.settings.ColorScheme;
+import com.djrapitops.plugin.settings.DefaultMessages;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,21 +21,23 @@ import java.util.Map;
  *
  * @param <T>
  * @author Rsl1122
- * @since 2.0.0
+ * @since 3.2.0
  */
-public class StatusCommand<T extends IPlugin> extends SubCommand {
+public class StatusCommand<T extends IPlugin> extends CommandNode {
 
     private final T plugin;
     private final ColorScheme cs;
 
     public StatusCommand(T plugin, String permission, ColorScheme cs) {
-        super("status", CommandType.ALL, permission, "Check the status of plugin's processes.", "[timings]");
+        super("status", permission, CommandType.ALL);
+        setArguments("[timings]");
+        setShortHelp("Check the status of plugin's processes.");
         this.plugin = plugin;
         this.cs = cs;
     }
 
     @Override
-    public boolean onCommand(ISender sender, String commandLabel, String[] args) {
+    public void onCommand(ISender sender, String commandLabel, String[] args) {
         String oColor = cs.getMainColor();
         String sColor = cs.getSecondaryColor();
         String tColor = cs.getTertiaryColor();
@@ -48,7 +50,7 @@ public class StatusCommand<T extends IPlugin> extends SubCommand {
             Arrays.stream(Benchmark.getAverages().asStringArray())
                     .map(benchmark -> tColor + "   " + benchmark)
                     .forEach(sender::sendMessage);
-            return true;
+            return;
         }
 
         List<String> notifications = NotificationCenter.getNotifications(pluginClass);
@@ -67,7 +69,7 @@ public class StatusCommand<T extends IPlugin> extends SubCommand {
                 .map(task -> tColor + "   " + task)
                 .forEach(sender::sendMessage);
         sender.sendMessage(tColor + DefaultMessages.ARROWS_RIGHT.parse());
-        return true;
+        return;
     }
 
 }
