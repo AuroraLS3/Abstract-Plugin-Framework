@@ -6,7 +6,10 @@ package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
+import com.djrapitops.plugin.command.CommandNode;
+import com.djrapitops.plugin.command.sponge.SpongeCommand;
 import org.slf4j.Logger;
+import org.spongepowered.api.Sponge;
 
 /**
  * //TODO Class Javadoc Comment
@@ -65,5 +68,11 @@ public abstract class SpongePlugin implements IPlugin {
 
     void setReloading(boolean reloading) {
         this.reloading = reloading;
+    }
+
+    @Override
+    public void registerCommand(String name, CommandNode command) {
+        Sponge.getCommandManager().register(this, new SpongeCommand(command), name);
+        PluginCommon.saveCommandInstances(command, this.getClass());
     }
 }

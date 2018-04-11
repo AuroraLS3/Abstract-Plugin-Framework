@@ -4,6 +4,8 @@
  */
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.command.CommandNode;
+
 import java.io.File;
 
 /**
@@ -28,4 +30,6 @@ public interface IPlugin {
     File getDataFolder();
 
     String getVersion();
+
+    void registerCommand(String name, CommandNode command);
 }

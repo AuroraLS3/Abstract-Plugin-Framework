@@ -73,6 +73,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
         }
     }
 
+    @Override
     public void registerCommand(String name, CommandNode command) {
         getProxy().getPluginManager().registerCommand(this, new BungeeCommand(name, command));
         PluginCommon.saveCommandInstances(command, this.getClass());

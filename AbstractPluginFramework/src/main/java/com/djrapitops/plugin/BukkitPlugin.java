@@ -68,6 +68,7 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         }
     }
 
+    @Override
     public void registerCommand(String name, CommandNode command) {
         getCommand(name).setExecutor(new BukkitCommand(command));
         PluginCommon.saveCommandInstances(command, this.getClass());
