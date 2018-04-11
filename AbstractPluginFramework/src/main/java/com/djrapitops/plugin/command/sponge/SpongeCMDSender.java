@@ -10,6 +10,7 @@ import org.spongepowered.api.command.source.SignSource;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.api.text.format.TextStyles;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,7 +46,7 @@ public class SpongeCMDSender implements ISender {
             commandSource.sendMessage(
                     Text.join(
                             Text.of(pretext),
-                            Text.builder(message).onClick(TextActions.openUrl(new URL(url))).build()
+                            Text.builder(message).style(TextStyles.UNDERLINE).onClick(TextActions.openUrl(new URL(url))).build()
                     ));
         } catch (MalformedURLException e) {
             sendLink(message, url, url);
