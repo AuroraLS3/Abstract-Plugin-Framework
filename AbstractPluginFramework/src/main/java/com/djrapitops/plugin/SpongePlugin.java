@@ -11,6 +11,7 @@ import com.djrapitops.plugin.command.sponge.SpongeCommand;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.GameReloadEvent;
 
 /**
  * //TODO Class Javadoc Comment
@@ -82,5 +83,10 @@ public abstract class SpongePlugin implements IPlugin {
             Sponge.getEventManager().registerListeners(this, listener);
             StaticHolder.saveInstance(listener.getClass(), getClass());
         }
+    }
+
+    @Listener
+    public void reload(GameReloadEvent event) {
+        reloadPlugin(true);
     }
 }
