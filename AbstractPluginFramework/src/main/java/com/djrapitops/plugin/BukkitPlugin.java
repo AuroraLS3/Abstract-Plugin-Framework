@@ -83,7 +83,8 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         PluginCommon.reload(this, full);
     }
 
-    void setReloading(boolean reloading) {
+    @Override
+    public void setReloading(boolean reloading) {
         this.reloading = reloading;
     }
 

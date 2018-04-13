@@ -32,4 +32,6 @@ public interface IPlugin {
     String getVersion();
 
     void registerCommand(String name, CommandNode command);
+
+    void setReloading(boolean value);
 }

@@ -10,8 +10,14 @@ import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.sponge.SpongeCommand;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.command.CommandMapping;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * //TODO Class Javadoc Comment
@@ -21,6 +27,8 @@ import org.spongepowered.api.event.game.GameReloadEvent;
 public abstract class SpongePlugin implements IPlugin {
 
     protected boolean reloading;
+
+    private final Map<String, CommandMapping> commandMappings = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -68,13 +76,22 @@ public abstract class SpongePlugin implements IPlugin {
 
     protected abstract Logger getLogger();
 
-    void setReloading(boolean reloading) {
+    @Override
+    public void setReloading(boolean reloading) {
         this.reloading = reloading;
     }
 
     @Override
     public void registerCommand(String name, CommandNode command) {
-        Sponge.getCommandManager().register(this, new SpongeCommand(command), name);
+        CommandManager commandManager = Sponge.getCommandManager();
+
+        CommandMapping registered = commandMappings.get(name);
+        if (registered != null) {
+            commandManager.removeMapping(registered);
+        }
+
+        Optional<CommandMapping> register = commandManager.register(this, new SpongeCommand(command), name);
+        register.ifPresent(commandMapping -> commandMappings.put(name, commandMapping));
         PluginCommon.saveCommandInstances(command, this.getClass());
     }
 

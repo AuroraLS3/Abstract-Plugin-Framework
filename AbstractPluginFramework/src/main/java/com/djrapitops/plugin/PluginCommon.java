@@ -12,7 +12,7 @@ public class PluginCommon {
 
     static void reload(IPlugin plugin, boolean full) {
         try {
-            setReloading(plugin, true);
+            plugin.setReloading(true);
             if (full) {
                 plugin.onDisable();
                 plugin.onReload();
@@ -21,17 +21,7 @@ public class PluginCommon {
                 plugin.onReload();
             }
         } finally {
-            setReloading(plugin, false);
-        }
-    }
-
-    static void setReloading(IPlugin plugin, boolean value) {
-        if (plugin instanceof BukkitPlugin) {
-            ((BukkitPlugin) plugin).setReloading(value);
-        } else if (plugin instanceof BungeePlugin) {
-            ((BungeePlugin) plugin).setReloading(value);
-        } else if (plugin instanceof SpongePlugin) {
-            ((SpongePlugin) plugin).setReloading(value);
+            plugin.setReloading(false);
         }
     }
 

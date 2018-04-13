@@ -88,7 +88,8 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
         return reloading;
     }
 
-    void setReloading(boolean reloading) {
+    @Override
+    public void setReloading(boolean reloading) {
         this.reloading = reloading;
     }
 }
