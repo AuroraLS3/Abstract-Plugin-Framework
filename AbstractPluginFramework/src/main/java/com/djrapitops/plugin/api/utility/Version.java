@@ -2,6 +2,7 @@ package com.djrapitops.plugin.api.utility;
 
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
+import com.google.common.base.Objects;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -97,5 +98,18 @@ public class Version implements Comparable<Version> {
                 FormatUtils.parseVersionNumber(this.versionString),
                 FormatUtils.parseVersionNumber(o.versionString)
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Version version = (Version) o;
+        return Objects.equal(versionString, version.versionString);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(versionString);
     }
 }

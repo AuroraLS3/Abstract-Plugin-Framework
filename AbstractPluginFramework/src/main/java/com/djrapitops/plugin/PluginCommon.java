@@ -39,4 +39,7 @@ public class PluginCommon {
         }
     }
 
+    private PluginCommon() {
+        /* Hides constructor */
+    }
 }

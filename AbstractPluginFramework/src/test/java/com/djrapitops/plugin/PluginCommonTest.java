@@ -38,6 +38,11 @@ public class PluginCommonTest {
             }
 
             @Override
+            public void setReloading(boolean value) {
+
+            }
+
+            @Override
             public void reloadPlugin(boolean full) {
                 PluginCommon.reload(this, full);
             }
