@@ -112,4 +112,13 @@ public class Version implements Comparable<Version> {
     public int hashCode() {
         return Objects.hashCode(versionString);
     }
+
+    public String getVersionString() {
+        return versionString;
+    }
+
+    @Override
+    public String toString() {
+        return versionString;
+    }
 }

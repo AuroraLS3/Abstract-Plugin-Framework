@@ -1,9 +1,9 @@
 package com.djrapitops.plugin.api.systems;
 
+import com.djrapitops.plugin.SpongePlugin;
 import com.djrapitops.plugin.api.Priority;
 import com.djrapitops.plugin.utilities.Format;
 import com.djrapitops.plugin.utilities.StackUtils;
-import org.spongepowered.api.text.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +41,7 @@ public class NotificationCenter {
     public static void checkNotifications(org.spongepowered.api.entity.living.player.Player player) {
         if (player.hasPermission("apf.notify")) {
             for (String msg : getNotifications()) {
-                player.sendMessage(Text.of(msg));
+                SpongePlugin.sendPlayerMsg(player, msg);
             }
         }
     }

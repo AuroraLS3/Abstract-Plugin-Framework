@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandMapping;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
+import org.spongepowered.api.text.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -105,5 +107,9 @@ public abstract class SpongePlugin implements IPlugin {
     @Listener
     public void reload(GameReloadEvent event) {
         reloadPlugin(true);
+    }
+
+    public static void sendPlayerMsg(Player player, String msg) {
+        player.sendMessage(Text.of(msg));
     }
 }
