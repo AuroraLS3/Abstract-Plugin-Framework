@@ -33,7 +33,7 @@ public class PluginCommon {
                     if (node == null) {
                         continue;
                     }
-                    StaticHolder.saveInstance(node.getClass(), clazz);
+                    saveCommandInstances(node, clazz);
                 }
             }
         }
