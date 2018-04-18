@@ -12,7 +12,7 @@ import com.djrapitops.plugin.task.ITask;
 import org.spongepowered.api.scheduler.Task;
 
 /**
- * //TODO Class Javadoc Comment
+ * IRunnable implementation for Sponge.
  *
  * @author Rsl1122
  */

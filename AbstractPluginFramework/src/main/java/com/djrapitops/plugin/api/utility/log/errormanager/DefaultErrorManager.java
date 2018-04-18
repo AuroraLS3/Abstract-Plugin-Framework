@@ -12,11 +12,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * //TODO Class Javadoc Comment
+ * ErrorManager that all APF plugins use by default inf one is not specified.
  *
  * @author Rsl1122
+ * @see ErrorManager
  */
-public class DefaultErrorManager extends ErrorManager {
+public class DefaultErrorManager implements ErrorManager {
 
     @Override
     public void toLog(String source, Throwable e, Class callingPlugin) {

@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * //TODO Class Javadoc Comment
+ * IPlugin implementation for Sponge.
  *
  * @author Rsl1122
  */

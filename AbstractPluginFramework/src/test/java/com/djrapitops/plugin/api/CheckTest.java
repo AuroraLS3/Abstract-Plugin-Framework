@@ -2,13 +2,8 @@ package com.djrapitops.plugin.api;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-/**
- * //TODO Class Javadoc Comment
- *
- * @author Rsl1122
- */
 public class CheckTest {
 
     @Test

@@ -5,11 +5,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * //TODO Class Javadoc Comment
- *
- * @author Rsl1122
- */
 public class VersionTest {
     @Test
     public void checkVersionGitHub() throws Exception {

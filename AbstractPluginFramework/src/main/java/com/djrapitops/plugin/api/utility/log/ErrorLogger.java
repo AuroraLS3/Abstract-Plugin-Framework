@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * //TODO Class Javadoc Comment
+ * Utility class Log uses to log Exceptions to a file specific to a plugin.
  *
  * @author Rsl1122
  */

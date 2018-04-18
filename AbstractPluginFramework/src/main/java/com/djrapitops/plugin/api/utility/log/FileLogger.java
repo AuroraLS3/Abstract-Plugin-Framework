@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * //TODO Class Javadoc Comment
+ * Utility used for logging to files.
  *
  * @author Rsl1122
  */

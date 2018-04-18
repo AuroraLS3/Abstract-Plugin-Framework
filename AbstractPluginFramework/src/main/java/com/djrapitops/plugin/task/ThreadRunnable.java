@@ -1,11 +1,11 @@
-/* 
+/*
  * Licence is provided in the jar as license.yml also here:
  * https://github.com/Rsl1122/Plan-PlayerAnalytics/blob/master/Plan/src/main/resources/license.yml
  */
 package com.djrapitops.plugin.task;
 
 /**
- * //TODO Class Javadoc Comment
+ * IRunnable implementation for tasks where no scheduler is available.
  *
  * @author Rsl1122
  */
