@@ -5,12 +5,15 @@
 package com.djrapitops.plugin.api.utility.log.errormanager;
 
 /**
- * //TODO Class Javadoc Comment
+ * Interface for acting on different errors.
+ * <p>
+ * Used by Log class for logging all exceptions.
  *
  * @author Rsl1122
+ * @see com.djrapitops.plugin.api.utility.log.Log
  */
-public abstract class ErrorManager {
+public interface ErrorManager {
 
-    public abstract void toLog(String source, Throwable e, Class callingPlugin);
+    void toLog(String source, Throwable e, Class callingPlugin);
 
 }

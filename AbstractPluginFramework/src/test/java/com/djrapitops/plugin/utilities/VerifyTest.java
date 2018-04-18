@@ -7,11 +7,6 @@ import java.io.File;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * //TODO Class Javadoc Comment
- *
- * @author Rsl1122
- */
 public class VerifyTest {
     @Test
     public void exists() {

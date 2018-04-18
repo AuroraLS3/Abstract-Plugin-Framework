@@ -227,4 +227,11 @@ public class Verify {
         return sender.hasPermission(permission);
     }
 
+    public static <K extends Throwable> void isTrue(boolean value, ErrorLoader<K> exception) throws K {
+        checkCondition(value, exception);
+    }
+
+    public static <K extends Throwable> void isFalse(boolean value, ErrorLoader<K> exception) throws K {
+        checkCondition(!value, exception);
+    }
 }

@@ -1,5 +1,11 @@
 package com.djrapitops.plugin.api.utility;
 
+import com.djrapitops.plugin.utilities.FormatUtils;
+import com.djrapitops.plugin.utilities.StackUtils;
+import com.google.common.base.Objects;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -7,48 +13,47 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-import com.djrapitops.plugin.IPlugin;
-import com.djrapitops.plugin.api.Priority;
-import com.djrapitops.plugin.utilities.FormatUtils;
-import com.djrapitops.plugin.utilities.StackUtils;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
 /**
  * Utility class for checking newest version availability from different sources.
  *
  * @author Rsl1122
  */
-public class Version {
+public class Version implements Comparable<Version> {
 
-    private static <T extends IPlugin> String getGitVersion(String url) throws IOException {
-        URL githubUrl = new URL(url);
-        String lineWithVersion = "";
-        Scanner websiteScanner = new Scanner(githubUrl.openStream());
-        while (websiteScanner.hasNextLine()) {
-            String line = websiteScanner.nextLine();
-            if (line.toLowerCase().contains("version")) {
-                lineWithVersion = line;
-                break;
-            }
-        }
-        return lineWithVersion.split(": ")[1];
+    private final String versionString;
+
+    public Version(String versionString) {
+        this.versionString = versionString;
     }
 
-    private static boolean isNewVersionAvailable(String currentVersion, String newVersion) {
-        long newestVersionNumber = FormatUtils.parseVersionNumber(newVersion);
-        long currentVersionNumber = FormatUtils.parseVersionNumber(currentVersion);
-        return newestVersionNumber > currentVersionNumber;
+    public static Version getGitVersion(String url) throws IOException {
+        URL githubUrl = new URL(url);
+        String lineWithVersion = "";
+        try (Scanner websiteScanner = new Scanner(githubUrl.openStream())) {
+            while (websiteScanner.hasNextLine()) {
+                String line = websiteScanner.nextLine();
+                if (line.toLowerCase().contains("version")) {
+                    lineWithVersion = line;
+                    break;
+                }
+            }
+        }
+        return new Version(lineWithVersion.split(": ")[1]);
+    }
+
+    public static boolean isNewVersionAvailable(Version currentVersion, Version newVersion) {
+        return newVersion.compareTo(currentVersion) > 0;
     }
 
     public static boolean checkVersion(String version, String versionStringUrl) throws IOException {
+        Version currentVersion = new Version(version);
         boolean gitHub = versionStringUrl.contains("raw.githubusercontent.com");
         boolean spigot = versionStringUrl.contains("spigotmc.org");
         try {
             if (gitHub) {
-                return isNewVersionAvailable(version, getGitVersion(versionStringUrl));
+                return isNewVersionAvailable(currentVersion, getGitVersion(versionStringUrl));
             } else if (spigot) {
-                return isNewVersionAvailable(version, getSpigotVersion(versionStringUrl));
+                return isNewVersionAvailable(currentVersion, getSpigotVersion(versionStringUrl));
             }
         } catch (NumberFormatException e) {
             throw new IOException("Version fetch error, address: " + versionStringUrl, e);
@@ -56,7 +61,7 @@ public class Version {
         throw new IOException("Version can not be fetched from this address: " + versionStringUrl);
     }
 
-    private static String getSpigotVersion(String versionStringUrl) throws IOException {
+    public static Version getSpigotVersion(String versionStringUrl) throws IOException {
         String[] split = versionStringUrl.split("\\.");
         String resourceID = split[split.length - 1].replace("/", "");
         String requestUrl = "https://api.spiget.org/v2/resources/" + resourceID + "/versions?size=1&sort=-name";
@@ -77,13 +82,43 @@ public class Version {
                     try (InputStreamReader reader = new InputStreamReader(inputStream)) {
                         JsonElement element = new JsonParser().parse(reader);
                         if (element.isJsonArray()) {
-                            return element.getAsJsonArray().get(0).getAsJsonObject().get("name").getAsString();
+                            return new Version(element.getAsJsonArray().get(0).getAsJsonObject().get("name").getAsString());
                         } else if (element.isJsonObject()) {
-                            return element.getAsJsonObject().get("name").getAsString();
+                            return new Version(element.getAsJsonObject().get("name").getAsString());
                         }
-                        return "0";
+                        return new Version("0");
                     }
             }
         }
+    }
+
+    @Override
+    public int compareTo(Version o) {
+        return Long.compare(
+                FormatUtils.parseVersionNumber(this.versionString),
+                FormatUtils.parseVersionNumber(o.versionString)
+        );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Version version = (Version) o;
+        return Objects.equal(versionString, version.versionString);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(versionString);
+    }
+
+    public String getVersionString() {
+        return versionString;
+    }
+
+    @Override
+    public String toString() {
+        return versionString;
     }
 }

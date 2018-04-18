@@ -16,6 +16,7 @@ import com.djrapitops.plugin.utilities.Verify;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,8 +25,8 @@ import java.util.stream.Collectors;
  */
 public class Log extends DebugLog {
 
-    public static final String DEBUG_FILE_NAME = "DebugLog-.txt";
-    public static final String ERROR_FILE_NAME = "ErrorLog.txt";
+    private static final String DEBUG_FILE_NAME = "DebugLog-.txt";
+    private static final String ERROR_FILE_NAME = "ErrorLog-.txt";
 
     private static final Map<Class, String> debugMode = new HashMap<>();
 
@@ -152,9 +153,9 @@ public class Log extends DebugLog {
     public static File getLogsFolder(Class callingPlugin) {
         IPlugin instance = StaticHolder.getInstance(callingPlugin);
         if (instance == null) {
-            File apf_plugin_errorlogs = new File("APF_plugin_errorlogs");
-            apf_plugin_errorlogs.mkdirs();
-            return apf_plugin_errorlogs;
+            File apfErrorLogs = new File("APF_error_logs");
+            apfErrorLogs.mkdirs();
+            return apfErrorLogs;
         }
         File dataFolder = instance.getDataFolder();
         File logsFolder = new File(dataFolder, "logs");
@@ -162,14 +163,10 @@ public class Log extends DebugLog {
         return logsFolder;
     }
 
-
     private static void toDebugLog(List<String> lines, Class callingPlugin) {
         File logsFolder = getLogsFolder(callingPlugin);
 
-        String[] split = DEBUG_FILE_NAME.split("-");
-        String day = FormatUtils.formatTimeStampYear(TimeAmount.currentMs()).split(",")[0].replace(" ", "-");
-        String debugLogFileName = split[0] + "-" + day + ".txt";
-
+        String debugLogFileName = getDebugFileName();
         String timeStamp = FormatUtils.formatTimeStampSecond(TimeAmount.currentMs());
         List<String> timeStamped = lines.stream().map(line -> "| " + timeStamp + " | " + line)
                 .collect(Collectors.toList());
@@ -180,7 +177,6 @@ public class Log extends DebugLog {
             Log.toLog("com.djrapitops.plugin.api.utility.log.Log", e);
         }
     }
-
 
     private static boolean debugToFile(Class c) {
         String debugMode = Log.debugMode.get(c);
@@ -209,5 +205,18 @@ public class Log extends DebugLog {
 
     private static List<String> getDebugLogInMemory(Class callingPlugin) {
         return debugLogs.getOrDefault(callingPlugin, new ArrayList<>());
+    }
+
+    public static String getDebugFileName() {
+        String[] split = DEBUG_FILE_NAME.split("-");
+        String day = new SimpleDateFormat("yyyy_MM_dd").format(TimeAmount.currentMs());
+        return split[0] + "-" + day + split[1];
+    }
+
+    public static String getErrorFileName() {
+        String[] split = ERROR_FILE_NAME.split("-");
+        String day = new SimpleDateFormat("yyyy_MM_dd").format(TimeAmount.currentMs());
+
+        return split[0] + "-" + day + split[1];
     }
 }

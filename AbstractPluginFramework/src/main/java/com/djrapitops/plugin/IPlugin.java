@@ -4,10 +4,12 @@
  */
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.command.CommandNode;
+
 import java.io.File;
 
 /**
- * //TODO Class Javadoc Comment
+ * Main interface all APF plugins implement.
  *
  * @author Rsl1122
  */
@@ -29,4 +31,7 @@ public interface IPlugin {
 
     String getVersion();
 
+    void registerCommand(String name, CommandNode command);
+
+    void setReloading(boolean value);
 }

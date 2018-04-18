@@ -8,13 +8,16 @@ import com.djrapitops.plugin.api.utility.log.ErrorLogger;
 import com.djrapitops.plugin.api.utility.log.Log;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * //TODO Class Javadoc Comment
+ * ErrorManager that all APF plugins use by default inf one is not specified.
  *
  * @author Rsl1122
+ * @see ErrorManager
  */
-public class DefaultErrorManager extends ErrorManager {
+public class DefaultErrorManager implements ErrorManager {
 
     @Override
     public void toLog(String source, Throwable e, Class callingPlugin) {
@@ -23,11 +26,8 @@ public class DefaultErrorManager extends ErrorManager {
             Log.warn(source + " Caught: " + e, callingPlugin);
             ErrorLogger.logThrowable(e, logsFolder);
         } catch (Exception exception) {
-            System.out.println("Failed to log error to file because of " + exception);
-            System.out.println("Error:");
-            e.printStackTrace();
-            System.out.println("Fail Reason:");
-            exception.printStackTrace();
+            Logger.getGlobal().log(Level.SEVERE, "Failed to log error because of exception", exception);
+            Logger.getGlobal().log(Level.SEVERE, "Unlogged Exception:", e);
         }
     }
 }

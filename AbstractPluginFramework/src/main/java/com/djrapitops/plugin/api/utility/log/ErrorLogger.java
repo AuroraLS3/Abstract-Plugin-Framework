@@ -1,4 +1,4 @@
-/* 
+/*
  * Licence is provided in the jar as license.yml also here:
  * https://github.com/Rsl1122/Plan-PlayerAnalytics/blob/master/Plan/src/main/resources/license.yml
  */
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * //TODO Class Javadoc Comment
+ * Utility class Log uses to log Exceptions to a file specific to a plugin.
  *
  * @author Rsl1122
  */
@@ -40,9 +40,11 @@ public class ErrorLogger {
     }
 
     public static void logThrowable(Throwable e, File logsFolder) throws IOException {
-        File errorFile = new File(logsFolder, Log.ERROR_FILE_NAME);
+        File errorFile = new File(logsFolder, Log.getErrorFileName());
         if (!errorFile.exists()) {
-            errorFile.createNewFile();
+            if (!errorFile.createNewFile()) {
+                return;
+            }
         }
         List<String> stackTrace = getStackTrace(e);
         stackTrace.add("Error was logged: " + FormatUtils.formatTimeStampSecond(TimeAmount.currentMs()));
@@ -58,7 +60,7 @@ public class ErrorLogger {
      */
     public static TreeMap<String, List<String>> getLoggedErrors(IPlugin plugin) throws IOException {
         File logsFolder = new File(plugin.getDataFolder(), "logs");
-        File errorFile = new File(logsFolder, Log.ERROR_FILE_NAME);
+        File errorFile = new File(logsFolder, Log.getErrorFileName());
         if (!logsFolder.exists() || !errorFile.exists()) {
             return new TreeMap<>();
         }

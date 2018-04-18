@@ -9,7 +9,7 @@ package com.djrapitops.plugin.task;
  * This class is an abstraction class used to contain run information for Bukkit
  * and Bungee runnables.
  *
- * When creating a new task, IPlugin#getRunnableFactory#createNew method should
+ * When creating a new task, RunnableFactory#createNew method should
  * be called with an implementation of this class as a parameter.
  *
  * @author Rsl1122

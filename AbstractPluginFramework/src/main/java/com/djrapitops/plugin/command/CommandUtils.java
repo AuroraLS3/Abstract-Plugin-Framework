@@ -9,7 +9,7 @@ package com.djrapitops.plugin.command;
 public class CommandUtils {
 
     public static boolean isPlayer(ISender sender) {
-        return sender.getSenderType() == SenderType.PLAYER || sender.getSenderType() == SenderType.PROXY_PLAYER;
+        return !isConsole(sender) && !isCommandBlock(sender);
     }
 
     public static boolean isCommandBlock(ISender sender) {

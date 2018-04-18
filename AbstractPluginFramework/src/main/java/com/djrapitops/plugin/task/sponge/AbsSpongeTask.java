@@ -8,7 +8,7 @@ import com.djrapitops.plugin.task.ITask;
 import org.spongepowered.api.scheduler.Task;
 
 /**
- * //TODO Class Javadoc Comment
+ * ITask implementation for Sponge.
  *
  * @author Rsl1122
  */

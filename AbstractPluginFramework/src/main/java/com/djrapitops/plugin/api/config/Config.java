@@ -5,7 +5,6 @@
 package com.djrapitops.plugin.api.config;
 
 import com.djrapitops.plugin.api.utility.log.FileLogger;
-import com.djrapitops.plugin.api.utility.log.Log;
 import com.djrapitops.plugin.utilities.Verify;
 
 import java.io.File;
@@ -27,23 +26,25 @@ import java.util.stream.Stream;
  */
 public class Config extends ConfigNode {
 
+    private static final String APF_NEWLINE = " APF_NEWLINE ";
     private String absolutePath;
 
     public Config(File file) {
         super("", null, "");
         File folder = file.getParentFile();
         if (!folder.exists()) {
-            folder.mkdirs();
+            if (!folder.mkdirs()) {
+                throw new IllegalStateException("Folders could not be created for config file " + file.getAbsolutePath());
+            }
         }
 
         this.absolutePath = file.getAbsolutePath();
         try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
+            Verify.isTrue(file.exists() || file.createNewFile(), () ->
+                    new FileNotFoundException("Could not create file: " + file.getAbsolutePath()));
             read();
         } catch (IOException e) {
-            Log.toLog(this.getClass(), e);
+            throw new IllegalStateException(e.getMessage(), e);
         }
     }
 
@@ -64,15 +65,12 @@ public class Config extends ConfigNode {
 
     public void read() throws IOException {
         File file = getFile();
-        if (file == null) {
-            throw new FileNotFoundException("File was null");
-        }
-        if (!file.exists()) {
-            file.createNewFile();
-        }
+        Verify.isTrue(file != null, () -> new FileNotFoundException("File was null"));
+        Verify.isTrue(file.exists() || file.createNewFile(), () ->
+                new FileNotFoundException("Could not create file: " + file.getAbsolutePath()));
         childOrder.clear();
         this.getChildren().clear();
-        processLines(readLines(getFile().toPath()), true);
+        processLines(readLines(file.toPath()), true);
     }
 
     public void copyDefaults(File from) throws IOException {
@@ -111,10 +109,10 @@ public class Config extends ConfigNode {
                     String lastValue = lastNode.getValue();
 
                     boolean isListItem = trimmed.startsWith("-");
-                    boolean wasListItem = lastValue.contains("APF_NEWLINE") || lastValue.trim().isEmpty();
+                    boolean wasListItem = lastValue.contains(APF_NEWLINE.trim()) || lastValue.trim().isEmpty();
 
                     if (isListItem && wasListItem) {
-                        lastNode.set(lastValue + " APF_NEWLINE " + trimmed);
+                        lastNode.set(lastValue + APF_NEWLINE + trimmed);
                     } else {
                         if ((lastValue.startsWith("\"") && trimmed.endsWith("\""))
                                 || (lastValue.startsWith("'") && trimmed.endsWith("'"))) {
@@ -195,11 +193,11 @@ public class Config extends ConfigNode {
 
             StringBuilder b = new StringBuilder();
             addIndentation(depth, b);
-            if (value.startsWith(" APF_NEWLINE ")) {
+            if (value.startsWith(APF_NEWLINE)) {
                 // Keyline
                 lines.add(b.append(key).append(":").toString());
                 // List
-                String[] list = value.split(" APF_NEWLINE ");
+                String[] list = value.split(APF_NEWLINE);
                 for (String listValue : list) {
                     String v = listValue.trim();
                     if (v.isEmpty()) {

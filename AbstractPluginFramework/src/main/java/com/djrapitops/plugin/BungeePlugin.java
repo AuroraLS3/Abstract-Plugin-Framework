@@ -1,13 +1,11 @@
 package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.api.Benchmark;
-import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.api.systems.TaskCenter;
 import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
-import com.djrapitops.plugin.command.SubCommand;
+import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bungee.BungeeCommand;
-import com.djrapitops.plugin.task.RunnableFactory;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Listener;
 
@@ -37,15 +35,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
 
     @Override
     public void reloadPlugin(boolean full) {
-        reloading = true;
-        if (full) {
-            onDisable();
-            onReload();
-            onEnable();
-        } else {
-            onReload();
-        }
-        reloading = false;
+        PluginCommon.reload(this, full);
     }
 
     @Override
@@ -83,25 +73,23 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
         }
     }
 
-    public void registerCommand(String name, SubCommand command) {
-        getProxy().getPluginManager().registerCommand(this, new BungeeCommand(command));
-        StaticHolder.saveInstance(command.getClass(), getClass());
+    @Override
+    public void registerCommand(String name, CommandNode command) {
+        getProxy().getPluginManager().registerCommand(this, new BungeeCommand(name, command));
+        PluginCommon.saveCommandInstances(command, this.getClass());
     }
 
     protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {
         return Version.checkVersion(getVersion(), versionStringUrl);
     }
 
-    public NotificationCenter getNotificationCenter() {
-        return StaticHolder.getNotificationCenter();
-    }
-
-    public RunnableFactory getRunnableFactory() {
-        return StaticHolder.getRunnableFactory();
-    }
-
     @Override
     public boolean isReloading() {
         return reloading;
+    }
+
+    @Override
+    public void setReloading(boolean reloading) {
+        this.reloading = reloading;
     }
 }

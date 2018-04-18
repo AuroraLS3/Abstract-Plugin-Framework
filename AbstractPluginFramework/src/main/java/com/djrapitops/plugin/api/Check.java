@@ -40,6 +40,10 @@ public class Check {
     public static boolean isSpongeAvailable() {
         return SPONGE_AVAILABLE;
     }
+
+    private Check() {
+        /* Hide constructor */
+    }
 }
 
 

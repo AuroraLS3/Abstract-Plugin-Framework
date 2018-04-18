@@ -1,13 +1,11 @@
 package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.api.Benchmark;
-import com.djrapitops.plugin.api.systems.NotificationCenter;
 import com.djrapitops.plugin.api.systems.TaskCenter;
 import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
-import com.djrapitops.plugin.command.SubCommand;
+import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
-import com.djrapitops.plugin.task.RunnableFactory;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -70,34 +68,24 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         }
     }
 
-    public void registerCommand(String name, SubCommand command) {
+    @Override
+    public void registerCommand(String name, CommandNode command) {
         getCommand(name).setExecutor(new BukkitCommand(command));
-        StaticHolder.saveInstance(command.getClass(), getClass());
+        PluginCommon.saveCommandInstances(command, this.getClass());
     }
 
     protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {
         return Version.checkVersion(getVersion(), versionStringUrl);
     }
 
-    public NotificationCenter getNotificationCenter() {
-        return StaticHolder.getNotificationCenter();
-    }
-
-    public RunnableFactory getRunnableFactory() {
-        return StaticHolder.getRunnableFactory();
+    @Override
+    public void reloadPlugin(boolean full) {
+        PluginCommon.reload(this, full);
     }
 
     @Override
-    public void reloadPlugin(boolean full) {
-        reloading = true;
-        if (full) {
-            onDisable();
-            onReload();
-            onEnable();
-        } else {
-            onReload();
-        }
-        reloading = false;
+    public void setReloading(boolean reloading) {
+        this.reloading = reloading;
     }
 
     @Override
