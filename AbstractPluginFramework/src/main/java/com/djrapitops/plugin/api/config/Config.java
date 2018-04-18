@@ -32,16 +32,14 @@ public class Config extends ConfigNode {
     public Config(File file) {
         super("", null, "");
         File folder = file.getParentFile();
-        if (!folder.exists()) {
-            if (!folder.mkdirs()) {
-                throw new IllegalStateException("Folders could not be created for config file " + file.getAbsolutePath());
-            }
-        }
-
-        this.absolutePath = file.getAbsolutePath();
         try {
+            Verify.isTrue(folder.exists() || folder.mkdirs(), () ->
+                    new FileNotFoundException("Folders could not be created for config file " + absolutePath));
+
+            this.absolutePath = file.getAbsolutePath();
+
             Verify.isTrue(file.exists() || file.createNewFile(), () ->
-                    new FileNotFoundException("Could not create file: " + file.getAbsolutePath()));
+                    new FileNotFoundException("Could not create file: " + absolutePath));
             read();
         } catch (IOException e) {
             throw new IllegalStateException(e.getMessage(), e);
@@ -67,7 +65,7 @@ public class Config extends ConfigNode {
         File file = getFile();
         Verify.isTrue(file != null, () -> new FileNotFoundException("File was null"));
         Verify.isTrue(file.exists() || file.createNewFile(), () ->
-                new FileNotFoundException("Could not create file: " + file.getAbsolutePath()));
+                new FileNotFoundException("Could not create file: " + absolutePath));
         childOrder.clear();
         this.getChildren().clear();
         processLines(readLines(file.toPath()), true);

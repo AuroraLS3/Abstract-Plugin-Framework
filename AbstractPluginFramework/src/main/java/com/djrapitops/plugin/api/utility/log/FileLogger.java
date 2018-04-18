@@ -30,10 +30,8 @@ public class FileLogger {
     }
 
     public static void appendToFile(File file, List<String> lines) throws IOException {
-        if (!file.exists()) {
-            if (!file.createNewFile()) {
-                return;
-            }
+        if (!file.exists() && !file.createNewFile()) {
+            return;
         }
         Files.write(file.toPath(), lines, getCharset(), StandardOpenOption.APPEND);
     }

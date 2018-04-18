@@ -41,10 +41,8 @@ public class ErrorLogger {
 
     public static void logThrowable(Throwable e, File logsFolder) throws IOException {
         File errorFile = new File(logsFolder, Log.getErrorFileName());
-        if (!errorFile.exists()) {
-            if (!errorFile.createNewFile()) {
-                return;
-            }
+        if (!errorFile.exists() && !errorFile.createNewFile()) {
+            return;
         }
         List<String> stackTrace = getStackTrace(e);
         stackTrace.add("Error was logged: " + FormatUtils.formatTimeStampSecond(TimeAmount.currentMs()));
