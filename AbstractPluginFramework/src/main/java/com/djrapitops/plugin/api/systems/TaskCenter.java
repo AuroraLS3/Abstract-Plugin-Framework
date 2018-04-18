@@ -50,7 +50,7 @@ public class TaskCenter {
     }
 
     public static void taskCancelled(Class plugin, String name, int id) {
-        List<TaskInfo> task = taskInfo.get(plugin);
+        List<TaskInfo> task = taskInfo.getOrDefault(plugin, new ArrayList<>());
         Optional<TaskInfo> first = task.stream()
                 .filter(t -> t.getName().equals(name) && t.getId() == id)
                 .findFirst();

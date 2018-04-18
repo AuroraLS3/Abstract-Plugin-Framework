@@ -25,10 +25,8 @@ public class DefaultErrorManager extends ErrorManager {
             Log.warn(source + " Caught: " + e, callingPlugin);
             ErrorLogger.logThrowable(e, logsFolder);
         } catch (Exception exception) {
-            System.err.println("Failed to log error to file because of " + exception);
-            Logger.getGlobal().log(Level.SEVERE, "Error:", e);
-            System.err.println("Fail Reason:");
-            exception.printStackTrace();
+            Logger.getGlobal().log(Level.SEVERE, "Failed to log error because of exception", exception);
+            Logger.getGlobal().log(Level.SEVERE, "Unlogged Exception:", e);
         }
     }
 }

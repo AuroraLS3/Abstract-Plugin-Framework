@@ -5,7 +5,6 @@
 package com.djrapitops.plugin.api.config;
 
 import com.djrapitops.plugin.api.utility.log.FileLogger;
-import com.djrapitops.plugin.api.utility.log.Log;
 import com.djrapitops.plugin.utilities.Verify;
 
 import java.io.File;
@@ -34,17 +33,18 @@ public class Config extends ConfigNode {
         super("", null, "");
         File folder = file.getParentFile();
         if (!folder.exists()) {
-            folder.mkdirs();
+            if (!folder.mkdirs()) {
+                throw new IllegalStateException("Folders could not be created for config file " + file.getAbsolutePath());
+            }
         }
 
         this.absolutePath = file.getAbsolutePath();
         try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
+            Verify.isTrue(file.exists() || file.createNewFile(), () ->
+                    new FileNotFoundException("Could not create file: " + file.getAbsolutePath()));
             read();
         } catch (IOException e) {
-            Log.toLog(this.getClass(), e);
+            throw new IllegalStateException(e.getMessage(), e);
         }
     }
 
@@ -65,12 +65,9 @@ public class Config extends ConfigNode {
 
     public void read() throws IOException {
         File file = getFile();
-        if (file == null) {
-            throw new FileNotFoundException("File was null");
-        }
-        if (!file.exists()) {
-            file.createNewFile();
-        }
+        Verify.isTrue(file != null, () -> new FileNotFoundException("File was null"));
+        Verify.isTrue(file.exists() || file.createNewFile(), () ->
+                new FileNotFoundException("Could not create file: " + file.getAbsolutePath()));
         childOrder.clear();
         this.getChildren().clear();
         processLines(readLines(file.toPath()), true);
