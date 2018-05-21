@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
  */
 public class Log extends DebugLog {
 
-    private static final String DEBUG_FILE_NAME = "DebugLog-.txt";
-    private static final String ERROR_FILE_NAME = "ErrorLog-.txt";
+    private static final String DEBUG_FILE_NAME = "DebugLog-";
+    private static final String ERROR_FILE_NAME = "ErrorLog-";
 
     private static final Map<Class, String> debugMode = new HashMap<>();
 
@@ -208,15 +208,12 @@ public class Log extends DebugLog {
     }
 
     public static String getDebugFileName() {
-        String[] split = DEBUG_FILE_NAME.split("-");
         String day = new SimpleDateFormat("yyyy_MM_dd").format(TimeAmount.currentMs());
-        return split[0] + "-" + day + split[1];
+        return DEBUG_FILE_NAME + day + ".txt";
     }
 
     public static String getErrorFileName() {
-        String[] split = ERROR_FILE_NAME.split("-");
         String day = new SimpleDateFormat("yyyy_MM_dd").format(TimeAmount.currentMs());
-
-        return split[0] + "-" + day + split[1];
+        return ERROR_FILE_NAME + day + ".txt";
     }
 }
