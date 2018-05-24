@@ -32,12 +32,10 @@ public class Config extends ConfigNode {
     public Config(File file) {
         super("", null, "");
         File folder = file.getParentFile();
+        this.absolutePath = file.getAbsolutePath();
         try {
             Verify.isTrue(folder.exists() || folder.mkdirs(), () ->
                     new FileNotFoundException("Folders could not be created for config file " + absolutePath));
-
-            this.absolutePath = file.getAbsolutePath();
-
             Verify.isTrue(file.exists() || file.createNewFile(), () ->
                     new FileNotFoundException("Could not create file: " + absolutePath));
             read();
