@@ -51,8 +51,9 @@ public class TaskCenter {
 
     public static void taskCancelled(Class plugin, String name, int id) {
         List<TaskInfo> task = taskInfo.getOrDefault(plugin, new ArrayList<>());
-        Optional<TaskInfo> first = task.stream()
-                .filter(t -> t.getName().equals(name) && t.getId() == id)
+        Optional<TaskInfo> first = new ArrayList<>(task).stream()
+                .filter(Objects::nonNull)
+                .filter(t -> (name != null && name.equals(t.getName())) || t.getId() == id)
                 .findFirst();
         first.ifPresent(info -> {
             Log.debug(plugin, "Ended task " + info);
