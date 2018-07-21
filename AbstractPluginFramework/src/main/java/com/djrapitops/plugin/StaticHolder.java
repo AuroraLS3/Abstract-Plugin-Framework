@@ -6,6 +6,7 @@ import java.util.Map;
 /**
  * @author Rsl1122
  */
+@Deprecated
 public class StaticHolder {
 
     private static final Map<Class, IPlugin> plugins = new HashMap<>();

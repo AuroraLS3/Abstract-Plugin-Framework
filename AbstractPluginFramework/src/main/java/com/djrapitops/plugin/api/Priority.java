@@ -1,5 +1,6 @@
 package com.djrapitops.plugin.api;
 
+@Deprecated
 public enum Priority {
     LOW("§e"),
     MEDIUM("§6"),

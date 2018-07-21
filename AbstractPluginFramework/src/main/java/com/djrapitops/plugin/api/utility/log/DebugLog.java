@@ -15,6 +15,7 @@ import java.util.Map;
  *
  * @author Rsl1122
  */
+@Deprecated
 public class DebugLog {
 
     private static final Map<Class, Map<String, DebugInfo>> debugInfo = new HashMap<>();

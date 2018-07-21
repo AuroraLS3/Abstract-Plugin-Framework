@@ -12,6 +12,7 @@ package com.djrapitops.plugin.api.utility.log.errormanager;
  * @author Rsl1122
  * @see com.djrapitops.plugin.api.utility.log.Log
  */
+@Deprecated
 public interface ErrorManager {
 
     void toLog(String source, Throwable e, Class callingPlugin);

@@ -19,6 +19,7 @@ import java.util.List;
  * @author Rsl1122
  * @since 2.0.2
  */
+@Deprecated
 public class DebugInfo {
 
     private final Class sourcePlugin;

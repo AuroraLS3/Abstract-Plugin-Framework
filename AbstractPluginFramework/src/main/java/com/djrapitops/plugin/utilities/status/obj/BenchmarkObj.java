@@ -14,6 +14,7 @@ import java.util.Objects;
  *
  * @author Rsl1122
  */
+@Deprecated
 public class BenchmarkObj {
 
     private final List<Long> benchmarks;

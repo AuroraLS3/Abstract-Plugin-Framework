@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 /**
  * @author Rsl1122
  */
+@Deprecated
 public class Log extends DebugLog {
 
     private static final String DEBUG_FILE_NAME = "DebugLog-";

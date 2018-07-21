@@ -4,6 +4,7 @@ package com.djrapitops.plugin.api;
  *
  * @author Rsl1122
  */
+@Deprecated
 public class Check {
 
     private static final boolean BUKKIT_AVAILABLE = isAvailable("org.bukkit.plugin.java.JavaPlugin");

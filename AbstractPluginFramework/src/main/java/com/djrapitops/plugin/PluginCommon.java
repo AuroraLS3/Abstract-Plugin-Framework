@@ -25,6 +25,7 @@ public class PluginCommon {
         }
     }
 
+    @Deprecated
     public static void saveCommandInstances(CommandNode command, Class<? extends IPlugin> clazz) {
         StaticHolder.saveInstance(command.getClass(), clazz);
         if (command instanceof TreeCmdNode) {

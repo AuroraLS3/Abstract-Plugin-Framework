@@ -11,6 +11,7 @@ import java.util.Map;
 /**
  * @author Rsl1122
  */
+@Deprecated
 public class Benchmark {
 
     private static final Map<Class, Map<String, Long>> STARTS = new HashMap<>();

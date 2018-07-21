@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  * @author Rsl1122
  * @since 2.0.1
  */
+@Deprecated
 public class NotificationCenter {
 
     private static final Map<Class, Map<Priority, List<String>>> notifications = new HashMap<>();

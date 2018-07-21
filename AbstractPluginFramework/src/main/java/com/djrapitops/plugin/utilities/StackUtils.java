@@ -16,6 +16,7 @@ public class StackUtils {
      * @return Class that extends Plugin or Plugin.class if not found in the
      * StackTrace.
      */
+    @Deprecated
     public static Class getCallingPlugin() {
         StackTraceElement[] stack = Thread.currentThread().getStackTrace();
         for (StackTraceElement element : stack) {

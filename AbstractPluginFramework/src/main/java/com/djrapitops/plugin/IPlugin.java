@@ -25,6 +25,7 @@ public interface IPlugin {
 
     boolean isReloading();
 
+    @Deprecated
     void log(String level, String s);
 
     File getDataFolder();

@@ -23,6 +23,7 @@ import java.util.stream.Stream;
  *
  * @author Rsl1122
  */
+@Deprecated
 public class ErrorLogger {
 
     private static List<String> getStackTrace(Throwable e) {

@@ -17,6 +17,7 @@ import java.util.logging.Logger;
  * @author Rsl1122
  * @see ErrorManager
  */
+@Deprecated
 public class DefaultErrorManager implements ErrorManager {
 
     @Override
