@@ -6,7 +6,6 @@ package com.djrapitops.plugin.task.sponge;
 
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.SpongePlugin;
-import com.djrapitops.plugin.api.systems.TaskCenter;
 import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.PluginTask;
 import org.spongepowered.api.scheduler.Task;
@@ -20,10 +19,12 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
 
     private final T plugin;
     private final String name;
+    private final long time;
 
     private PluginTask task;
 
-    public AbsSpongeRunnable(String name, IPlugin plugin) {
+    public AbsSpongeRunnable(String name, IPlugin plugin, long time) {
+        this.time = time;
         if (plugin instanceof SpongePlugin) {
             this.plugin = (T) plugin;
         } else {
@@ -39,7 +40,6 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
 
     @Override
     public void cancel() {
-        TaskCenter.taskCancelled(plugin.getClass(), name, getTaskId());
         if (task != null) {
             task.cancel();
         }
@@ -53,14 +53,12 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
     @Override
     public PluginTask runTask() {
         task = new AbsSpongeTask(Task.builder().execute(this).submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
     @Override
     public PluginTask runTaskAsynchronously() {
         task = new AbsSpongeTask(Task.builder().execute(this).async().submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
@@ -69,7 +67,6 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
         task = new AbsSpongeTask(Task.builder().execute(this)
                 .delayTicks(delay)
                 .submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
@@ -78,7 +75,6 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
         task = new AbsSpongeTask(Task.builder().execute(this).async()
                 .delayTicks(delay)
                 .submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
@@ -88,7 +84,6 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
                 .delayTicks(delay)
                 .intervalTicks(period)
                 .submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
@@ -98,7 +93,11 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
                 .delayTicks(delay)
                 .intervalTicks(period)
                 .submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
+    }
+
+    @Override
+    public long getTime() {
+        return time;
     }
 }

@@ -23,11 +23,13 @@ public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements Plugi
 
     private final T plugin;
     private final String name;
+    private final long time;
     private final TaskScheduler scheduler;
     private int id = -1;
 
-    public AbsBungeeRunnable(String name, IPlugin plugin) {
+    public AbsBungeeRunnable(String name, IPlugin plugin, long time) {
         this.name = name;
+        this.time = time;
         if (plugin instanceof BungeePlugin) {
             this.plugin = (T) plugin;
         } else {
@@ -93,5 +95,10 @@ public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements Plugi
     @Override
     public String getTaskName() {
         return name;
+    }
+
+    @Override
+    public long getTime() {
+        return time;
     }
 }

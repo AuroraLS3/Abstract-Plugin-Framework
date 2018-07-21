@@ -17,11 +17,13 @@ public class ThreadRunnable implements PluginRunnable, Runnable {
 
     private final String name;
     private final AbsRunnable runnable;
+    private final long time;
     private Thread thread;
 
-    public ThreadRunnable(String name, AbsRunnable runnable) {
+    public ThreadRunnable(String name, AbsRunnable runnable, long time) {
         this.name = name;
         this.runnable = runnable;
+        this.time = time;
         runnable.setCancellable(this);
     }
 
@@ -86,5 +88,10 @@ public class ThreadRunnable implements PluginRunnable, Runnable {
     @Override
     public void run() {
         runnable.run();
+    }
+
+    @Override
+    public long getTime() {
+        return time;
     }
 }

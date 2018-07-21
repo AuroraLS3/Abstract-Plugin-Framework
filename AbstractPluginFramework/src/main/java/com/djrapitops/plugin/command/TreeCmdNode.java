@@ -1,7 +1,6 @@
 package com.djrapitops.plugin.command;
 
 import com.djrapitops.plugin.command.defaultcmds.HelpCommand;
-import com.djrapitops.plugin.settings.ColorScheme;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.Verify;
 

@@ -1,10 +1,6 @@
 package com.djrapitops.plugin.command.defaultcmds;
 
-import com.djrapitops.plugin.command.CommandNode;
-import com.djrapitops.plugin.command.CommandType;
-import com.djrapitops.plugin.command.ISender;
-import com.djrapitops.plugin.command.TreeCmdNode;
-import com.djrapitops.plugin.settings.ColorScheme;
+import com.djrapitops.plugin.command.*;
 
 /**
  * Default command for any TreeCmdNode.

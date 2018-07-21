@@ -29,4 +29,6 @@ public interface PluginRunnable<T> {
     PluginTask runTaskTimer(long delay, long period);
 
     PluginTask runTaskTimerAsynchronously(long delay, long period);
+
+    long getTime();
 }

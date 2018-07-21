@@ -5,7 +5,7 @@ import com.djrapitops.plugin.task.AbsRunnable;
 import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.RunnableFactory;
 
-public class SpongeRunnableFactory implements RunnableFactory {
+public class SpongeRunnableFactory extends RunnableFactory {
 
     private final SpongePlugin plugin;
 
@@ -14,8 +14,8 @@ public class SpongeRunnableFactory implements RunnableFactory {
     }
 
     @Override
-    public PluginRunnable createNew(String name, AbsRunnable runnable) {
-        return new AbsSpongeRunnable(name, plugin) {
+    public PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time) {
+        return new AbsSpongeRunnable(name, plugin, time) {
             @Override
             public void run() {
                 runnable.setCancellable(this);

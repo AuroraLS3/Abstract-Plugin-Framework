@@ -1,4 +1,4 @@
-package com.djrapitops.plugin.settings;
+package com.djrapitops.plugin.command;
 
 import java.util.Arrays;
 import java.util.List;
