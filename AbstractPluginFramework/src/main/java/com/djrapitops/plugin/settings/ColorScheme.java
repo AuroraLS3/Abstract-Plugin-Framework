@@ -2,28 +2,23 @@ package com.djrapitops.plugin.settings;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Class that contains ChatColors for Bukkit plugins.
+ * Class that contains ChatColors for plugins.
  *
  * @author Rsl1122
  * @since 2.0.0
  */
-public class ColorScheme {
+public abstract class ColorScheme {
 
     private final List<String> colors;
 
     public ColorScheme(String... colors) {
-        this.colors = Arrays.asList(colors);
+        this(Arrays.asList(colors));
     }
 
-    public ColorScheme(org.bukkit.ChatColor... colors) {
-        this.colors = Arrays.stream(colors).map(org.bukkit.ChatColor::toString).collect(Collectors.toList());
-    }
-
-    public ColorScheme(net.md_5.bungee.api.ChatColor... colors) {
-        this.colors = Arrays.stream(colors).map(net.md_5.bungee.api.ChatColor::toString).collect(Collectors.toList());
+    public ColorScheme(List<String> colors) {
+        this.colors = colors;
     }
 
     public String getColor(int i) {
