@@ -8,9 +8,9 @@ package com.djrapitops.plugin.task.bungee;
 import com.djrapitops.plugin.BungeePlugin;
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.TimeAmount;
-import com.djrapitops.plugin.task.IRunnable;
-import com.djrapitops.plugin.task.ITask;
 import com.djrapitops.plugin.api.systems.TaskCenter;
+import com.djrapitops.plugin.task.PluginRunnable;
+import com.djrapitops.plugin.task.PluginTask;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 
 import java.util.concurrent.TimeUnit;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @param <T>
  * @author Rsl1122
  */
-public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements IRunnable, Runnable {
+public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements PluginRunnable, Runnable {
 
     private final T plugin;
     private final String name;
@@ -40,12 +40,12 @@ public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements IRunn
     public abstract void run();
 
     @Override
-    public ITask runTask() {
+    public PluginTask runTask() {
         return runTaskAsynchronously();
     }
 
     @Override
-    public ITask runTaskAsynchronously() {
+    public PluginTask runTaskAsynchronously() {
         AbsBungeeTask task = new AbsBungeeTask(scheduler.runAsync(plugin, this));
         id = task.getTaskId();
         TaskCenter.taskStarted(plugin.getClass(), task, name, this);
@@ -53,13 +53,13 @@ public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements IRunn
     }
 
     @Override
-    public ITask runTaskLater(long delay) {
+    public PluginTask runTaskLater(long delay) {
 
         return runTaskLaterAsynchronously(delay);
     }
 
     @Override
-    public ITask runTaskLaterAsynchronously(long delay) {
+    public PluginTask runTaskLaterAsynchronously(long delay) {
         AbsBungeeTask task = new AbsBungeeTask(scheduler.schedule(plugin, this, TimeAmount.ticksToMillis(delay), TimeUnit.MILLISECONDS));
         id = task.getTaskId();
         TaskCenter.taskStarted(plugin.getClass(), task, name, this);
@@ -67,12 +67,12 @@ public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements IRunn
     }
 
     @Override
-    public ITask runTaskTimer(long delay, long period) {
+    public PluginTask runTaskTimer(long delay, long period) {
         return runTaskTimerAsynchronously(delay, period);
     }
 
     @Override
-    public ITask runTaskTimerAsynchronously(long delay, long period) {
+    public PluginTask runTaskTimerAsynchronously(long delay, long period) {
         AbsBungeeTask task = new AbsBungeeTask(scheduler.schedule(plugin, this, TimeAmount.ticksToMillis(delay), TimeAmount.ticksToMillis(period), TimeUnit.MILLISECONDS));
         id = task.getTaskId();
         TaskCenter.taskStarted(plugin.getClass(), task, name, this);

@@ -9,7 +9,7 @@ package com.djrapitops.plugin.task;
  *
  * @author Rsl1122
  */
-public interface ITask<T> {
+public interface PluginTask<T> {
 
     int getTaskId();
 

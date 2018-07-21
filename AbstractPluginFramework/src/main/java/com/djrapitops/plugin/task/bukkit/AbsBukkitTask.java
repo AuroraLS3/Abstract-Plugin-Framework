@@ -1,6 +1,6 @@
 package com.djrapitops.plugin.task.bukkit;
 
-import com.djrapitops.plugin.task.ITask;
+import com.djrapitops.plugin.task.PluginTask;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitTask;
  *
  * @author Rsl1122
  */
-public class AbsBukkitTask implements BukkitTask, ITask<BukkitTask> {
+public class AbsBukkitTask implements BukkitTask, PluginTask<BukkitTask> {
 
     private final BukkitTask task;
 

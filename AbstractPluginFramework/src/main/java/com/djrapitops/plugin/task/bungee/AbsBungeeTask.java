@@ -5,7 +5,7 @@
  */
 package com.djrapitops.plugin.task.bungee;
 
-import com.djrapitops.plugin.task.ITask;
+import com.djrapitops.plugin.task.PluginTask;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
@@ -13,7 +13,7 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
  *
  * @author Rsl1122
  */
-public class AbsBungeeTask implements ScheduledTask, ITask<ScheduledTask> {
+public class AbsBungeeTask implements ScheduledTask, PluginTask<ScheduledTask> {
 
     private final ScheduledTask task;
 

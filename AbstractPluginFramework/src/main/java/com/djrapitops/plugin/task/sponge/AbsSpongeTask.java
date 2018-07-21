@@ -4,15 +4,15 @@
  */
 package com.djrapitops.plugin.task.sponge;
 
-import com.djrapitops.plugin.task.ITask;
+import com.djrapitops.plugin.task.PluginTask;
 import org.spongepowered.api.scheduler.Task;
 
 /**
- * ITask implementation for Sponge.
+ * PluginTask implementation for Sponge.
  *
  * @author Rsl1122
  */
-public class AbsSpongeTask implements ITask<Task> {
+public class AbsSpongeTask implements PluginTask<Task> {
 
     private final Task task;
 

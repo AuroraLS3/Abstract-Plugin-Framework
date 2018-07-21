@@ -6,8 +6,7 @@
 package com.djrapitops.plugin.task;
 
 /**
- * This class is an abstraction class used to contain run information for Bukkit
- * and Bungee runnables.
+ * This class is an abstraction class used to contain run information for Plugin runnables.
  *
  * When creating a new task, RunnableFactory#createNew method should
  * be called with an implementation of this class as a parameter.
@@ -16,23 +15,9 @@ package com.djrapitops.plugin.task;
  */
 public abstract class AbsRunnable implements Runnable {
 
-    private IRunnable runnable;
-    private final String name;
+    private PluginRunnable runnable;
 
     public AbsRunnable() {
-        name = "No name given";
-    }
-
-    public AbsRunnable(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTaskName() {
-        return getName();
     }
 
     public int getTaskId() {
@@ -42,7 +27,7 @@ public abstract class AbsRunnable implements Runnable {
     @Override
     public abstract void run();
 
-    public void setCancellable(IRunnable cancellable) {
+    public void setCancellable(PluginRunnable cancellable) {
         this.runnable = cancellable;
     }
 

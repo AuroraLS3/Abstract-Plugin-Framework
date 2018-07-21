@@ -1,8 +1,8 @@
 package com.djrapitops.plugin.api.systems;
 
 import com.djrapitops.plugin.api.utility.log.Log;
-import com.djrapitops.plugin.task.IRunnable;
-import com.djrapitops.plugin.task.ITask;
+import com.djrapitops.plugin.task.PluginRunnable;
+import com.djrapitops.plugin.task.PluginTask;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.status.obj.TaskInfo;
 
@@ -16,16 +16,16 @@ import java.util.*;
 public class TaskCenter {
 
     private static final Map<Class, List<TaskInfo>> taskInfo = new HashMap<>();
-    private static final Map<Class, List<IRunnable>> tasks = new HashMap<>();
+    private static final Map<Class, List<PluginRunnable>> tasks = new HashMap<>();
 
-    public static void taskStarted(Class plugin, ITask task, String name, IRunnable run) {
+    public static void taskStarted(Class plugin, PluginTask task, String name, PluginRunnable run) {
         TaskInfo info = new TaskInfo(name, task.isSync(), "Started", task.getTaskId());
 
         List<TaskInfo> taskInfoList = taskInfo.getOrDefault(plugin, new ArrayList<>());
         taskInfoList.add(info);
         taskInfo.put(plugin, taskInfoList);
 
-        List<IRunnable> taskList = tasks.getOrDefault(plugin, new ArrayList<>());
+        List<PluginRunnable> taskList = tasks.getOrDefault(plugin, new ArrayList<>());
         taskList.add(run);
         tasks.put(plugin, taskList);
         Log.debug(plugin, "Started task " + info);
@@ -36,12 +36,12 @@ public class TaskCenter {
     }
 
     public static void cancelAllKnownTasks(Class plugin) {
-        List<IRunnable> taskList = tasks.getOrDefault(plugin, new ArrayList<>());
+        List<PluginRunnable> taskList = tasks.getOrDefault(plugin, new ArrayList<>());
         // taskList is copied to new ArrayList to avoid Concurrent Modification
-        for (IRunnable iRunnable : new ArrayList<>(taskList)) {
+        for (PluginRunnable pluginRunnable : new ArrayList<>(taskList)) {
             try {
-                iRunnable.cancel();
-                taskCancelled(plugin, iRunnable.getTaskName(), iRunnable.getTaskId());
+                pluginRunnable.cancel();
+                taskCancelled(plugin, pluginRunnable.getTaskName(), pluginRunnable.getTaskId());
             } catch (Exception ignored) {
             }
         }

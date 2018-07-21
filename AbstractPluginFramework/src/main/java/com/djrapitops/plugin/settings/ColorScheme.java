@@ -9,7 +9,7 @@ import java.util.List;
  * @author Rsl1122
  * @since 2.0.0
  */
-public abstract class ColorScheme {
+public class ColorScheme {
 
     private final List<String> colors;
 

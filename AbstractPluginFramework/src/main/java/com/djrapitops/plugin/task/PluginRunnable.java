@@ -10,7 +10,7 @@ package com.djrapitops.plugin.task;
  * @author Rsl1122
  * @param <T>
  */
-public interface IRunnable<T> {
+public interface PluginRunnable<T> {
 
     String getTaskName();
 
@@ -18,15 +18,15 @@ public interface IRunnable<T> {
 
     int getTaskId();
 
-    ITask runTask();
+    PluginTask runTask();
 
-    ITask runTaskAsynchronously();
+    PluginTask runTaskAsynchronously();
 
-    ITask runTaskLater(long delay);
+    PluginTask runTaskLater(long delay);
 
-    ITask runTaskLaterAsynchronously(long delay);
+    PluginTask runTaskLaterAsynchronously(long delay);
 
-    ITask runTaskTimer(long delay, long period);
+    PluginTask runTaskTimer(long delay, long period);
 
-    ITask runTaskTimerAsynchronously(long delay, long period);
+    PluginTask runTaskTimerAsynchronously(long delay, long period);
 }

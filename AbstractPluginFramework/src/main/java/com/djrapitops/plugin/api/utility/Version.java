@@ -18,7 +18,6 @@ import java.util.Scanner;
  *
  * @author Rsl1122
  */
-@Deprecated
 public class Version implements Comparable<Version> {
 
     private final String versionString;

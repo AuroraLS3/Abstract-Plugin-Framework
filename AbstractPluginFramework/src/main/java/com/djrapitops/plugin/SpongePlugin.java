@@ -8,14 +8,14 @@ import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.sponge.SpongeCommand;
+import com.djrapitops.plugin.task.RunnableFactory;
+import com.djrapitops.plugin.task.sponge.SpongeRunnableFactory;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandMapping;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
-import org.spongepowered.api.text.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +27,12 @@ import java.util.Optional;
  * @author Rsl1122
  */
 public abstract class SpongePlugin implements IPlugin {
+
+    protected final RunnableFactory runnableFactory;
+
+    public SpongePlugin() {
+        runnableFactory = new SpongeRunnableFactory(this);
+    }
 
     protected boolean reloading;
 
@@ -109,7 +115,8 @@ public abstract class SpongePlugin implements IPlugin {
         reloadPlugin(true);
     }
 
-    public static void sendPlayerMsg(Player player, String msg) {
-        player.sendMessage(Text.of(msg));
+    @Override
+    public RunnableFactory getRunnableFactory() {
+        return runnableFactory;
     }
 }

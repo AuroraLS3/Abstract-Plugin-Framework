@@ -6,6 +6,8 @@ import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bungee.BungeeCommand;
+import com.djrapitops.plugin.task.RunnableFactory;
+import com.djrapitops.plugin.task.bungee.BungeeRunnableFactory;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Listener;
 
@@ -17,7 +19,13 @@ import java.util.logging.Logger;
  */
 public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements IPlugin {
 
+    protected final RunnableFactory runnableFactory;
+    
     protected boolean reloading;
+
+    public BungeePlugin() {
+        runnableFactory = new BungeeRunnableFactory(this);
+    }
 
     @Override
     public void onEnable() {
@@ -91,5 +99,10 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
     @Override
     public void setReloading(boolean reloading) {
         this.reloading = reloading;
+    }
+
+    @Override
+    public RunnableFactory getRunnableFactory() {
+        return runnableFactory;
     }
 }

@@ -1,6 +1,5 @@
 package com.djrapitops.plugin.api.systems;
 
-import com.djrapitops.plugin.SpongePlugin;
 import com.djrapitops.plugin.api.Priority;
 import com.djrapitops.plugin.utilities.Format;
 import com.djrapitops.plugin.utilities.StackUtils;
@@ -29,26 +28,6 @@ public class NotificationCenter {
         Map<Priority, List<String>> notificationMap = notifications.computeIfAbsent(callingPlugin, p -> new HashMap<>());
         notificationMap.computeIfAbsent(priority, p -> new ArrayList<>())
                 .add(message);
-    }
-
-    public static void checkNotifications(org.bukkit.entity.Player player) {
-        if (player.isOp() || player.hasPermission("apf.notify")) {
-            for (String msg : getNotifications()) {
-                player.sendMessage(msg);
-            }
-        }
-    }
-
-    public static void checkNotifications(org.spongepowered.api.entity.living.player.Player player) {
-        if (player.hasPermission("apf.notify")) {
-            for (String msg : getNotifications()) {
-                SpongePlugin.sendPlayerMsg(player, msg);
-            }
-        }
-    }
-
-    public static List<String> getNotifications() {
-        return getNotifications(StackUtils.getCallingPlugin());
     }
 
     public static List<String> getNotifications(Class callingPlugin) {

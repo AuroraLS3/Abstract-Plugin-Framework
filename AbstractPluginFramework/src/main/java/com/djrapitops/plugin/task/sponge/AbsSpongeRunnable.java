@@ -7,21 +7,21 @@ package com.djrapitops.plugin.task.sponge;
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.SpongePlugin;
 import com.djrapitops.plugin.api.systems.TaskCenter;
-import com.djrapitops.plugin.task.IRunnable;
-import com.djrapitops.plugin.task.ITask;
+import com.djrapitops.plugin.task.PluginRunnable;
+import com.djrapitops.plugin.task.PluginTask;
 import org.spongepowered.api.scheduler.Task;
 
 /**
- * IRunnable implementation for Sponge.
+ * PluginRunnable implementation for Sponge.
  *
  * @author Rsl1122
  */
-public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable, Runnable {
+public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunnable, Runnable {
 
     private final T plugin;
     private final String name;
 
-    private ITask task;
+    private PluginTask task;
 
     public AbsSpongeRunnable(String name, IPlugin plugin) {
         if (plugin instanceof SpongePlugin) {
@@ -51,21 +51,21 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
     }
 
     @Override
-    public ITask runTask() {
+    public PluginTask runTask() {
         task = new AbsSpongeTask(Task.builder().execute(this).submit(plugin));
         TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
     @Override
-    public ITask runTaskAsynchronously() {
+    public PluginTask runTaskAsynchronously() {
         task = new AbsSpongeTask(Task.builder().execute(this).async().submit(plugin));
         TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
     @Override
-    public ITask runTaskLater(long delay) {
+    public PluginTask runTaskLater(long delay) {
         task = new AbsSpongeTask(Task.builder().execute(this)
                 .delayTicks(delay)
                 .submit(plugin));
@@ -74,7 +74,7 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
     }
 
     @Override
-    public ITask runTaskLaterAsynchronously(long delay) {
+    public PluginTask runTaskLaterAsynchronously(long delay) {
         task = new AbsSpongeTask(Task.builder().execute(this).async()
                 .delayTicks(delay)
                 .submit(plugin));
@@ -83,7 +83,7 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
     }
 
     @Override
-    public ITask runTaskTimer(long delay, long period) {
+    public PluginTask runTaskTimer(long delay, long period) {
         task = new AbsSpongeTask(Task.builder().execute(this)
                 .delayTicks(delay)
                 .intervalTicks(period)
@@ -93,7 +93,7 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
     }
 
     @Override
-    public ITask runTaskTimerAsynchronously(long delay, long period) {
+    public PluginTask runTaskTimerAsynchronously(long delay, long period) {
         task = new AbsSpongeTask(Task.builder().execute(this).async()
                 .delayTicks(delay)
                 .intervalTicks(period)

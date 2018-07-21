@@ -2,23 +2,25 @@
  * Licence is provided in the jar as license.yml also here:
  * https://github.com/Rsl1122/Plan-PlayerAnalytics/blob/master/Plan/src/main/resources/license.yml
  */
-package com.djrapitops.plugin.task;
+package com.djrapitops.plugin.task.thread;
+
+import com.djrapitops.plugin.task.AbsRunnable;
+import com.djrapitops.plugin.task.PluginRunnable;
+import com.djrapitops.plugin.task.PluginTask;
 
 /**
- * IRunnable implementation for tasks where no scheduler is available.
+ * PluginRunnable implementation for tasks where no scheduler is available.
  *
  * @author Rsl1122
  */
-public class ThreadRunnable implements IRunnable, Runnable {
+public class ThreadRunnable implements PluginRunnable, Runnable {
 
     private final String name;
-    private final int id;
     private final AbsRunnable runnable;
     private Thread thread;
 
-    public ThreadRunnable(String name, int id, AbsRunnable runnable) {
+    public ThreadRunnable(String name, AbsRunnable runnable) {
         this.name = name;
-        this.id = id;
         this.runnable = runnable;
         runnable.setCancellable(this);
     }
@@ -37,41 +39,41 @@ public class ThreadRunnable implements IRunnable, Runnable {
 
     @Override
     public int getTaskId() {
-        return id;
+        return -1;
     }
 
     @Override
-    public ITask runTask() {
+    public PluginTask runTask() {
         runThis();
         return null;
     }
 
     @Override
-    public ITask runTaskAsynchronously() {
+    public PluginTask runTaskAsynchronously() {
         runThis();
         return null;
     }
 
     @Override
-    public ITask runTaskLater(long delay) {
+    public PluginTask runTaskLater(long delay) {
         runThis();
         return null;
     }
 
     @Override
-    public ITask runTaskLaterAsynchronously(long delay) {
+    public PluginTask runTaskLaterAsynchronously(long delay) {
         runThis();
         return null;
     }
 
     @Override
-    public ITask runTaskTimer(long delay, long period) {
+    public PluginTask runTaskTimer(long delay, long period) {
         runThis();
         return null;
     }
 
     @Override
-    public ITask runTaskTimerAsynchronously(long delay, long period) {
+    public PluginTask runTaskTimerAsynchronously(long delay, long period) {
         runThis();
         return null;
     }

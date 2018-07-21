@@ -6,6 +6,8 @@ import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
+import com.djrapitops.plugin.task.RunnableFactory;
+import com.djrapitops.plugin.task.bukkit.BukkitRunnableFactory;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,6 +18,12 @@ import java.util.logging.Logger;
  * @author Rsl1122
  */
 public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
+
+    protected final RunnableFactory runnableFactory;
+
+    public BukkitPlugin() {
+        runnableFactory = new BukkitRunnableFactory(this);
+    }
 
     protected boolean reloading;
 
@@ -91,5 +99,9 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     @Override
     public boolean isReloading() {
         return reloading;
+    }
+
+    public RunnableFactory getRunnableFactory() {
+        return runnableFactory;
     }
 }
