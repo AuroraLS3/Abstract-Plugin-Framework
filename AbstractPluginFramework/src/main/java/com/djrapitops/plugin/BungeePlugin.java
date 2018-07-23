@@ -1,7 +1,6 @@
 package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.api.Benchmark;
-import com.djrapitops.plugin.api.systems.TaskCenter;
 import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.CommandNode;
@@ -38,7 +37,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
         StaticHolder.unRegister(pluginClass);
         Benchmark.pluginDisabled(pluginClass);
         DebugLog.pluginDisabled(pluginClass);
-        TaskCenter.cancelAllKnownTasks(pluginClass);
+        runnableFactory.cancelAllKnownTasks();
     }
 
     @Override

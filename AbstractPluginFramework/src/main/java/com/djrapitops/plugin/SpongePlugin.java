@@ -49,6 +49,7 @@ public abstract class SpongePlugin implements IPlugin {
         StaticHolder.unRegister(pluginClass);
         Benchmark.pluginDisabled(pluginClass);
         DebugLog.pluginDisabled(pluginClass);
+        runnableFactory.cancelAllKnownTasks();
     }
 
     @Override

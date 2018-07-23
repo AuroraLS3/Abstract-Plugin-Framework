@@ -1,7 +1,6 @@
 package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.api.Benchmark;
-import com.djrapitops.plugin.api.systems.TaskCenter;
 import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.CommandNode;
@@ -37,8 +36,8 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         Class<? extends IPlugin> pluginClass = getClass();
         Benchmark.pluginDisabled(pluginClass);
         DebugLog.pluginDisabled(pluginClass);
-        TaskCenter.cancelAllKnownTasks(pluginClass);
         StaticHolder.unRegister(pluginClass);
+        runnableFactory.cancelAllKnownTasks();
     }
 
     @Override
