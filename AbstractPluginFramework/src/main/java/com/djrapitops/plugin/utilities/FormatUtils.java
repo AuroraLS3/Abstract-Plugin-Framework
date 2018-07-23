@@ -16,20 +16,6 @@ import java.util.stream.Collectors;
 @Deprecated
 public class FormatUtils {
 
-    /**
-     * @param epochMs
-     * @return
-     */
-    public static String formatTimeStamp(long epochMs) {
-        Date date = new Date(epochMs);
-        String timeStamp = date.toString();
-        // "EEE MMM dd HH:mm:ss zzz yyyy"
-        // "0123456789012345678901234567"
-        String day = timeStamp.substring(4, 10);
-        String clock = timeStamp.substring(11, 16);
-        return day + ", " + clock;
-    }
-
     public static String formatTimeStampSecond(long epochMs) {
         Date date = new Date(epochMs);
         String timeStamp = date.toString();

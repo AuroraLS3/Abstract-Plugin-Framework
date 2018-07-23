@@ -6,6 +6,7 @@ package com.djrapitops.plugin.api.utility.log;
 
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.TimeAmount;
+import com.djrapitops.plugin.logging.FileLogger;
 import com.djrapitops.plugin.utilities.FormatUtils;
 
 import java.io.File;

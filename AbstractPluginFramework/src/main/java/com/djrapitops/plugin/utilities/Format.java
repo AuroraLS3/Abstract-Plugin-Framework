@@ -24,17 +24,17 @@ public class Format {
     }
 
     public Format removeLetters() {
-        string = FormatUtils.removeLetters(string);
+        string = string.replaceAll("[A-Za-z]", "");
         return this;
     }
 
     public Format removeSymbols() {
-        string = FormatUtils.removeSymbols(string);
+        string = string.replaceAll("[^a-zA-Z0-9_\\s]", "");
         return this;
     }
 
     public Format removeSymbolsButDot() {
-        string = FormatUtils.removeSymbolsButDot(string);
+        string = string.replaceAll("[^a-zA-Z0-9_\\s\\.]", "");
         return this;
     }
 
@@ -44,17 +44,17 @@ public class Format {
     }
 
     public Format removeNumbers() {
-        string = FormatUtils.removeNumbers(string);
+        string = string.replaceAll("[0-9]", "");
         return this;
     }
 
     public Format removeWhitespace() {
-        string = FormatUtils.removeWhitespace(string);
+        string = string.replaceAll("[\\s]", "");
         return this;
     }
 
     public Format spaceWhitespace() {
-        string = FormatUtils.spaceWhitespace(string);
+        string = string.replaceAll("[\\s]", " ");
         return this;
     }
 

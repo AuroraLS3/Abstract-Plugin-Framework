@@ -10,6 +10,7 @@ import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.api.TimeAmount;
 import com.djrapitops.plugin.api.utility.log.errormanager.DefaultErrorManager;
 import com.djrapitops.plugin.api.utility.log.errormanager.ErrorManager;
+import com.djrapitops.plugin.logging.FileLogger;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.djrapitops.plugin.utilities.Verify;

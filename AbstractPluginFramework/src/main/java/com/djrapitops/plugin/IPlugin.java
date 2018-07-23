@@ -5,6 +5,7 @@
 package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.command.CommandNode;
+import com.djrapitops.plugin.logging.console.PluginLogger;
 import com.djrapitops.plugin.task.RunnableFactory;
 
 import java.io.File;
@@ -38,4 +39,6 @@ public interface IPlugin {
     void setReloading(boolean value);
 
     RunnableFactory getRunnableFactory();
+
+    PluginLogger getPluginLogger();
 }

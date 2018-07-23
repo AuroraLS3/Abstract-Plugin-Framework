@@ -8,6 +8,8 @@ import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.sponge.SpongeCommand;
+import com.djrapitops.plugin.logging.console.PluginLogger;
+import com.djrapitops.plugin.logging.console.SpongePluginLogger;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.task.sponge.SpongeRunnableFactory;
 import org.slf4j.Logger;
@@ -28,10 +30,12 @@ import java.util.Optional;
  */
 public abstract class SpongePlugin implements IPlugin {
 
+    protected final PluginLogger logger;
     protected final RunnableFactory runnableFactory;
 
     public SpongePlugin() {
         runnableFactory = new SpongeRunnableFactory(this);
+        logger = new SpongePluginLogger(this);
     }
 
     protected boolean reloading;
@@ -83,7 +87,7 @@ public abstract class SpongePlugin implements IPlugin {
         }
     }
 
-    protected abstract Logger getLogger();
+    public abstract Logger getLogger();
 
     @Override
     public void setReloading(boolean reloading) {
@@ -119,5 +123,10 @@ public abstract class SpongePlugin implements IPlugin {
     @Override
     public RunnableFactory getRunnableFactory() {
         return runnableFactory;
+    }
+
+    @Override
+    public PluginLogger getPluginLogger() {
+        return logger;
     }
 }

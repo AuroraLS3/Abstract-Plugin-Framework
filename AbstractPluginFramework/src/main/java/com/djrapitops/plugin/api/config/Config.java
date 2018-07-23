@@ -4,7 +4,7 @@
  */
 package com.djrapitops.plugin.api.config;
 
-import com.djrapitops.plugin.api.utility.log.FileLogger;
+import com.djrapitops.plugin.logging.FileLogger;
 import com.djrapitops.plugin.utilities.Verify;
 
 import java.io.File;

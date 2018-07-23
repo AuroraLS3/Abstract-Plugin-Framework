@@ -2,7 +2,7 @@
  * Licence is provided in the jar as license.yml also here:
  * https://github.com/Rsl1122/Plan-PlayerAnalytics/blob/master/Plan/src/main/resources/license.yml
  */
-package com.djrapitops.plugin.api.utility.log;
+package com.djrapitops.plugin.logging;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +59,6 @@ public class FileLogger {
     }
 
     private FileLogger() {
-        /* Hide constructor */
+        /* Static method class */
     }
 }

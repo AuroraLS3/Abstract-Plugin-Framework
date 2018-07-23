@@ -5,6 +5,8 @@ import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
+import com.djrapitops.plugin.logging.console.BukkitPluginLogger;
+import com.djrapitops.plugin.logging.console.PluginLogger;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.task.bukkit.BukkitRunnableFactory;
 import org.bukkit.event.Listener;
@@ -18,10 +20,15 @@ import java.util.logging.Logger;
  */
 public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
+    protected PluginLogger logger;
     protected final RunnableFactory runnableFactory;
 
     public BukkitPlugin() {
         runnableFactory = new BukkitRunnableFactory(this);
+        logger = new BukkitPluginLogger(
+                message -> getServer().getConsoleSender().sendMessage(message),
+                getLogger()
+        );
     }
 
     protected boolean reloading;
@@ -102,5 +109,10 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
     public RunnableFactory getRunnableFactory() {
         return runnableFactory;
+    }
+
+    @Override
+    public PluginLogger getPluginLogger() {
+        return logger;
     }
 }
