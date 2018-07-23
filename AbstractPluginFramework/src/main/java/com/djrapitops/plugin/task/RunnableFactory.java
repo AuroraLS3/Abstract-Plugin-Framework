@@ -1,14 +1,15 @@
 package com.djrapitops.plugin.task;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class RunnableFactory {
 
     private final Map<Long, PluginRunnable> runningTasks;
 
     public RunnableFactory() {
-        this.runningTasks = new HashMap<>();
+        this.runningTasks = new ConcurrentHashMap<>();
     }
 
     public PluginRunnable createNew(String name, AbsRunnable absRunnable) {
@@ -36,5 +37,10 @@ public abstract class RunnableFactory {
 
     public void cancelled(PluginRunnable pluginRunnable) {
         runningTasks.remove(pluginRunnable.getTime());
+    }
+
+    public void cancelAllKnownTasks() {
+        new ArrayList<>(runningTasks.values())
+                .forEach(PluginRunnable::cancel);
     }
 }
