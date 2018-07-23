@@ -1,18 +1,22 @@
 package com.djrapitops.plugin.task;
 
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class RunnableFactory {
 
-    private final TreeMap<Long, PluginRunnable> runningTasks;
+    private final Map<Long, PluginRunnable> runningTasks;
 
     public RunnableFactory() {
-        this.runningTasks = new TreeMap<>();
+        this.runningTasks = new HashMap<>();
     }
 
     public PluginRunnable createNew(String name, AbsRunnable absRunnable) {
         long time = System.currentTimeMillis();
         PluginRunnable runnable = createNewRunnable(name, absRunnable, time);
+        while (runningTasks.containsKey(time)) {
+            time++;
+        }
         runningTasks.put(time, runnable);
         return runnable;
     }
@@ -26,7 +30,11 @@ public abstract class RunnableFactory {
      */
     public abstract PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time);
 
-    public TreeMap<Long, PluginRunnable> getRunningTasks() {
+    public Map<Long, PluginRunnable> getRunningTasks() {
         return runningTasks;
+    }
+
+    public void cancelled(PluginRunnable pluginRunnable) {
+        runningTasks.remove(pluginRunnable.getTime());
     }
 }

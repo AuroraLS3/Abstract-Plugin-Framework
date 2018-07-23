@@ -9,6 +9,7 @@ import com.djrapitops.plugin.BukkitPlugin;
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.PluginTask;
+import com.djrapitops.plugin.task.RunnableFactory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -17,10 +18,12 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public abstract class AbsBukkitRunnable<T extends BukkitPlugin> extends BukkitRunnable implements PluginRunnable, Runnable {
 
-    private final T plugin;
     private final String name;
     private final long time;
     private int id = -1;
+
+    private T plugin;
+    private RunnableFactory runnableFactory;
 
     public AbsBukkitRunnable(String name, IPlugin plugin, long time) {
         this.name = name;
@@ -30,6 +33,7 @@ public abstract class AbsBukkitRunnable<T extends BukkitPlugin> extends BukkitRu
         } else {
             throw new IllegalArgumentException("Given plugin was not of correct type");
         }
+        runnableFactory = plugin.getRunnableFactory();
     }
 
     @Override
@@ -79,8 +83,18 @@ public abstract class AbsBukkitRunnable<T extends BukkitPlugin> extends BukkitRu
 
     @Override
     public synchronized void cancel() throws IllegalStateException {
-        plugin.getServer().getScheduler().cancelTask(id);
-        super.cancel();
+        if (plugin == null) {
+            return;
+        }
+        try {
+            runnableFactory.cancelled(this);
+            plugin.getServer().getScheduler().cancelTask(id);
+            super.cancel();
+        } finally {
+            // Clear instances so that cyclic references don't block GC
+            runnableFactory = null;
+            plugin = null;
+        }
     }
 
     @Override

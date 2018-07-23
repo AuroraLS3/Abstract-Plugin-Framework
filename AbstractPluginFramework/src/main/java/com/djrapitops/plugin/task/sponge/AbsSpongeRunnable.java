@@ -8,6 +8,7 @@ import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.SpongePlugin;
 import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.PluginTask;
+import com.djrapitops.plugin.task.RunnableFactory;
 import org.spongepowered.api.scheduler.Task;
 
 /**
@@ -17,9 +18,11 @@ import org.spongepowered.api.scheduler.Task;
  */
 public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunnable, Runnable {
 
-    private final T plugin;
     private final String name;
     private final long time;
+
+    private T plugin;
+    private RunnableFactory runnableFactory;
 
     private PluginTask task;
 
@@ -31,6 +34,7 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
             throw new IllegalArgumentException("Given plugin was not of correct type");
         }
         this.name = name;
+        this.runnableFactory = plugin.getRunnableFactory();
     }
 
     @Override
@@ -40,8 +44,18 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
 
     @Override
     public void cancel() {
-        if (task != null) {
-            task.cancel();
+        if (plugin == null) {
+            return;
+        }
+        try {
+            if (task != null) {
+                runnableFactory.cancelled(this);
+                task.cancel();
+            }
+        } finally {
+            // Clear instances so that cyclic references don't block GC
+            plugin = null;
+            runnableFactory = null;
         }
     }
 

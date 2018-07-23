@@ -13,6 +13,7 @@ import java.util.*;
  *
  * @author Rsl1122
  */
+@Deprecated
 public class TaskCenter {
 
     private static final Map<Class, List<TaskInfo>> taskInfo = new HashMap<>();
