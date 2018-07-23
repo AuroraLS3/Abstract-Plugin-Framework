@@ -10,6 +10,10 @@ import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.sponge.SpongeCommand;
 import com.djrapitops.plugin.logging.console.PluginLogger;
 import com.djrapitops.plugin.logging.console.SpongePluginLogger;
+import com.djrapitops.plugin.logging.debug.DebugLogger;
+import com.djrapitops.plugin.logging.debug.MemoryDebugLogger;
+import com.djrapitops.plugin.logging.error.DefaultErrorHandler;
+import com.djrapitops.plugin.logging.error.ErrorHandler;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.task.sponge.SpongeRunnableFactory;
 import org.slf4j.Logger;
@@ -19,6 +23,7 @@ import org.spongepowered.api.command.CommandMapping;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,11 +36,19 @@ import java.util.Optional;
 public abstract class SpongePlugin implements IPlugin {
 
     protected final PluginLogger logger;
+    protected DebugLogger debugLogger;
+    protected ErrorHandler errorHandler;
     protected final RunnableFactory runnableFactory;
 
     public SpongePlugin() {
+        this(new MemoryDebugLogger());
+    }
+
+    public SpongePlugin(DebugLogger debugLogger) {
+        this.debugLogger = debugLogger;
         runnableFactory = new SpongeRunnableFactory(this);
-        logger = new SpongePluginLogger(this);
+        logger = new SpongePluginLogger(this, this::getDebugLogger);
+        errorHandler = new DefaultErrorHandler(logger, new File(getDataFolder(), "logs"));
     }
 
     protected boolean reloading;
@@ -128,5 +141,14 @@ public abstract class SpongePlugin implements IPlugin {
     @Override
     public PluginLogger getPluginLogger() {
         return logger;
+    }
+
+    private DebugLogger getDebugLogger() {
+        return debugLogger;
+    }
+
+    @Override
+    public ErrorHandler getErrorHandler() {
+        return errorHandler;
     }
 }

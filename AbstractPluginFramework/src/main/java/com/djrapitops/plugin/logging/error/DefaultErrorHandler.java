@@ -1,21 +1,21 @@
 package com.djrapitops.plugin.logging.error;
 
-import com.djrapitops.plugin.logging.L;
 import com.djrapitops.plugin.logging.console.PluginLogger;
 
-public class DefaultErrorHandler implements ErrorHandler {
+import java.io.File;
 
-    private final PluginLogger logger;
-    private final ErrorFileLogger errorFileLogger;
+public class DefaultErrorHandler extends CombineErrorHandler {
 
-    public DefaultErrorHandler(PluginLogger logger, ErrorFileLogger errorFileLogger) {
-        this.logger = logger;
-        this.errorFileLogger = errorFileLogger;
+    public DefaultErrorHandler(PluginLogger logger, File logsFolder) {
+        this(new ConsoleErrorLogger(logger), logsFolder);
     }
 
-    @Override
-    public void logError(L level, Class caughtBy, Throwable throwable) {
-        logger.log(level, "Error was caught by " + caughtBy.getName(), throwable);
-        errorFileLogger.logError(level, caughtBy, throwable);
+    private DefaultErrorHandler(ConsoleErrorLogger consoleErrorLogger, File logsFolder) {
+        super(
+                consoleErrorLogger,
+                new FolderTimeStampErrorFileLogger(logsFolder, consoleErrorLogger)
+        );
     }
+
+
 }

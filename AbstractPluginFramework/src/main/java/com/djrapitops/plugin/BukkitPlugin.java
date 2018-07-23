@@ -7,11 +7,16 @@ import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
 import com.djrapitops.plugin.logging.console.BukkitPluginLogger;
 import com.djrapitops.plugin.logging.console.PluginLogger;
+import com.djrapitops.plugin.logging.debug.DebugLogger;
+import com.djrapitops.plugin.logging.debug.MemoryDebugLogger;
+import com.djrapitops.plugin.logging.error.DefaultErrorHandler;
+import com.djrapitops.plugin.logging.error.ErrorHandler;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.task.bukkit.BukkitRunnableFactory;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -21,14 +26,23 @@ import java.util.logging.Logger;
 public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
     protected PluginLogger logger;
+    protected DebugLogger debugLogger;
+    protected ErrorHandler errorHandler;
     protected final RunnableFactory runnableFactory;
 
     public BukkitPlugin() {
+        this(new MemoryDebugLogger());
+    }
+
+    public BukkitPlugin(DebugLogger debugLogger) {
+        this.debugLogger = debugLogger;
         runnableFactory = new BukkitRunnableFactory(this);
         logger = new BukkitPluginLogger(
                 message -> getServer().getConsoleSender().sendMessage(message),
+                this::getDebugLogger,
                 getLogger()
         );
+        errorHandler = new DefaultErrorHandler(logger, new File(getDataFolder(), "logs"));
     }
 
     protected boolean reloading;
@@ -114,5 +128,14 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     @Override
     public PluginLogger getPluginLogger() {
         return logger;
+    }
+
+    private DebugLogger getDebugLogger() {
+        return debugLogger;
+    }
+
+    @Override
+    public ErrorHandler getErrorHandler() {
+        return errorHandler;
     }
 }

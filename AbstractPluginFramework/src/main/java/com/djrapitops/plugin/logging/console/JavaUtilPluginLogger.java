@@ -1,27 +1,31 @@
 package com.djrapitops.plugin.logging.console;
 
 import com.djrapitops.plugin.logging.L;
+import com.djrapitops.plugin.logging.debug.DebugLogger;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JavaUtilPluginLogger implements PluginLogger {
 
     protected final Consumer<String> console;
+    protected final Supplier<DebugLogger> debugLogger;
     protected final Logger logger;
 
-    public JavaUtilPluginLogger(Consumer<String> console, Logger logger) {
+    public JavaUtilPluginLogger(Consumer<String> console, Supplier<DebugLogger> debugLogger, Logger logger) {
         this.console = console;
+        this.debugLogger = debugLogger;
         this.logger = logger;
     }
 
     @Override
     public void log(L level, String... message) {
         if (level == L.DEBUG) {
-            // Log to debug log.
+            debugLogger.get().log(message);
             return;
-        } else {
+        } else if (level != L.DEBUG_INFO) {
             log(L.DEBUG, message);
         }
         switch (level) {
@@ -39,6 +43,11 @@ public class JavaUtilPluginLogger implements PluginLogger {
             case INFO_COLOR:
                 for (String line : message) {
                     console.accept(line);
+                }
+                break;
+            case DEBUG_INFO:
+                for (String line : message) {
+                    logger.log(Level.INFO, "[DEBUG] " + line);
                 }
                 break;
             case INFO:

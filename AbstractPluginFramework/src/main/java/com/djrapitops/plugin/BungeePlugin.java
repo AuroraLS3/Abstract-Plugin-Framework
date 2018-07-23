@@ -7,11 +7,16 @@ import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bungee.BungeeCommand;
 import com.djrapitops.plugin.logging.console.BungeePluginLogger;
 import com.djrapitops.plugin.logging.console.PluginLogger;
+import com.djrapitops.plugin.logging.debug.DebugLogger;
+import com.djrapitops.plugin.logging.debug.MemoryDebugLogger;
+import com.djrapitops.plugin.logging.error.DefaultErrorHandler;
+import com.djrapitops.plugin.logging.error.ErrorHandler;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.task.bungee.BungeeRunnableFactory;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Listener;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -21,16 +26,25 @@ import java.util.logging.Logger;
 public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements IPlugin {
 
     protected PluginLogger logger;
+    protected DebugLogger debugLogger;
+    protected ErrorHandler errorHandler;
     protected final RunnableFactory runnableFactory;
     
     protected boolean reloading;
 
     public BungeePlugin() {
+        this(new MemoryDebugLogger());
+    }
+
+    public BungeePlugin(DebugLogger debugLogger) {
+        this.debugLogger = debugLogger;
         runnableFactory = new BungeeRunnableFactory(this);
         logger = new BungeePluginLogger(
                 message -> getProxy().getConsole().sendMessage(new TextComponent(message)),
+                this::getDebugLogger,
                 getLogger()
         );
+        errorHandler = new DefaultErrorHandler(logger, new File(getDataFolder(), "logs"));
     }
 
     @Override
@@ -115,5 +129,14 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
     @Override
     public PluginLogger getPluginLogger() {
         return logger;
+    }
+
+    private DebugLogger getDebugLogger() {
+        return debugLogger;
+    }
+
+    @Override
+    public ErrorHandler getErrorHandler() {
+        return errorHandler;
     }
 }
