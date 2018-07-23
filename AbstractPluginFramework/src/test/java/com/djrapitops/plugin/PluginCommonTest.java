@@ -4,6 +4,8 @@ import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.CommandType;
 import com.djrapitops.plugin.command.ISender;
 import com.djrapitops.plugin.command.TreeCmdNode;
+import com.djrapitops.plugin.task.RunnableFactory;
+import com.djrapitops.plugin.task.thread.ThreadRunnableFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,6 +71,11 @@ public class PluginCommonTest {
             @Override
             public void registerCommand(String name, CommandNode command) {
 
+            }
+
+            @Override
+            public RunnableFactory getRunnableFactory() {
+                return new ThreadRunnableFactory();
             }
         };
     }
