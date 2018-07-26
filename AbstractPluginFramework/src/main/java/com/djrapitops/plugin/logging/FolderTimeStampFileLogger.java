@@ -29,7 +29,7 @@ public class FolderTimeStampFileLogger {
                     .map(line -> "| " + getTimeStamp() + " | " + line)
                     .collect(Collectors.toList()));
         } catch (IOException e) {
-            errorHandler.get().logError(L.CRITICAL, this.getClass(), e);
+            errorHandler.get().log(L.CRITICAL, this.getClass(), e);
         }
     }
 

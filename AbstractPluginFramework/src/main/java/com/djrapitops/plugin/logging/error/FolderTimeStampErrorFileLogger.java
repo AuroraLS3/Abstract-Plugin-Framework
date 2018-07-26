@@ -14,7 +14,7 @@ public class FolderTimeStampErrorFileLogger extends FolderTimeStampFileLogger im
     }
 
     @Override
-    public void logError(L level, Class caughtBy, Throwable throwable) {
+    public void log(L level, Class caughtBy, Throwable throwable) {
         log(caughtBy.getName() + " caught " + throwable.getClass().getSimpleName());
 
         List<String> stackTrace = getStackTrace(throwable);

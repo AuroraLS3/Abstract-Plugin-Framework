@@ -11,9 +11,9 @@ public class CombineErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public void logError(L level, Class caughtBy, Throwable throwable) {
+    public void log(L level, Class caughtBy, Throwable throwable) {
         for (ErrorHandler handler : handlers) {
-            handler.logError(level, caughtBy, throwable);
+            handler.log(level, caughtBy, throwable);
         }
     }
 }

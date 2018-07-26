@@ -12,7 +12,7 @@ public class ConsoleErrorLogger implements ErrorHandler {
     }
 
     @Override
-    public void logError(L level, Class caughtBy, Throwable throwable) {
+    public void log(L level, Class caughtBy, Throwable throwable) {
         logger.log(level, "Error was caught by " + caughtBy.getName(), throwable);
     }
 }
