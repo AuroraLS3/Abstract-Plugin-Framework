@@ -8,26 +8,26 @@ package com.djrapitops.plugin.utilities;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- *
  * @author ristolah
  */
 public class FormatTest {
-    
+
     private final String string = "ABCZabcz123490;?=) ";
     private final String letters = "ABCZabcz";
     private final String numbers = "123490";
     private final String symbols = ";?=)";
-    
+
     public FormatTest() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -74,5 +74,11 @@ public class FormatTest {
         String r = result.toString();
         assertEquals('A', r.charAt(0));
         assertEquals('b', r.charAt(1));
-    }    
+    }
+
+    @Test
+    public void removesFirstAndLastLetters() {
+        Format result = new Format(string).removeFirstAndLastChar();
+        assertEquals("BCZabcz123490;?=)", result.toString());
+    }
 }

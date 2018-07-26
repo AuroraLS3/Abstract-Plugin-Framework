@@ -1,7 +1,7 @@
 package com.djrapitops.plugin.command;
 
 import com.djrapitops.plugin.command.defaultcmds.HelpCommand;
-import com.djrapitops.plugin.utilities.FormatUtils;
+import com.djrapitops.plugin.utilities.ArrayUtil;
 import com.djrapitops.plugin.utilities.Verify;
 
 import java.util.Arrays;
@@ -128,7 +128,7 @@ public class TreeCmdNode extends CommandNode {
             return cmd;
         }
         if (!defaultCommand.equals(args[0])) {
-            return getCommand(FormatUtils.mergeArrays(new String[]{defaultCommand}, args));
+            return getCommand(ArrayUtil.merge(new String[]{defaultCommand}, args));
         }
         return helpCommand;
     }

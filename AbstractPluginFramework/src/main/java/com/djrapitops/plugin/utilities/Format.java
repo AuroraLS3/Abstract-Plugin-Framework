@@ -111,6 +111,11 @@ public class Format {
         return this;
     }
 
+    public Format removeFirstAndLastChar() {
+        string = string.substring(1, string.length() - 1);
+        return this;
+    }
+
     @Override
     public String toString() {
         return string;
@@ -137,6 +142,5 @@ public class Format {
         final Format other = (Format) obj;
         return Objects.equals(this.string, other.string);
     }
-
 
 }

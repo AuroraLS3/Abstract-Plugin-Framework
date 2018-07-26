@@ -1,5 +1,6 @@
 package com.djrapitops.plugin.api.utility;
 
+import com.djrapitops.plugin.api.utility.log.Log;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.google.common.base.Objects;
@@ -11,7 +12,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  * Utility class for checking newest version availability from different sources.
@@ -95,9 +99,27 @@ public class Version implements Comparable<Version> {
     @Override
     public int compareTo(Version o) {
         return Long.compare(
-                FormatUtils.parseVersionNumber(this.versionString),
-                FormatUtils.parseVersionNumber(o.versionString)
+                this.getVersionLong(),
+                o.getVersionLong()
         );
+    }
+
+    public long getVersionLong() {
+        String replaced = versionString.replaceAll("[^0-9]", ".");
+        String[] split = replaced.split("\\.");
+        List<String> version = Arrays.stream(split).filter(s -> !s.isEmpty()).collect(Collectors.toList());
+
+        long versionNumber = 0;
+        for (int i = 0; i < version.size(); i++) {
+            try {
+                int num = Integer.parseInt(version.get(i));
+                long multiplier = (long) Math.pow(100, 8.0 - i);
+                versionNumber += num * multiplier;
+            } catch (NumberFormatException e) {
+                Log.toLog(FormatUtils.class, e);
+            }
+        }
+        return versionNumber;
     }
 
     @Override
