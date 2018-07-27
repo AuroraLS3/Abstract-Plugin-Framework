@@ -3,6 +3,7 @@ package com.djrapitops.plugin;
 import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
+import com.djrapitops.plugin.benchmarking.Timings;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
 import com.djrapitops.plugin.logging.console.BukkitPluginLogger;
@@ -18,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * @author Rsl1122
@@ -28,6 +28,7 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     protected PluginLogger logger;
     protected DebugLogger debugLogger;
     protected ErrorHandler errorHandler;
+    protected final Timings timings;
     protected final RunnableFactory runnableFactory;
 
     public BukkitPlugin() {
@@ -37,6 +38,7 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     public BukkitPlugin(DebugLogger debugLogger) {
         this.debugLogger = debugLogger;
         runnableFactory = new BukkitRunnableFactory(this);
+        timings = new Timings();
         logger = new BukkitPluginLogger(
                 message -> getServer().getConsoleSender().sendMessage(message),
                 this::getDebugLogger,
@@ -59,34 +61,6 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         DebugLog.pluginDisabled(pluginClass);
         StaticHolder.unRegister(pluginClass);
         runnableFactory.cancelAllKnownTasks();
-    }
-
-    @Override
-    public void log(String level, String s) {
-        Logger logger = getLogger();
-        switch (level.toUpperCase()) {
-            case "INFO":
-            case "I":
-                logger.info(s);
-                break;
-            case "INFO_COLOR":
-                getServer().getConsoleSender().sendMessage(s);
-                break;
-            case "W":
-            case "WARN":
-            case "WARNING":
-                logger.warning(s);
-                break;
-            case "E":
-            case "ERR":
-            case "ERROR":
-            case "SEVERE":
-                logger.severe(s);
-                break;
-            default:
-                logger.info(s);
-                break;
-        }
     }
 
     public void registerListener(Listener... listeners) {
@@ -137,5 +111,10 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     @Override
     public ErrorHandler getErrorHandler() {
         return errorHandler;
+    }
+
+    @Override
+    public Timings getTimings() {
+        return timings;
     }
 }

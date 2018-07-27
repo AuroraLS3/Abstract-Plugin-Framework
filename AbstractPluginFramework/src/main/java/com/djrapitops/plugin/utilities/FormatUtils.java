@@ -1,8 +1,5 @@
 package com.djrapitops.plugin.utilities;
 
-import org.bukkit.Location;
-
-import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Date;
 
@@ -18,26 +15,6 @@ public class FormatUtils {
         String day = timeStamp.substring(4, 10);
         String clock = timeStamp.substring(11, 19);
         return day + ", " + clock;
-    }
-
-    /**
-     * Formats a Minecraft Location into readable format.
-     *
-     * @param loc Location to format
-     * @return Readable location format.
-     */
-    public static String formatLocation(Location loc) {
-        return "x " + loc.getBlockX() + " z " + loc.getBlockZ() + " in " + loc.getWorld();
-    }
-
-    /**
-     * @param d
-     * @return
-     */
-    public static String cutDecimals(double d) {
-        DecimalFormat df = new DecimalFormat("#.##");
-//        df.setRoundingMode(RoundingMode.CEILING);
-        return df.format(d);
     }
 
     public static <T> String collectionToStringNoBrackets(Collection<T> coll) {

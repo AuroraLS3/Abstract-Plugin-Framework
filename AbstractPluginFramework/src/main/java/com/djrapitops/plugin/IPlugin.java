@@ -4,6 +4,7 @@
  */
 package com.djrapitops.plugin;
 
+import com.djrapitops.plugin.benchmarking.Timings;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.logging.console.PluginLogger;
 import com.djrapitops.plugin.logging.error.ErrorHandler;
@@ -28,9 +29,6 @@ public interface IPlugin {
 
     boolean isReloading();
 
-    @Deprecated
-    void log(String level, String s);
-
     File getDataFolder();
 
     String getVersion();
@@ -44,4 +42,6 @@ public interface IPlugin {
     PluginLogger getPluginLogger();
 
     ErrorHandler getErrorHandler();
+
+    Timings getTimings();
 }

@@ -6,6 +6,7 @@ package com.djrapitops.plugin;
 
 import com.djrapitops.plugin.api.Benchmark;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
+import com.djrapitops.plugin.benchmarking.Timings;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.sponge.SpongeCommand;
 import com.djrapitops.plugin.logging.console.PluginLogger;
@@ -38,6 +39,7 @@ public abstract class SpongePlugin implements IPlugin {
     protected final PluginLogger logger;
     protected DebugLogger debugLogger;
     protected ErrorHandler errorHandler;
+    protected final Timings timings;
     protected final RunnableFactory runnableFactory;
 
     public SpongePlugin() {
@@ -47,6 +49,7 @@ public abstract class SpongePlugin implements IPlugin {
     public SpongePlugin(DebugLogger debugLogger) {
         this.debugLogger = debugLogger;
         runnableFactory = new SpongeRunnableFactory(this);
+        timings = new Timings();
         logger = new SpongePluginLogger(this, this::getDebugLogger);
         errorHandler = new DefaultErrorHandler(logger, new File(getDataFolder(), "logs"));
     }
@@ -72,32 +75,6 @@ public abstract class SpongePlugin implements IPlugin {
     @Override
     public void reloadPlugin(boolean full) {
         PluginCommon.reload(this, full);
-    }
-
-    @Override
-    public void log(String level, String s) {
-        Logger logger = getLogger();
-        switch (level.toUpperCase()) {
-            case "INFO":
-            case "I":
-            case "INFO_COLOR":
-                logger.info(s);
-                break;
-            case "W":
-            case "WARN":
-            case "WARNING":
-                logger.warn(s);
-                break;
-            case "E":
-            case "ERR":
-            case "ERROR":
-            case "SEVERE":
-                logger.error(s);
-                break;
-            default:
-                logger.info(s);
-                break;
-        }
     }
 
     public abstract Logger getLogger();
@@ -150,5 +127,10 @@ public abstract class SpongePlugin implements IPlugin {
     @Override
     public ErrorHandler getErrorHandler() {
         return errorHandler;
+    }
+
+    @Override
+    public Timings getTimings() {
+        return timings;
     }
 }
