@@ -19,7 +19,7 @@ class RunningBenchmark {
 
     Benchmark end() {
         long endNs = System.nanoTime();
-        long diffNs = startNs - endNs;
+        long diffNs = endNs - startNs;
 
         long endMemory = Runtime.getRuntime().freeMemory();
         long estimatedMemoryUse = endMemory - startMemory;

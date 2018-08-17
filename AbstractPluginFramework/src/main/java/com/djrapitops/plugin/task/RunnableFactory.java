@@ -18,7 +18,9 @@ public abstract class RunnableFactory {
 
     @Deprecated
     public static PluginRunnable createNew(String name, AbsRunnable absRunnable) {
-        IPlugin plugin = StaticHolder.getInstance(StackUtils.getCallingPlugin());
+        Class callingPlugin = StackUtils.getCallingPlugin();
+        StaticHolder.saveInstance(absRunnable.getClass(), callingPlugin);
+        IPlugin plugin = StaticHolder.getInstance(callingPlugin);
         return plugin.getRunnableFactory().create(name, absRunnable);
     }
 

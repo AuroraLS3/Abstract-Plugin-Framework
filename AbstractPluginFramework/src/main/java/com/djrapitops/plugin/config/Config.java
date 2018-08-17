@@ -35,8 +35,10 @@ public class Config extends ConfigNode {
         this.absolutePath = file.getAbsolutePath();
 
         try {
-            Files.createDirectories(folder.toPath());
-            Files.createFile(file.toPath());
+            Verify.isTrue(folder.exists() || folder.mkdirs(), () ->
+                    new FileNotFoundException("Folders could not be created for config file " + absolutePath));
+            Verify.isTrue(file.exists() || file.createNewFile(), () ->
+                    new FileNotFoundException("Could not create file: " + absolutePath));
             read();
         } catch (IOException e) {
             throw new IllegalStateException(e.getMessage(), e);

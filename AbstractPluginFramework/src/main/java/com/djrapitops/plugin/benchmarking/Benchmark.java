@@ -42,7 +42,7 @@ public class Benchmark implements Comparable<Benchmark> {
         return this.name.toLowerCase().compareTo(o.name.toLowerCase());
     }
 
-    private String toDurationString() {
+    public String toDurationString() {
         long millisecond = TimeAmount.MILLISECOND.ns();
         if (this.ns < millisecond) {
             return ns + " ns";
