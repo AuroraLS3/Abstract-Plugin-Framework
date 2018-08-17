@@ -11,7 +11,7 @@ public class Timings {
 
     private final Map<String, List<Benchmark>> results;
 
-    private final Map<String, Long> running;
+    private final Map<String, RunningBenchmark> running;
 
     public Timings() {
         results = new HashMap<>();
@@ -19,19 +19,17 @@ public class Timings {
     }
 
     public void start(String name) {
-        running.put(name, System.nanoTime());
+        running.put(name, new RunningBenchmark(name));
     }
 
     public Optional<Benchmark> end(String name) {
-        Long start = running.get(name);
-        if (start == null) {
+        RunningBenchmark bench = running.get(name);
+        if (bench == null) {
             return Optional.empty();
         }
-        long end = System.nanoTime();
-        long diff = start - end;
+        Benchmark result = bench.end();
 
         List<Benchmark> benchmarks = results.getOrDefault(name, new ArrayList<>());
-        Benchmark result = new Benchmark(name, diff);
         benchmarks.add(result);
         results.put(name, benchmarks);
         return Optional.of(result);

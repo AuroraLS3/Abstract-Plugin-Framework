@@ -10,15 +10,19 @@ import com.djrapitops.plugin.api.TimeAmount;
 public class Benchmark implements Comparable<Benchmark> {
 
     private final long ns;
+    private final long estimatedMemoryUse;
+
     private String name;
 
-    public Benchmark(long ns) {
+    public Benchmark(long ns, long estimatedMemoryUse) {
         this.ns = ns;
+        this.estimatedMemoryUse = estimatedMemoryUse;
     }
 
-    public Benchmark(String name, long ns) {
+    public Benchmark(String name, long ns, long estimatedMemoryUse) {
         this.name = name;
         this.ns = ns;
+        this.estimatedMemoryUse = estimatedMemoryUse;
     }
 
     public String getName() {
@@ -38,13 +42,18 @@ public class Benchmark implements Comparable<Benchmark> {
         return this.name.toLowerCase().compareTo(o.name.toLowerCase());
     }
 
-    public String toDurationString() {
+    private String toDurationString() {
         long millisecond = TimeAmount.MILLISECOND.ns();
         if (this.ns < millisecond) {
             return ns + " ns";
         } else {
             return (ns / millisecond) + " ms";
         }
+    }
+
+    private String toMemoryString() {
+        long usedMegabytes = estimatedMemoryUse / 1000000L;
+        return "~" + usedMegabytes + " MB";
     }
 
     @Override
@@ -54,7 +63,20 @@ public class Benchmark implements Comparable<Benchmark> {
         while (b.length() < 10) {
             b.append(" ");
         }
+        b.append(toMemoryString());
+        while ((b.length() < 19)) {
+            b.append(" ");
+        }
         b.append(name);
         return b.toString();
+    }
+
+    /**
+     * Estimate of memory difference between start and end in bytes.
+     *
+     * @return bytes of memory difference.
+     */
+    public long getUsedMemory() {
+        return estimatedMemoryUse;
     }
 }
