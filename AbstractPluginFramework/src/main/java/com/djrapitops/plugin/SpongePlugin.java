@@ -11,6 +11,7 @@ import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.sponge.SpongeCommand;
 import com.djrapitops.plugin.logging.console.PluginLogger;
 import com.djrapitops.plugin.logging.console.SpongePluginLogger;
+import com.djrapitops.plugin.logging.debug.CombineDebugLogger;
 import com.djrapitops.plugin.logging.debug.DebugLogger;
 import com.djrapitops.plugin.logging.debug.MemoryDebugLogger;
 import com.djrapitops.plugin.logging.error.DefaultErrorHandler;
@@ -43,7 +44,7 @@ public abstract class SpongePlugin implements IPlugin {
     protected final RunnableFactory runnableFactory;
 
     public SpongePlugin() {
-        this(new MemoryDebugLogger());
+        this(new CombineDebugLogger(new MemoryDebugLogger()));
     }
 
     public SpongePlugin(DebugLogger debugLogger) {

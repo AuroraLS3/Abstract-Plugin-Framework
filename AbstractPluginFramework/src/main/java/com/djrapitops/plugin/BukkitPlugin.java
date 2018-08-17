@@ -8,6 +8,7 @@ import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bukkit.BukkitCommand;
 import com.djrapitops.plugin.logging.console.BukkitPluginLogger;
 import com.djrapitops.plugin.logging.console.PluginLogger;
+import com.djrapitops.plugin.logging.debug.CombineDebugLogger;
 import com.djrapitops.plugin.logging.debug.DebugLogger;
 import com.djrapitops.plugin.logging.debug.MemoryDebugLogger;
 import com.djrapitops.plugin.logging.error.DefaultErrorHandler;
@@ -32,7 +33,7 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     protected final RunnableFactory runnableFactory;
 
     public BukkitPlugin() {
-        this(new MemoryDebugLogger());
+        this(new CombineDebugLogger(new MemoryDebugLogger()));
     }
 
     public BukkitPlugin(DebugLogger debugLogger) {

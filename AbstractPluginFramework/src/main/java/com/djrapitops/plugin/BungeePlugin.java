@@ -8,6 +8,7 @@ import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bungee.BungeeCommand;
 import com.djrapitops.plugin.logging.console.BungeePluginLogger;
 import com.djrapitops.plugin.logging.console.PluginLogger;
+import com.djrapitops.plugin.logging.debug.CombineDebugLogger;
 import com.djrapitops.plugin.logging.debug.DebugLogger;
 import com.djrapitops.plugin.logging.debug.MemoryDebugLogger;
 import com.djrapitops.plugin.logging.error.DefaultErrorHandler;
@@ -34,7 +35,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
     protected boolean reloading;
 
     public BungeePlugin() {
-        this(new MemoryDebugLogger());
+        this(new CombineDebugLogger(new MemoryDebugLogger()));
     }
 
     public BungeePlugin(DebugLogger debugLogger) {

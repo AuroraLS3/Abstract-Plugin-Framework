@@ -12,7 +12,9 @@ public class DebugConsoleLogger implements DebugLogger {
     }
 
     @Override
-    public void log(String... message) {
-        logger.log(L.DEBUG_INFO, message);
+    public void logOn(String channel, String... message) {
+        for (String line : message) {
+            logger.log(L.DEBUG_INFO, "[" + channel + "] " + line);
+        }
     }
 }

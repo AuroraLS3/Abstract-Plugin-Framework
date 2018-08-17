@@ -11,4 +11,11 @@ public class DebugFolderTimeStampFileLogger extends FolderTimeStampFileLogger im
     public DebugFolderTimeStampFileLogger(File logFolder, Supplier<ErrorHandler> errorHandler) {
         super("DebugLog", logFolder, errorHandler);
     }
+
+    @Override
+    public void logOn(String channel, String... message) {
+        for (String line : message) {
+            log("[" + channel + "] " + line);
+        }
+    }
 }
