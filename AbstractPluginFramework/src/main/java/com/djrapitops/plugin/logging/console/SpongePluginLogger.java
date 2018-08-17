@@ -20,7 +20,7 @@ public class SpongePluginLogger implements PluginLogger {
     @Override
     public void log(L level, String... message) {
         if (level == L.DEBUG) {
-            debugLogger.get().log(message);
+            debugLogger.get().logOn(message);
             return;
         } else if (level != L.DEBUG_INFO) {
             log(L.DEBUG, message);
