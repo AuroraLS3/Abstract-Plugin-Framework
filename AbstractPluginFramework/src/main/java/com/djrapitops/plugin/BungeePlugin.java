@@ -119,4 +119,9 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
     public Timings getTimings() {
         return timings;
     }
+
+    @Override
+    public void onReload() {
+        // No implementation, override to be called on reload.
+    }
 }

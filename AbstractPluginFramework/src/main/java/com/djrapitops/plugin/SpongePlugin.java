@@ -134,4 +134,14 @@ public abstract class SpongePlugin implements IPlugin {
     public Timings getTimings() {
         return timings;
     }
+
+    @Override
+    public void onReload() {
+        // No implementation, override to be called on reload.
+    }
+
+    @Override
+    public boolean isReloading() {
+        return reloading;
+    }
 }

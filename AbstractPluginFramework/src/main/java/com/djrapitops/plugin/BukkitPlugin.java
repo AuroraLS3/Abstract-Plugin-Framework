@@ -118,4 +118,9 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     public Timings getTimings() {
         return timings;
     }
+
+    @Override
+    public void onReload() {
+        // No implementation, override to be called on reload.
+    }
 }
