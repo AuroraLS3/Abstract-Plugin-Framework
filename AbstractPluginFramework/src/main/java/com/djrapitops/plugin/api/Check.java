@@ -12,7 +12,7 @@ public class Check {
     private static final boolean BUNGEE_AVAILABLE = isAvailable("net.md_5.bungee.api.plugin.Plugin");
     private static final boolean SPONGE_AVAILABLE = isAvailable("org.spongepowered.api.plugin.Plugin");
 
-    private static boolean isAvailable(String clazz) {
+    public static boolean isAvailable(String clazz) {
         try {
             Class.forName(clazz);
             return true;
