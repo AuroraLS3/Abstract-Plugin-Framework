@@ -7,7 +7,7 @@ import com.djrapitops.plugin.task.RunnableFactory;
 public class ThreadRunnableFactory extends RunnableFactory {
 
     @Override
-    public PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time) {
+    protected PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time) {
         return new ThreadRunnable(name, runnable, time);
     }
 }

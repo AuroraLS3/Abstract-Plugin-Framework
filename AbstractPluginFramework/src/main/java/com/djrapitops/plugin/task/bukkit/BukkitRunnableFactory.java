@@ -14,7 +14,7 @@ public class BukkitRunnableFactory extends RunnableFactory {
     }
 
     @Override
-    public PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time) {
+    protected PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time) {
         return new AbsBukkitRunnable(name, plugin, time) {
             @Override
             public void run() {
