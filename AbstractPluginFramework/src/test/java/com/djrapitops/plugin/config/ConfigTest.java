@@ -1,4 +1,4 @@
-package com.djrapitops.plugin.api.config;
+package com.djrapitops.plugin.config;
 
 import org.junit.After;
 import org.junit.Before;
