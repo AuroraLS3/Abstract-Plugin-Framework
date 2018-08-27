@@ -1,6 +1,7 @@
 package com.djrapitops.plugin.logging.console;
 
 import com.djrapitops.plugin.logging.L;
+import com.djrapitops.plugin.logging.debug.DebugLogger;
 
 public interface PluginLogger {
 
@@ -23,4 +24,6 @@ public interface PluginLogger {
     }
 
     void log(L level, String message, Throwable throwable);
+
+    DebugLogger getDebugLogger();
 }

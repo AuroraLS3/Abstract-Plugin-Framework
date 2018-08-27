@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public class CombineDebugLogger implements DebugLogger {
 
-    private final DebugLogger[] loggers;
+    private DebugLogger[] loggers;
 
     public CombineDebugLogger(DebugLogger... loggers) {
         this.loggers = loggers;
@@ -15,6 +15,10 @@ public class CombineDebugLogger implements DebugLogger {
         for (DebugLogger logger : loggers) {
             logger.logOn(channel, message);
         }
+    }
+
+    public void setDebugLoggers(DebugLogger... loggers) {
+        this.loggers = loggers;
     }
 
     public <T extends DebugLogger> Optional<T> getDebugLogger(Class<T> ofType) {

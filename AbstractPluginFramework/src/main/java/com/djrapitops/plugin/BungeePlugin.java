@@ -27,7 +27,7 @@ import java.io.IOException;
 public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements IPlugin {
 
     protected PluginLogger logger;
-    protected DebugLogger debugLogger;
+    protected CombineDebugLogger debugLogger;
     protected ErrorHandler errorHandler;
     protected final Timings timings;
     protected final RunnableFactory runnableFactory;
@@ -38,10 +38,10 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
         this(new CombineDebugLogger(new MemoryDebugLogger()));
     }
 
-    public BungeePlugin(DebugLogger debugLogger) {
+    public BungeePlugin(CombineDebugLogger debugLogger) {
         this.debugLogger = debugLogger;
         runnableFactory = new BungeeRunnableFactory(this);
-        timings = new Timings();
+        timings = new Timings(debugLogger);
         logger = new BungeePluginLogger(
                 message -> getProxy().getConsole().sendMessage(new TextComponent(message)),
                 this::getDebugLogger,
@@ -106,8 +106,14 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
         return logger;
     }
 
-    private DebugLogger getDebugLogger() {
+    @Override
+    public DebugLogger getDebugLogger() {
         return debugLogger;
+    }
+
+    @Override
+    public void setDebugLoggers(DebugLogger... loggers) {
+        debugLogger.setDebugLoggers(loggers);
     }
 
     @Override

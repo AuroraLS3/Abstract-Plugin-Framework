@@ -27,7 +27,7 @@ import java.io.IOException;
 public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
     protected PluginLogger logger;
-    protected DebugLogger debugLogger;
+    protected CombineDebugLogger debugLogger;
     protected ErrorHandler errorHandler;
     protected final Timings timings;
     protected final RunnableFactory runnableFactory;
@@ -36,10 +36,10 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         this(new CombineDebugLogger(new MemoryDebugLogger()));
     }
 
-    public BukkitPlugin(DebugLogger debugLogger) {
+    public BukkitPlugin(CombineDebugLogger debugLogger) {
         this.debugLogger = debugLogger;
         runnableFactory = new BukkitRunnableFactory(this);
-        timings = new Timings();
+        timings = new Timings(debugLogger);
         logger = new BukkitPluginLogger(
                 message -> getServer().getConsoleSender().sendMessage(message),
                 this::getDebugLogger,
@@ -105,7 +105,8 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
         return logger;
     }
 
-    private DebugLogger getDebugLogger() {
+    @Override
+    public DebugLogger getDebugLogger() {
         return debugLogger;
     }
 
@@ -117,6 +118,11 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     @Override
     public Timings getTimings() {
         return timings;
+    }
+
+    @Override
+    public void setDebugLoggers(DebugLogger... loggers) {
+        debugLogger.setDebugLoggers(loggers);
     }
 
     @Override

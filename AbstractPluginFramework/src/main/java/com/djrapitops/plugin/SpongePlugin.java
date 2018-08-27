@@ -38,7 +38,7 @@ import java.util.Optional;
 public abstract class SpongePlugin implements IPlugin {
 
     protected final PluginLogger logger;
-    protected DebugLogger debugLogger;
+    protected CombineDebugLogger debugLogger;
     protected ErrorHandler errorHandler;
     protected final Timings timings;
     protected final RunnableFactory runnableFactory;
@@ -47,10 +47,10 @@ public abstract class SpongePlugin implements IPlugin {
         this(new CombineDebugLogger(new MemoryDebugLogger()));
     }
 
-    public SpongePlugin(DebugLogger debugLogger) {
+    public SpongePlugin(CombineDebugLogger debugLogger) {
         this.debugLogger = debugLogger;
         runnableFactory = new SpongeRunnableFactory(this);
-        timings = new Timings();
+        timings = new Timings(debugLogger);
         logger = new SpongePluginLogger(this, this::getDebugLogger);
         errorHandler = new DefaultErrorHandler(logger, new File(getDataFolder(), "logs"));
     }
@@ -121,8 +121,14 @@ public abstract class SpongePlugin implements IPlugin {
         return logger;
     }
 
-    private DebugLogger getDebugLogger() {
+    @Override
+    public DebugLogger getDebugLogger() {
         return debugLogger;
+    }
+
+    @Override
+    public void setDebugLoggers(DebugLogger... loggers) {
+        debugLogger.setDebugLoggers(loggers);
     }
 
     @Override

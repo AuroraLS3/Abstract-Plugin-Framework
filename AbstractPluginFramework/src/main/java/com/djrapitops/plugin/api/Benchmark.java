@@ -3,7 +3,6 @@ package com.djrapitops.plugin.api;
 import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
-import com.djrapitops.plugin.utilities.status.Timings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,6 @@ import java.util.Map;
 public class Benchmark {
 
     private static final Map<Class, Map<String, Long>> STARTS = new HashMap<>();
-    private static final Map<Class, Timings> TIMINGS = new HashMap<>();
 
     /**
      * Start a new benchmark.
@@ -64,17 +62,7 @@ public class Benchmark {
 
         pluginBenchStarts.remove(source);
 
-        long bench = stop - start;
-
-        Timings timings = TIMINGS.getOrDefault(plugin, new Timings());
-        timings.markExecution(source, bench);
-        TIMINGS.put(plugin, timings);
-
-        return bench;
-    }
-
-    public static Timings getAverages() {
-        return TIMINGS.getOrDefault(StackUtils.getCallingPlugin(), new Timings());
+        return stop - start;
     }
 
     public static void pluginDisabled(Class c) {

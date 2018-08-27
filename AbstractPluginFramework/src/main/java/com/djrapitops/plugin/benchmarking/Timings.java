@@ -1,5 +1,7 @@
 package com.djrapitops.plugin.benchmarking;
 
+import com.djrapitops.plugin.logging.debug.DebugLogger;
+
 import java.util.*;
 
 /**
@@ -10,10 +12,12 @@ import java.util.*;
 public class Timings {
 
     private final Map<String, List<Benchmark>> results;
-
     private final Map<String, RunningBenchmark> running;
 
-    public Timings() {
+    private final DebugLogger debugLogger;
+
+    public Timings(DebugLogger debugLogger) {
+        this.debugLogger = debugLogger;
         results = new HashMap<>();
         running = new HashMap<>();
     }
@@ -33,6 +37,12 @@ public class Timings {
         benchmarks.add(result);
         results.put(name, benchmarks);
         return Optional.of(result);
+    }
+
+    public Optional<Benchmark> end(String debugChannel, String name) {
+        Optional<Benchmark> benchmark = end(name);
+        benchmark.ifPresent(bench -> debugLogger.logOn(debugChannel, bench.toString()));
+        return benchmark;
     }
 
     public void reset() {

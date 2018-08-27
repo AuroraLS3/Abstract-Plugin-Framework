@@ -23,7 +23,7 @@ public class JavaUtilPluginLogger implements PluginLogger {
     @Override
     public void log(L level, String... message) {
         if (level == L.DEBUG) {
-            debugLogger.get().logOn(message);
+            debugLogger.get().log(message);
             return;
         } else if (level != L.DEBUG_INFO) {
             log(L.DEBUG, message);
@@ -71,5 +71,10 @@ public class JavaUtilPluginLogger implements PluginLogger {
                 logger.log(Level.WARNING, message, throwable);
                 break;
         }
+    }
+
+    @Override
+    public DebugLogger getDebugLogger() {
+        return debugLogger.get();
     }
 }

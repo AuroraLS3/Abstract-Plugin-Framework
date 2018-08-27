@@ -2,7 +2,7 @@ package com.djrapitops.plugin.logging.debug;
 
 public interface DebugLogger {
 
-    default void logOn(String... message) {
+    default void log(String... message) {
         logOn("", message);
     }
 

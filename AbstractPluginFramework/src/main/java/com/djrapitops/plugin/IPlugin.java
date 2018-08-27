@@ -7,6 +7,7 @@ package com.djrapitops.plugin;
 import com.djrapitops.plugin.benchmarking.Timings;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.logging.console.PluginLogger;
+import com.djrapitops.plugin.logging.debug.DebugLogger;
 import com.djrapitops.plugin.logging.error.ErrorHandler;
 import com.djrapitops.plugin.task.RunnableFactory;
 
@@ -22,6 +23,8 @@ public interface IPlugin {
     void onEnable();
 
     void onDisable();
+
+    void setDebugLoggers(DebugLogger... loggers);
 
     void onReload();
 
@@ -40,6 +43,8 @@ public interface IPlugin {
     RunnableFactory getRunnableFactory();
 
     PluginLogger getPluginLogger();
+
+    DebugLogger getDebugLogger();
 
     ErrorHandler getErrorHandler();
 
