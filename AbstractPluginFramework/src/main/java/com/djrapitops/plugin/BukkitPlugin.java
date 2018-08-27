@@ -27,8 +27,8 @@ import java.io.IOException;
 public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
     protected PluginLogger logger;
-    protected CombineDebugLogger debugLogger;
-    protected ErrorHandler errorHandler;
+    protected final CombineDebugLogger debugLogger;
+    protected final DefaultErrorHandler errorHandler;
     protected final Timings timings;
     protected final RunnableFactory runnableFactory;
 
@@ -123,6 +123,11 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     @Override
     public void setDebugLoggers(DebugLogger... loggers) {
         debugLogger.setDebugLoggers(loggers);
+    }
+
+    @Override
+    public void setErrorHandlers(ErrorHandler... errorHandlers) {
+        errorHandler.setErrorHandlers(errorHandlers);
     }
 
     @Override

@@ -38,8 +38,8 @@ import java.util.Optional;
 public abstract class SpongePlugin implements IPlugin {
 
     protected final PluginLogger logger;
-    protected CombineDebugLogger debugLogger;
-    protected ErrorHandler errorHandler;
+    protected final CombineDebugLogger debugLogger;
+    protected final DefaultErrorHandler errorHandler;
     protected final Timings timings;
     protected final RunnableFactory runnableFactory;
 
@@ -134,6 +134,11 @@ public abstract class SpongePlugin implements IPlugin {
     @Override
     public ErrorHandler getErrorHandler() {
         return errorHandler;
+    }
+
+    @Override
+    public void setErrorHandlers(ErrorHandler... errorHandlers) {
+        errorHandler.setErrorHandlers(errorHandlers);
     }
 
     @Override

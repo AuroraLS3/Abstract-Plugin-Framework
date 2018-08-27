@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,19 @@ public class FolderTimeStampFileLogger {
     private String getFileName() {
         String day = new SimpleDateFormat("yyyy_MM_dd").format(System.currentTimeMillis());
         return fileNamePrefix + "-" + day + ".txt";
+    }
+
+    /**
+     * Get the currently used text file if it exists.
+     *
+     * @return Optional of file or empty optional if the file does not exist.
+     */
+    public Optional<File> getCurrentFile() {
+        File file = new File(logFolder, getFileName());
+        if (file.exists()) {
+            return Optional.of(file);
+        }
+        return Optional.empty();
     }
 
 }

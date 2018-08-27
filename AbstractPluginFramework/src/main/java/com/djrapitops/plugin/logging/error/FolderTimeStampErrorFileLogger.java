@@ -6,6 +6,7 @@ import com.djrapitops.plugin.logging.L;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 public class FolderTimeStampErrorFileLogger extends FolderTimeStampFileLogger implements ErrorHandler {
 
@@ -35,5 +36,30 @@ public class FolderTimeStampErrorFileLogger extends FolderTimeStampFileLogger im
             trace.addAll(getStackTrace(cause));
         }
         return trace;
+    }
+
+    public static TreeMap<String, List<String>> splitByError(List<String> lines) {
+        if (lines.isEmpty()) {
+            return new TreeMap<>();
+        }
+        String splittingLine = " caught ";
+
+        TreeMap<String, List<String>> errors = new TreeMap<>();
+        List<String> errorLines = null;
+        String currentError = null;
+        for (String line : lines) {
+            if (line.contains(splittingLine)) {
+                if (errorLines != null) {
+                    errors.put(currentError, errorLines);
+                }
+                currentError = line;
+                errorLines = new ArrayList<>();
+            } else {
+                if (errorLines != null) {
+                    errorLines.add(line);
+                }
+            }
+        }
+        return errors;
     }
 }

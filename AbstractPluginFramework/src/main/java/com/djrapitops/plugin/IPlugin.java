@@ -26,6 +26,8 @@ public interface IPlugin {
 
     void setDebugLoggers(DebugLogger... loggers);
 
+    void setErrorHandlers(ErrorHandler... errorHandlers);
+
     void onReload();
 
     void reloadPlugin(boolean full);

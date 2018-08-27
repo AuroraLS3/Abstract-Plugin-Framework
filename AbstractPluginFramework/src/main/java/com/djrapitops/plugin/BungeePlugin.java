@@ -27,11 +27,11 @@ import java.io.IOException;
 public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements IPlugin {
 
     protected PluginLogger logger;
-    protected CombineDebugLogger debugLogger;
-    protected ErrorHandler errorHandler;
+    protected final CombineDebugLogger debugLogger;
+    protected final DefaultErrorHandler errorHandler;
     protected final Timings timings;
     protected final RunnableFactory runnableFactory;
-    
+
     protected boolean reloading;
 
     public BungeePlugin() {
@@ -119,6 +119,11 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
     @Override
     public ErrorHandler getErrorHandler() {
         return errorHandler;
+    }
+
+    @Override
+    public void setErrorHandlers(ErrorHandler... errorHandlers) {
+        errorHandler.setErrorHandlers(errorHandlers);
     }
 
     @Override
