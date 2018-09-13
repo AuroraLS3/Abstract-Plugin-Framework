@@ -1,5 +1,7 @@
 package com.djrapitops.plugin.api;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Enum containing milli and nano second durations for several times.
  *
@@ -8,14 +10,19 @@ package com.djrapitops.plugin.api;
  */
 public enum TimeAmount {
 
-    MILLISECOND(1L),
-    SECOND(1000L),
-    MINUTE(60L * SECOND.ms()),
-    HOUR(60L * MINUTE.ms()),
-    DAY(24L * HOUR.ms()),
-    WEEK(7L * DAY.ms()),
-    MONTH(30L * DAY.ms()),
-    YEAR(365L * DAY.ms());
+    @Deprecated
+    MILLISECOND(TimeUnit.MILLISECONDS.toMillis(1L)),
+    @Deprecated
+    SECOND(TimeUnit.SECONDS.toMillis(1L)),
+    @Deprecated
+    MINUTE(TimeUnit.MINUTES.toMillis(1L)),
+    @Deprecated
+    HOUR(TimeUnit.HOURS.toMillis(1L)),
+    @Deprecated
+    DAY(TimeUnit.DAYS.toMillis(1L)),
+    WEEK(TimeUnit.DAYS.toMillis(7L)),
+    MONTH(TimeUnit.DAYS.toMillis(30L)),
+    YEAR(TimeUnit.DAYS.toMillis(365L));
 
     private final long ms;
 
@@ -23,23 +30,43 @@ public enum TimeAmount {
         this.ms = ms;
     }
 
-    public long ticks() {
-        return (ms / 1000L) * 20L;
+    public static long toTicks(long amount, TimeUnit unit) {
+        return unit.toMillis(amount) / 50L;
     }
 
+    public static long ticksToMillis(long ticks) {
+        return ticks * 50L;
+    }
+
+    /**
+     * @deprecated use {@code System.currentTimeMillis()} instead.
+     */
+    @Deprecated
+    public static long currentMs() {
+        return System.currentTimeMillis();
+    }
+
+    /**
+     * @deprecated use {@code toTicks(long, TimeUnit)} instead.
+     */
+    @Deprecated
+    public long ticks() {
+        return toTicks(ms, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * @deprecated use {@code TimeUnit#toMillis(long)} instead.
+     */
+    @Deprecated
     public long ms() {
         return ms;
     }
 
+    /**
+     * @deprecated use {@code TimeUnit#toNanos(long)} instead.
+     */
+    @Deprecated
     public long ns() {
-        return ms * 1000000L;
-    }
-
-    public static long ticksToMillis(long ticks) {
-        return ticks * 1000 / 20;
-    }
-
-    public static long currentMs() {
-        return System.currentTimeMillis();
+        return TimeUnit.MILLISECONDS.toNanos(ms);
     }
 }

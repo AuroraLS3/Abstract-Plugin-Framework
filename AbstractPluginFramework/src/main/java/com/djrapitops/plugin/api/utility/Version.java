@@ -1,7 +1,5 @@
 package com.djrapitops.plugin.api.utility;
 
-import com.djrapitops.plugin.api.utility.log.Log;
-import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.StackUtils;
 import com.google.common.base.Objects;
 import com.google.gson.JsonElement;
@@ -104,6 +102,11 @@ public class Version implements Comparable<Version> {
         );
     }
 
+    /**
+     * Get a parsed long of the version string.
+     *
+     * @return Comparable version number.
+     */
     public long getVersionLong() {
         String replaced = versionString.replaceAll("[^0-9]", ".");
         String[] split = replaced.split("\\.");
@@ -111,13 +114,9 @@ public class Version implements Comparable<Version> {
 
         long versionNumber = 0;
         for (int i = 0; i < version.size(); i++) {
-            try {
-                int num = Integer.parseInt(version.get(i));
-                long multiplier = (long) Math.pow(100, 8.0 - i);
-                versionNumber += num * multiplier;
-            } catch (NumberFormatException e) {
-                Log.toLog(FormatUtils.class, e);
-            }
+            int num = Integer.parseInt(version.get(i));
+            long multiplier = (long) Math.pow(100, 8.0 - i);
+            versionNumber += num * multiplier;
         }
         return versionNumber;
     }

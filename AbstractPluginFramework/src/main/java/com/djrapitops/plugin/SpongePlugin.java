@@ -4,8 +4,6 @@
  */
 package com.djrapitops.plugin;
 
-import com.djrapitops.plugin.api.Benchmark;
-import com.djrapitops.plugin.api.utility.log.DebugLog;
 import com.djrapitops.plugin.benchmarking.Timings;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.sponge.SpongeCommand;
@@ -68,8 +66,6 @@ public abstract class SpongePlugin implements IPlugin {
     public void onDisable() {
         Class<? extends IPlugin> pluginClass = getClass();
         StaticHolder.unRegister(pluginClass);
-        Benchmark.pluginDisabled(pluginClass);
-        DebugLog.pluginDisabled(pluginClass);
         runnableFactory.cancelAllKnownTasks();
     }
 

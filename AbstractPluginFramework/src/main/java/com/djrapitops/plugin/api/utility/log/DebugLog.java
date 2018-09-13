@@ -4,6 +4,7 @@
  */
 package com.djrapitops.plugin.api.utility.log;
 
+import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.TimeAmount;
 import com.djrapitops.plugin.utilities.StackUtils;
 
@@ -18,8 +19,6 @@ import java.util.Map;
 @Deprecated
 public class DebugLog {
 
-    private static final Map<Class, Map<String, DebugInfo>> debugInfo = new HashMap<>();
-
     /**
      * Used for logging larger debug complexes.
      *
@@ -27,6 +26,7 @@ public class DebugLog {
      * @param message Single message to add to the debug log.
      * @return full debug complex so far.
      */
+    @Deprecated
     public static DebugInfo logDebug(String task, String message) {
         return getDebug(task).addLine(message, TimeAmount.currentMs());
     }
@@ -52,24 +52,21 @@ public class DebugLog {
      *
      * @param task complex to get
      * @return full debug complex so far.
+     * @deprecated Use new debug logging functionality
      */
+    @Deprecated
     public static DebugInfo getDebug(String task) {
-        Class callingPlugin = StackUtils.getCallingPlugin();
-
-        Map<String, DebugInfo> debugInfos = debugInfo.getOrDefault(callingPlugin, new HashMap<>());
-        DebugInfo info = debugInfos.getOrDefault(task, new DebugInfo(callingPlugin, TimeAmount.currentMs(), task));
-
-        debugInfos.put(task, info);
-        debugInfo.put(callingPlugin, debugInfos);
-        return info;
+        return new DebugInfo(IPlugin.class, System.currentTimeMillis(), task);
     }
 
+    @Deprecated
     public static Map<String, DebugInfo> getAllDebugInfo() {
         return getAllDebugInfo(StackUtils.getCallingPlugin());
     }
 
+    @Deprecated
     public static Map<String, DebugInfo> getAllDebugInfo(Class callingPlugin) {
-        return debugInfo.getOrDefault(callingPlugin, new HashMap<>());
+        return new HashMap<>();
     }
 
     /**
@@ -91,14 +88,12 @@ public class DebugLog {
         getDebug(task).toLog(time);
     }
 
+    @Deprecated
     public static void clearDebug(String task) {
-        Class callingPlugin = StackUtils.getCallingPlugin();
-
-        Map<String, DebugInfo> debugInfos = debugInfo.getOrDefault(callingPlugin, new HashMap<>());
-        debugInfos.remove(task);
     }
 
+    @Deprecated
     public static void pluginDisabled(Class plugin) {
-        debugInfo.remove(plugin);
+
     }
 }

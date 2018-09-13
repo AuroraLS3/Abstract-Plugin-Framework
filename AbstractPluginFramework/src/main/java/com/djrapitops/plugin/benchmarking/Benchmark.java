@@ -1,6 +1,6 @@
 package com.djrapitops.plugin.benchmarking;
 
-import com.djrapitops.plugin.api.TimeAmount;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Object that represents a single benchmark.
@@ -43,11 +43,11 @@ public class Benchmark implements Comparable<Benchmark> {
     }
 
     public String toDurationString() {
-        long millisecond = TimeAmount.MILLISECOND.ns();
-        if (this.ns < millisecond) {
+        long millisecondNs = TimeUnit.MILLISECONDS.toNanos(1);
+        if (this.ns < millisecondNs) {
             return ns + " ns";
         } else {
-            return (ns / millisecond) + " ms";
+            return (ns / millisecondNs) + " ms";
         }
     }
 

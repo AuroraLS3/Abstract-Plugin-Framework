@@ -5,7 +5,6 @@
 package com.djrapitops.plugin.api.utility.log;
 
 import com.djrapitops.plugin.api.TimeAmount;
-import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.Verify;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class DebugInfo {
     }
 
     private String timeStamp(long time) {
-        return FormatUtils.formatTimeStampSecond(time);
+        return Long.toString(time);
     }
 
     public DebugInfo addLine(String line) {
@@ -78,9 +77,7 @@ public class DebugInfo {
     public void toLog(Long time) {
         if (msg.size() > 1) {
             msg.add(getFooter(time));
-            Log.debug(msg);
         }
-        DebugLog.clearDebug(task);
     }
 
     private String getFooter(Long time) {

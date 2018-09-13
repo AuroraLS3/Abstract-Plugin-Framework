@@ -14,7 +14,9 @@ import com.djrapitops.plugin.utilities.StackUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Rsl1122
@@ -22,14 +24,7 @@ import java.util.*;
 @Deprecated
 public class Log extends DebugLog {
 
-    private static final String ERROR_FILE_NAME = "ErrorLog-";
-
-    private static final Map<Class, String> debugMode = new HashMap<>();
-
-    private static final Map<Class, List<String>> debugLogs = new HashMap<>();
-
-    private static final Map<Class, ErrorManager> errorManagers = new HashMap<>();
-
+    @Deprecated
     public static void info(String s) {
         info(s, StackUtils.getCallingPlugin());
     }
@@ -42,6 +37,7 @@ public class Log extends DebugLog {
         instance.getPluginLogger().info(s);
     }
 
+    @Deprecated
     public static void infoColor(String s) {
         infoColor(s, StackUtils.getCallingPlugin());
     }
@@ -54,10 +50,12 @@ public class Log extends DebugLog {
         instance.getPluginLogger().log(L.INFO_COLOR, s);
     }
 
+    @Deprecated
     public static void warn(String s) {
         warn(s, StackUtils.getCallingPlugin());
     }
 
+    @Deprecated
     public static void warn(String s, Class c) {
         IPlugin instance = StaticHolder.getInstance(c);
         if (instance == null) {
@@ -66,6 +64,7 @@ public class Log extends DebugLog {
         instance.getPluginLogger().warn(s);
     }
 
+    @Deprecated
     public static void error(String s) {
         error(s, StackUtils.getCallingPlugin());
     }
@@ -78,26 +77,31 @@ public class Log extends DebugLog {
         instance.getPluginLogger().error(s);
     }
 
+    @Deprecated
     public static void debug(Class callingPlugin, String... lines) {
         debug(Arrays.asList(lines), callingPlugin);
     }
 
+    @Deprecated
     public static void debug(String... lines) {
         debug(Arrays.asList(lines));
     }
 
+    @Deprecated
     public static void debug(List<String> lines) {
         debug(lines, StackUtils.getCallingPlugin());
     }
 
-    static void debug(List<String> lines, Class callingPlugin) {
+    private static void debug(List<String> lines, Class callingPlugin) {
         StaticHolder.getInstance(callingPlugin).getPluginLogger().debug(lines.toArray(new String[0]));
     }
 
+    @Deprecated
     public static void toLog(Class clazz, Throwable e) {
         toLog(clazz.getName(), e);
     }
 
+    @Deprecated
     public static void toLog(String source, Throwable e) {
         Class callingPlugin = StackUtils.getCallingPlugin();
         toLog(source, e, callingPlugin);
@@ -107,8 +111,8 @@ public class Log extends DebugLog {
         StaticHolder.getInstance(callingPlugin).getErrorHandler().log(L.ERROR, callingPlugin, e);
     }
 
+    @Deprecated
     public static void setErrorManager(ErrorManager errorManager) {
-        errorManagers.put(StackUtils.getCallingPlugin(), errorManager);
     }
 
     public static File getLogsFolder() {
@@ -128,21 +132,18 @@ public class Log extends DebugLog {
         return logsFolder;
     }
 
+    @Deprecated
     public static void setDebugMode(String mode) {
-        Class callingPlugin = StackUtils.getCallingPlugin();
-        debugMode.put(callingPlugin, mode);
     }
 
+    @Deprecated
     public static List<String> getDebugLogInMemory() {
-        return getDebugLogInMemory(StackUtils.getCallingPlugin());
+        return new ArrayList<>();
     }
 
-    private static List<String> getDebugLogInMemory(Class callingPlugin) {
-        return debugLogs.getOrDefault(callingPlugin, new ArrayList<>());
-    }
-
+    @Deprecated
     public static String getErrorFileName() {
         String day = new SimpleDateFormat("yyyy_MM_dd").format(TimeAmount.currentMs());
-        return ERROR_FILE_NAME + day + ".txt";
+        return "ErrorLog-" + day + ".txt";
     }
 }

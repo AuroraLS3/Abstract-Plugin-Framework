@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -24,20 +25,23 @@ public class Verify {
      * @param file File to check
      * @return false if null or file.exists()
      */
+    @Deprecated
     public static boolean exists(File file) {
         return notNull(file) && file.exists();
     }
 
+    @Deprecated
     public static File existCheck(File file) throws IllegalArgumentException {
         return existCheck(file, () -> new IllegalArgumentException("File did not exist"));
     }
 
-    public static <K extends Throwable> File existCheck(File file, ErrorLoader<K> exception) throws K {
+    @Deprecated
+    public static <K extends Throwable> File existCheck(File file, Supplier<K> exception) throws K {
         nullCheck(file, exception);
         if (exists(file)) {
             return file;
         }
-        throw exception.load();
+        throw exception.get();
     }
 
     /**
@@ -142,7 +146,6 @@ public class Verify {
             }
         }
         return false;
-
     }
 
     /**
@@ -184,9 +187,9 @@ public class Verify {
         return nullCheck(object, () -> new IllegalArgumentException("Something was null!"));
     }
 
-    public static <T, K extends Throwable> T nullCheck(T object, ErrorLoader<K> exception) throws K {
+    public static <T, K extends Throwable> T nullCheck(T object, Supplier<K> exception) throws K {
         if (!notNull(object)) {
-            throw exception.load();
+            throw exception.get();
         }
         return object;
     }
@@ -199,39 +202,31 @@ public class Verify {
         );
     }
 
-    public static <T, K extends Throwable> T[] nullCheck(ErrorLoader<K> exception, T... objects) throws K {
+    public static <T, K extends Throwable> T[] nullCheck(Supplier<K> exception, T... objects) throws K {
         for (T obj : objects) {
             if (!notNull(obj)) {
-                throw exception.load();
+                throw exception.get();
             }
         }
         return objects;
     }
 
-    public static <K extends Throwable> void checkCondition(boolean condition, ErrorLoader<K> exception) throws K {
+    public static <K extends Throwable> void checkCondition(boolean condition, Supplier<K> exception) throws K {
         if (!condition) {
-            throw exception.load();
+            throw exception.get();
         }
     }
 
-    public interface ErrorLoader<K extends Throwable> {
-        K load();
-    }
-
-    /**
-     * @param permission
-     * @param sender
-     * @return
-     */
+    @Deprecated
     public static boolean hasPermission(String permission, ISender sender) {
         return sender.hasPermission(permission);
     }
 
-    public static <K extends Throwable> void isTrue(boolean value, ErrorLoader<K> exception) throws K {
+    public static <K extends Throwable> void isTrue(boolean value, Supplier<K> exception) throws K {
         checkCondition(value, exception);
     }
 
-    public static <K extends Throwable> void isFalse(boolean value, ErrorLoader<K> exception) throws K {
+    public static <K extends Throwable> void isFalse(boolean value, Supplier<K> exception) throws K {
         checkCondition(!value, exception);
     }
 }

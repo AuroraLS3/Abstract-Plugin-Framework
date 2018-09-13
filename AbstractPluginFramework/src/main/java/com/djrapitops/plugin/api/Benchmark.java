@@ -1,19 +1,15 @@
 package com.djrapitops.plugin.api;
 
-import com.djrapitops.plugin.api.utility.log.DebugLog;
-import com.djrapitops.plugin.utilities.FormatUtils;
+import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.utilities.StackUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Rsl1122
  */
 @Deprecated
 public class Benchmark {
-
-    private static final Map<Class, Map<String, Long>> STARTS = new HashMap<>();
 
     /**
      * Start a new benchmark.
@@ -23,50 +19,53 @@ public class Benchmark {
      */
     public static long start(String source) {
         Class plugin = StackUtils.getCallingPlugin();
-        Map<String, Long> pluginBenchStarts = STARTS.getOrDefault(plugin, new HashMap<>());
-        long time = TimeAmount.currentMs();
-        pluginBenchStarts.put(source, time);
-        STARTS.put(plugin, pluginBenchStarts);
-        return time;
+        StaticHolder.getInstance(plugin).getTimings().start(source);
+        return System.currentTimeMillis();
     }
 
+    @Deprecated
     public static void start(String logDebug, String source) {
-        DebugLog.logDebug(logDebug, startAndFormat(source));
+        start(source);
     }
 
+    @Deprecated
     public static String startAndFormat(String source) {
         start(source);
         return "started   " + source;
     }
 
+    @Deprecated
     public static String stopAndFormat(String source) {
-        return FormatUtils.formatBench(source, stop(source));
+        StringBuilder b = new StringBuilder();
+        b.append(stop(source)).append(" ms");
+        while (b.length() < 10) {
+            b.append(" ");
+        }
+        b.append(source);
+        return b.toString();
     }
 
+    @Deprecated
     public static long stop(String logDebug, String source) {
-        long time = stop(source);
-        DebugLog.logDebug(logDebug, FormatUtils.formatBench(source, time));
-        return time;
+        Class plugin = StackUtils.getCallingPlugin();
+        return TimeUnit.NANOSECONDS.toMillis(
+                StaticHolder.getInstance(plugin).getTimings().end(logDebug, source)
+                        .map(com.djrapitops.plugin.benchmarking.Benchmark::getNs)
+                        .orElse(0L)
+        );
     }
 
     public static long stop(String source) {
         Class plugin = StackUtils.getCallingPlugin();
-        long stop = TimeAmount.currentMs();
-
-        Map<String, Long> pluginBenchStarts = STARTS.getOrDefault(plugin, new HashMap<>());
-        Long start = pluginBenchStarts.get(source);
-
-        if (start == null) {
-            return -1;
-        }
-
-        pluginBenchStarts.remove(source);
-
-        return stop - start;
+        return TimeUnit.NANOSECONDS.toMillis(
+                StaticHolder.getInstance(plugin).getTimings().end(source)
+                        .map(com.djrapitops.plugin.benchmarking.Benchmark::getNs)
+                        .orElse(0L)
+        );
     }
 
+    @Deprecated
     public static void pluginDisabled(Class c) {
-        STARTS.remove(c);
     }
 
     /**

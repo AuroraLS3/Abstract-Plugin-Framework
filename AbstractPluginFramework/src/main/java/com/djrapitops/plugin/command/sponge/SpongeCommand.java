@@ -1,7 +1,6 @@
 package com.djrapitops.plugin.command.sponge;
 
 import com.djrapitops.plugin.command.CommandNode;
-import com.djrapitops.plugin.utilities.FormatUtils;
 import com.djrapitops.plugin.utilities.Verify;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandResult;
@@ -64,15 +63,15 @@ public class SpongeCommand implements CommandCallable {
     public Optional<Text> getHelp(CommandSource source) {
         String[] inDepthHelp = command.getInDepthHelp();
         if (inDepthHelp != null) {
-            return Optional.of(Text.of(FormatUtils.collectionToStringNoBrackets(
-                    Arrays.asList(inDepthHelp)
-            )));
+            String helpString = Arrays.toString(inDepthHelp);
+            return Optional.of(Text.of(helpString.substring(1, helpString.length() - 1)));
         }
         return Optional.empty();
     }
 
     @Override
     public Text getUsage(CommandSource source) {
-        return Text.of(FormatUtils.collectionToStringNoBrackets(Arrays.asList(command.getArguments())));
+        String usageString = Arrays.toString(command.getArguments());
+        return Text.of(usageString.substring(1, usageString.length() - 1));
     }
 }
