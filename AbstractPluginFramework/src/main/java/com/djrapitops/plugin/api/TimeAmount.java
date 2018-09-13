@@ -38,6 +38,10 @@ public enum TimeAmount {
         return ticks * 50L;
     }
 
+    public long toMillis(long amount) {
+        return ms * amount;
+    }
+
     /**
      * @deprecated use {@code System.currentTimeMillis()} instead.
      */
