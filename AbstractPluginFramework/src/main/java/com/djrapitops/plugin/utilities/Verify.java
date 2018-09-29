@@ -5,7 +5,7 @@
  */
 package com.djrapitops.plugin.utilities;
 
-import com.djrapitops.plugin.command.ISender;
+import com.djrapitops.plugin.command.Sender;
 
 import java.io.File;
 import java.util.Arrays;
@@ -218,7 +218,7 @@ public class Verify {
     }
 
     @Deprecated
-    public static boolean hasPermission(String permission, ISender sender) {
+    public static boolean hasPermission(String permission, Sender sender) {
         return sender.hasPermission(permission);
     }
 

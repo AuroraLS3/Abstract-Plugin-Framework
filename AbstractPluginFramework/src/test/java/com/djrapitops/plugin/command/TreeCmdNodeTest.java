@@ -27,7 +27,7 @@ public class TreeCmdNodeTest {
 
         CommandNode test = new CommandNode("one|alias", "", CommandType.ALL) {
             @Override
-            public void onCommand(ISender sender, String commandLabel, String[] args) {
+            public void onCommand(Sender sender, String commandLabel, String[] args) {
                 calls.add(true);
             }
         };

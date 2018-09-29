@@ -1,6 +1,6 @@
 package com.djrapitops.plugin.command.bungee;
 
-import com.djrapitops.plugin.command.ISender;
+import com.djrapitops.plugin.command.Sender;
 import com.djrapitops.plugin.command.SenderType;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -10,12 +10,12 @@ import net.md_5.bungee.api.connection.ConnectedPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
- * Class that wraps bungee's CommandSender into an ISender.
+ * Class that wraps bungee's CommandSender into a Sender.
  *
  * @author Rsl1122
  * @since 2.0.0
  */
-public class BungeeCMDSender implements ISender {
+public class BungeeCMDSender implements Sender {
 
     private final CommandSender cs;
 

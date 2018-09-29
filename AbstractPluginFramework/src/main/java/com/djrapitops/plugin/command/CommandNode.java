@@ -47,7 +47,7 @@ public abstract class CommandNode {
         setShortHelp(shortHelp);
     }
 
-    public abstract void onCommand(ISender sender, String commandLabel, String[] args);
+    public abstract void onCommand(Sender sender, String commandLabel, String[] args);
 
     public String getName() {
         return getAliases()[0];

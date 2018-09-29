@@ -1,7 +1,7 @@
 package com.djrapitops.plugin.command;
 
 /**
- * Enum containing different ISender types.
+ * Enum containing different Sender types.
  *
  * PLAYER: Bukkit's Player, Bungee's ConnectedPlayer.
  * PROXY_PLAYER: Player connected to Bungee but not in lobby.

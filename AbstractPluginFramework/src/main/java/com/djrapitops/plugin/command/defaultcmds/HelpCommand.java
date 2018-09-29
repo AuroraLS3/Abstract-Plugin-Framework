@@ -17,7 +17,7 @@ public class HelpCommand extends CommandNode {
     }
 
     @Override
-    public void onCommand(ISender sender, String commandLabel, String[] args) {
+    public void onCommand(Sender sender, String commandLabel, String[] args) {
         ColorScheme colorScheme = treeCmdNode.getColorScheme();
         String cMain = colorScheme.getMainColor();
         String cSec = colorScheme.getSecondaryColor();

@@ -1,7 +1,7 @@
 package com.djrapitops.plugin.command.bukkit;
 
 import com.djrapitops.plugin.command.CommandUtils;
-import com.djrapitops.plugin.command.ISender;
+import com.djrapitops.plugin.command.Sender;
 import com.djrapitops.plugin.command.SenderType;
 import org.bukkit.ChatColor;
 import org.bukkit.block.CommandBlock;
@@ -9,14 +9,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Class that wraps bukkit's CommandSender to an ISender.
+ * Class that wraps bukkit's CommandSender to a Sender.
  * <p>
  * Represents a command sender of Bukkit server.
  *
  * @author Rsl1122
  * @since 2.0.0
  */
-public class BukkitCMDSender implements ISender {
+public class BukkitCMDSender implements Sender {
 
     private final CommandSender cs;
 

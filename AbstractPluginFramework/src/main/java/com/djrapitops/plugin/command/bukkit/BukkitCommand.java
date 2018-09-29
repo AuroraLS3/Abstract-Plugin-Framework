@@ -1,7 +1,7 @@
 package com.djrapitops.plugin.command.bukkit;
 
 import com.djrapitops.plugin.command.CommandNode;
-import com.djrapitops.plugin.command.ISender;
+import com.djrapitops.plugin.command.Sender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,7 +23,7 @@ public class BukkitCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        ISender iSender = new BukkitCMDSender(sender);
+        Sender iSender = new BukkitCMDSender(sender);
         commandNode.onCommand(iSender, label, args);
         return true;
     }

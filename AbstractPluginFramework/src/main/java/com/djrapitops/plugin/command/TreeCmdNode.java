@@ -64,7 +64,7 @@ public class TreeCmdNode extends CommandNode {
     }
 
     @Override
-    public void onCommand(ISender sender, String commandLabel, String[] args) {
+    public void onCommand(Sender sender, String commandLabel, String[] args) {
         try {
             if (args.length == 0) {
                 helpCommand.onCommand(sender, commandLabel, args);

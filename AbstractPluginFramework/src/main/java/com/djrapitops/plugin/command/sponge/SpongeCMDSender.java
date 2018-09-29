@@ -1,6 +1,6 @@
 package com.djrapitops.plugin.command.sponge;
 
-import com.djrapitops.plugin.command.ISender;
+import com.djrapitops.plugin.command.Sender;
 import com.djrapitops.plugin.command.SenderType;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.source.CommandBlockSource;
@@ -16,11 +16,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * ISender implementation for Sponge CommandSource.
+ * Sender implementation for Sponge CommandSource.
  *
  * @author Rsl1122
  */
-public class SpongeCMDSender implements ISender {
+public class SpongeCMDSender implements Sender {
 
     private final CommandSource commandSource;
 

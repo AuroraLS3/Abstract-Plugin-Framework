@@ -139,8 +139,8 @@ public class ConfigTest {
     public void tDouble() {
         double aDouble = config.getDouble("Double");
         double bDouble = config.getDouble("Double2");
-        assertTrue(aDouble + "", 0.043 == aDouble);
-        assertTrue(bDouble + "", 0.043 == bDouble);
+        assertEquals(aDouble + "", 0.043, aDouble, 0.0);
+        assertEquals(bDouble + "", 0.043, bDouble, 0.0);
     }
 
     @Test

@@ -1,9 +1,9 @@
 package mock;
 
-import com.djrapitops.plugin.command.ISender;
+import com.djrapitops.plugin.command.Sender;
 import com.djrapitops.plugin.command.SenderType;
 
-public class MockCMDSender implements ISender {
+public class MockCMDSender implements Sender {
 
     private String lastMsg;
 

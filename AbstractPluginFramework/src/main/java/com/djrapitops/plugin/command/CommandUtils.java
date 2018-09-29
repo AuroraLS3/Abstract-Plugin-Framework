@@ -8,19 +8,19 @@ package com.djrapitops.plugin.command;
  */
 public class CommandUtils {
 
-    public static boolean isPlayer(ISender sender) {
+    public static boolean isPlayer(Sender sender) {
         return !isConsole(sender) && !isCommandBlock(sender);
     }
 
-    public static boolean isCommandBlock(ISender sender) {
+    public static boolean isCommandBlock(Sender sender) {
         return sender.getSenderType() == SenderType.CMD_BLOCK;
     }
 
-    public static boolean isConsole(ISender sender) {
+    public static boolean isConsole(Sender sender) {
         return sender.getSenderType() == SenderType.CONSOLE;
     }
 
-    public static boolean senderHasEntity(ISender sender) {
+    public static boolean senderHasEntity(Sender sender) {
         return isPlayer(sender);
     }
 }
