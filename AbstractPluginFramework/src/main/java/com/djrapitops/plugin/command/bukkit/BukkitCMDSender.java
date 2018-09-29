@@ -20,7 +20,7 @@ public class BukkitCMDSender implements Sender {
 
     private final CommandSender cs;
 
-    public BukkitCMDSender(CommandSender cs) {
+    BukkitCMDSender(CommandSender cs) {
         this.cs = cs;
     }
 
@@ -55,10 +55,10 @@ public class BukkitCMDSender implements Sender {
     }
 
     @Override
-    public void sendLink(String pretext, String linkMsg, String url) {
+    public void sendLink(String pretext, String linkText, String url) {
         try {
             if (CommandUtils.isPlayer(this)) {
-                LinkSender.send(cs, pretext, linkMsg, url);
+                LinkSender.send(cs, pretext, linkText, url);
                 return;
             }
         } catch (NoClassDefFoundError ignore) {
@@ -68,8 +68,8 @@ public class BukkitCMDSender implements Sender {
     }
 
     @Override
-    public void sendLink(String message, String url) {
-        sendLink("", message, url);
+    public void sendLink(String linkText, String url) {
+        sendLink("", linkText, url);
     }
 
     @Override

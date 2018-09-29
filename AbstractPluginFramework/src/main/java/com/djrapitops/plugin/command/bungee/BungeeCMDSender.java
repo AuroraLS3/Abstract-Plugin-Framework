@@ -19,7 +19,7 @@ public class BungeeCMDSender implements Sender {
 
     private final CommandSender cs;
 
-    public BungeeCMDSender(CommandSender cs) {
+    BungeeCMDSender(CommandSender cs) {
         this.cs = cs;
     }
 
@@ -35,9 +35,9 @@ public class BungeeCMDSender implements Sender {
     }
 
     @Override
-    public void sendLink(String pretext, String linkMsg, String url) {
+    public void sendLink(String pretext, String linkText, String url) {
         TextComponent message = new TextComponent(pretext);
-        TextComponent link = new TextComponent(linkMsg);
+        TextComponent link = new TextComponent(linkText);
         link.setUnderlined(true);
         message.addExtra(link);
         message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
@@ -45,8 +45,8 @@ public class BungeeCMDSender implements Sender {
     }
 
     @Override
-    public void sendLink(String linkMsg, String url) {
-        sendLink("", linkMsg, url);
+    public void sendLink(String linkText, String url) {
+        sendLink("", linkText, url);
     }
 
     @Override

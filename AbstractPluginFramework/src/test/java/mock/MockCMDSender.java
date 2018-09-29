@@ -22,7 +22,7 @@ public class MockCMDSender implements Sender {
     }
 
     @Override
-    public void sendLink(String pretext, String message, String url) {
+    public void sendLink(String pretext, String linkText, String url) {
 
     }
 

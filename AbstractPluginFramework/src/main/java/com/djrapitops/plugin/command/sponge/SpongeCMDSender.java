@@ -24,7 +24,7 @@ public class SpongeCMDSender implements Sender {
 
     private final CommandSource commandSource;
 
-    public SpongeCMDSender(CommandSource commandSource) {
+    SpongeCMDSender(CommandSource commandSource) {
         this.commandSource = commandSource;
     }
 
@@ -41,26 +41,26 @@ public class SpongeCMDSender implements Sender {
     }
 
     @Override
-    public void sendLink(String pretext, String message, String url) {
+    public void sendLink(String pretext, String linkText, String url) {
         try {
             commandSource.sendMessage(
                     Text.join(
                             Text.of(pretext),
-                            Text.builder(message).style(TextStyles.UNDERLINE).onClick(TextActions.openUrl(new URL(url))).build()
+                            Text.builder(linkText).style(TextStyles.UNDERLINE).onClick(TextActions.openUrl(new URL(url))).build()
                     ));
         } catch (MalformedURLException e) {
-            sendLink(message, url, url);
+            sendLink(linkText, url, url);
         }
     }
 
     @Override
-    public void sendLink(String message, String url) {
+    public void sendLink(String linkText, String url) {
         try {
             commandSource.sendMessage(
-                    Text.builder(message).onClick(TextActions.openUrl(new URL(url))).build()
+                    Text.builder(linkText).onClick(TextActions.openUrl(new URL(url))).build()
             );
         } catch (MalformedURLException e) {
-            sendLink(message, url, url);
+            sendLink(linkText, url, url);
         }
     }
 
