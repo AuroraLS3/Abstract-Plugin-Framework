@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Object that represents a single benchmark.
+ * <p>
+ * To obtain Benchmark objects, use {@link Timings}.
  *
  * @author Rsl1122
  */
@@ -14,25 +16,32 @@ public class Benchmark implements Comparable<Benchmark> {
 
     private String name;
 
-    public Benchmark(long ns, long estimatedMemoryUse) {
+    Benchmark(long ns, long estimatedMemoryUse) {
         this.ns = ns;
         this.estimatedMemoryUse = estimatedMemoryUse;
     }
 
-    public Benchmark(String name, long ns, long estimatedMemoryUse) {
+    Benchmark(String name, long ns, long estimatedMemoryUse) {
         this.name = name;
         this.ns = ns;
         this.estimatedMemoryUse = estimatedMemoryUse;
     }
 
+    /**
+     * Get name of the Benchmark.
+     *
+     * @return Name defined in {@link Timings} that create the object.
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    /**
+     * Get how many nanoseconds the benchmark lasted.
+     *
+     * @return Difference in nanos between Timings#start and Timings#end.
+     * @see Timings
+     */
     public long getNs() {
         return ns;
     }
@@ -42,6 +51,11 @@ public class Benchmark implements Comparable<Benchmark> {
         return this.name.toLowerCase().compareTo(o.name.toLowerCase());
     }
 
+    /**
+     * Get a text representation of the duration.
+     *
+     * @return "x ns" or "x ms" depending on duration.
+     */
     public String toDurationString() {
         long millisecondNs = TimeUnit.MILLISECONDS.toNanos(1);
         if (this.ns < millisecondNs) {
@@ -51,7 +65,12 @@ public class Benchmark implements Comparable<Benchmark> {
         }
     }
 
-    private String toMemoryString() {
+    /**
+     * Get a text representation of the change in memory usage.
+     *
+     * @return " 0 B" "+/-x B", "+/-x KB" or "+/-x MB".
+     */
+    public String toMemoryString() {
         long usedKilobytes = estimatedMemoryUse / 1000L;
         if (estimatedMemoryUse == 0) {
             return " 0 B";
@@ -93,7 +112,7 @@ public class Benchmark implements Comparable<Benchmark> {
     /**
      * Estimate of memory difference between start and end in bytes.
      *
-     * @return bytes of memory difference.
+     * @return bytes (Difference)
      */
     public long getUsedMemory() {
         return estimatedMemoryUse;
