@@ -52,15 +52,34 @@ public class Benchmark implements Comparable<Benchmark> {
     }
 
     private String toMemoryString() {
-        long usedMegabytes = estimatedMemoryUse / 1000000L;
-        return "~" + usedMegabytes + " MB";
+        long usedKilobytes = estimatedMemoryUse / 1000L;
+        if (estimatedMemoryUse == 0) {
+            return " 0 B";
+        }
+        if (estimatedMemoryUse > 0) {
+            if (estimatedMemoryUse < 1000) {
+                return "+" + estimatedMemoryUse + " B";
+            }
+            if (usedKilobytes > 1000) {
+                return "+" + (usedKilobytes / 1000L) + " MB";
+            }
+            return "+" + usedKilobytes + " KB";
+        } else {
+            if (estimatedMemoryUse > -1000) {
+                return estimatedMemoryUse + " B";
+            }
+            if (usedKilobytes < -1000) {
+                return (usedKilobytes / 1000L) + " MB";
+            }
+            return usedKilobytes + " KB";
+        }
     }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append(toDurationString());
-        while (b.length() < 10) {
+        while (b.length() < 11) {
             b.append(" ");
         }
         b.append(toMemoryString());

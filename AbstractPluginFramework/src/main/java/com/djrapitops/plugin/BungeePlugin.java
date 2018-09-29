@@ -49,14 +49,8 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
     }
 
     @Override
-    public void onEnable() {
-        StaticHolder.register(this);
-    }
-
-    @Override
     public void onDisable() {
         Class<? extends IPlugin> pluginClass = getClass();
-        StaticHolder.unRegister(pluginClass);
         runnableFactory.cancelAllKnownTasks();
     }
 
@@ -67,15 +61,21 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
 
     public void registerListener(Listener... listeners) {
         for (Listener listener : listeners) {
+            if (listener == null) {
+                logger.warn("Attempted to register a null listener!");
+                continue;
+            }
             getProxy().getPluginManager().registerListener(this, listener);
-            StaticHolder.saveInstance(listener.getClass(), getClass());
         }
     }
 
     @Override
     public void registerCommand(String name, CommandNode command) {
+        if (command == null) {
+            logger.warn("Attempted to register a null command for name '" + name + "'!");
+            return;
+        }
         getProxy().getPluginManager().registerCommand(this, new BungeeCommand(name, command));
-        PluginCommon.saveCommandInstances(command, this.getClass());
     }
 
     protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {

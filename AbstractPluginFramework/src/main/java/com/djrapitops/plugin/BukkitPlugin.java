@@ -49,28 +49,28 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     protected boolean reloading;
 
     @Override
-    public void onEnable() {
-        StaticHolder.register(this);
-    }
-
-    @Override
     public void onDisable() {
         Class<? extends IPlugin> pluginClass = getClass();
-        StaticHolder.unRegister(pluginClass);
         runnableFactory.cancelAllKnownTasks();
     }
 
     public void registerListener(Listener... listeners) {
         for (Listener listener : listeners) {
+            if (listener == null) {
+                logger.warn("Attempted to register a null listener!");
+                continue;
+            }
             getServer().getPluginManager().registerEvents(listener, this);
-            StaticHolder.saveInstance(listener.getClass(), getClass());
         }
     }
 
     @Override
     public void registerCommand(String name, CommandNode command) {
+        if (command == null) {
+            logger.warn("Attempted to register a null command for name '" + name + "'!");
+            return;
+        }
         getCommand(name).setExecutor(new BukkitCommand(command));
-        PluginCommon.saveCommandInstances(command, this.getClass());
     }
 
     protected boolean isNewVersionAvailable(String versionStringUrl) throws IOException {

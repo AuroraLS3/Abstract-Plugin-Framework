@@ -58,14 +58,8 @@ public abstract class SpongePlugin implements IPlugin {
     private final Map<String, CommandMapping> commandMappings = new HashMap<>();
 
     @Override
-    public void onEnable() {
-        StaticHolder.register(this);
-    }
-
-    @Override
     public void onDisable() {
         Class<? extends IPlugin> pluginClass = getClass();
-        StaticHolder.unRegister(pluginClass);
         runnableFactory.cancelAllKnownTasks();
     }
 
@@ -83,6 +77,11 @@ public abstract class SpongePlugin implements IPlugin {
 
     @Override
     public void registerCommand(String name, CommandNode command) {
+        if (command == null) {
+            logger.warn("Attempted to register a null command for name '" + name + "'!");
+            return;
+        }
+
         CommandManager commandManager = Sponge.getCommandManager();
 
         CommandMapping registered = commandMappings.get(name);
@@ -92,13 +91,15 @@ public abstract class SpongePlugin implements IPlugin {
 
         Optional<CommandMapping> register = commandManager.register(this, new SpongeCommand(command), name);
         register.ifPresent(commandMapping -> commandMappings.put(name, commandMapping));
-        PluginCommon.saveCommandInstances(command, this.getClass());
     }
 
     public void registerListener(Object... listeners) {
         for (Object listener : listeners) {
+            if (listener == null) {
+                logger.warn("Attempted to register a null listener!");
+                continue;
+            }
             Sponge.getEventManager().registerListeners(this, listener);
-            StaticHolder.saveInstance(listener.getClass(), getClass());
         }
     }
 

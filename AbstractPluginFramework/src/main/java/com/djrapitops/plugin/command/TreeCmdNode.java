@@ -18,7 +18,7 @@ public class TreeCmdNode extends CommandNode {
     private ColorScheme colorScheme;
 
     private String defaultCommand = "help";
-    private CommandNode[][] nodeGroups;
+    private CommandNode[][] nodeGroups = new CommandNode[][]{};
 
     public TreeCmdNode(String name, String permission, CommandType commandType, CommandNode parent) {
         super(name, permission, commandType);
