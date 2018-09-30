@@ -20,15 +20,30 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Config class for config management.
+ * In-memory configuration object for managing .yml like configuration files.
+ * <p>
+ * This config model does not comply with Bukkit or Bungee .yml parsing as it contains features that are not present,
+ * like defining values for parent nodes.
+ * <p>
+ * Paths are separated with dots, eg: 'Parent.Child'.
+ * <p>
+ * If a non-existing node is attempted to be read, it will be initialized with an empty value.
  *
  * @author Rsl1122
+ * @see ConfigNode for variable accessing methods.
  */
 public class Config extends ConfigNode {
 
     private static final String APF_NEWLINE = " APF_NEWLINE ";
     private String absolutePath;
 
+    /**
+     * Create a Config by reading a file.
+     * <p>
+     * If the file does not exist, a new file is created at its path.
+     *
+     * @param file File to read/create the config from.
+     */
     public Config(File file) {
         super("", null, "");
         File folder = file.getParentFile();
@@ -45,6 +60,14 @@ public class Config extends ConfigNode {
         }
     }
 
+    /**
+     * Create a config by reading a file and setting defaults.
+     * <p>
+     * If the file does not exist, a new file is created at its path.
+     *
+     * @param file     File to read/create the config from.
+     * @param defaults lines of a read config file - indentation is required.
+     */
     public Config(File file, List<String> defaults) {
         this(file);
         copyDefaults(defaults);
@@ -60,6 +83,13 @@ public class Config extends ConfigNode {
         return absolutePath != null ? new File(absolutePath) : null;
     }
 
+    /**
+     * Read the values from the file defined at construction.
+     * <p>
+     * Replaces values in memory.
+     *
+     * @throws IOException If the file can not be read.
+     */
     public void read() throws IOException {
         File file = getFile();
         Verify.isTrue(file != null, () -> new FileNotFoundException("File was null"));
@@ -70,6 +100,14 @@ public class Config extends ConfigNode {
         processLines(readLines(file.toPath()), true);
     }
 
+    /**
+     * Copies defaults from an existing file.
+     * <p>
+     * Changes are not written to the config until {@link Config#save()} is called.
+     *
+     * @param from File to read config values from.
+     * @throws IOException If the file can not be read.
+     */
     public void copyDefaults(File from) throws IOException {
         copyDefaults(readLines(from.toPath()));
     }
@@ -80,6 +118,13 @@ public class Config extends ConfigNode {
         }
     }
 
+    /**
+     * Copies defaults from existing lines, indentation is required.
+     * <p>
+     * Changes are not written to the config until {@link Config#save()} is called.
+     *
+     * @param lines Lines read from a file.
+     */
     public void copyDefaults(List<String> lines) {
         copyDefaults(new Config(lines));
     }
@@ -162,6 +207,12 @@ public class Config extends ConfigNode {
         }
     }
 
+    /**
+     * Save the config values to the file defined during construction.
+     *
+     * @throws IOException           If the file can not be written.
+     * @throws IllegalStateException If the file path is null.
+     */
     @Override
     public void save() throws IOException {
         File file = getFile();
