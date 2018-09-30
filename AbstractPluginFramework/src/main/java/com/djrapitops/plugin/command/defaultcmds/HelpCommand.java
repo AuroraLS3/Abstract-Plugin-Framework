@@ -3,7 +3,11 @@ package com.djrapitops.plugin.command.defaultcmds;
 import com.djrapitops.plugin.command.*;
 
 /**
- * Default command for any TreeCmdNode.
+ * CommandNode that displays Help for the command.
+ *
+ * Lists each sub {@link CommandNode} of a {@link TreeCmdNode} that the {@link Sender} has permission for.
+ *
+ * If the {@link Sender} does not have permission, the list is empty.
  *
  * @author Rsl1122
  */
@@ -26,7 +30,7 @@ public class HelpCommand extends CommandNode {
         sender.sendMessage("  ");
 
         for (CommandNode[] commandNodes : treeCmdNode.getNodeGroups()) {
-            int desiredLength = getIndent(commandNodes);
+//            int desiredLength = getIndent(commandNodes);
 
             for (CommandNode node : commandNodes) {
                 if (node == null) {

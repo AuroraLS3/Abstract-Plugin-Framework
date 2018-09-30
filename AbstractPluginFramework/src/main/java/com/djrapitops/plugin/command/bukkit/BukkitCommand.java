@@ -7,8 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
- * Class that is used to wrap a CommandNode implementation into executable
- * command by Bukkit.
+ * {@link CommandNode} wrapper for Bukkit implementation.
  *
  * @author Rsl1122
  * @since 2.0.0

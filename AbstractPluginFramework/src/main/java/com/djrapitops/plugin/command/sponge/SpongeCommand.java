@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * CommandNode Wrapper for Sponge compatibility.
+ * {@link CommandNode} wrapper for Sponge compatibility.
  *
  * @author Rsl1122
  */

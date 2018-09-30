@@ -1,7 +1,7 @@
 package com.djrapitops.plugin.command;
 
 /**
- * Interface that represents a CommandSender for any command.
+ * Interface that represents the entity that executed the request for a command.
  *
  * @author Rsl1122
  * @since 2.0.0

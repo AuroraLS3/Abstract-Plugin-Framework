@@ -7,9 +7,17 @@ import com.djrapitops.plugin.utilities.Verify;
 import java.util.Arrays;
 
 /**
- * Represents a command with sub-commands.
+ * {@link CommandNode} with sub-commands.
+ * <p>
+ * Sub commands are defined with {@link TreeCmdNode#setNodeGroups(CommandNode[]...)}.
+ * Each TreeCmdNode is initialized with a {@link HelpCommand} that provides listing of sub-commands.
+ * It is recommended to use {@link TreeCmdNode#setColorScheme(ColorScheme)} to apply chat colors to the help listings.
+ * <p>
+ * It is possible to set a command to be executed with unknown arguments by using {@link TreeCmdNode#setDefaultCommand(String)}.
+ * If this is not set 'help' command will be executed when first argument is not a known sub-command.
  *
  * @author Rsl1122
+ * @see ColorScheme for Color instructions.
  */
 public class TreeCmdNode extends CommandNode {
 
@@ -20,12 +28,28 @@ public class TreeCmdNode extends CommandNode {
     private String defaultCommand = "help";
     private CommandNode[][] nodeGroups = new CommandNode[][]{};
 
+    /**
+     * Create a new TreeCmdNode.
+     *
+     * @param name        Name of the {@link CommandNode}.
+     * @param permission  Permission of the {@link CommandNode}.
+     * @param commandType {@link CommandType} of the {@link CommandNode}.
+     * @param parent      Parent node of this command, {@code null} if this command is a root {@link CommandNode}.
+     */
     public TreeCmdNode(String name, String permission, CommandType commandType, CommandNode parent) {
         super(name, permission, commandType);
         helpCommand = new HelpCommand(this);
         this.parent = parent;
     }
 
+    /**
+     * Get the in game representation for calling this command.
+     * <p>
+     * If a parent is set, its name is appended before this node.
+     * Traversal is performed up the command tree.
+     *
+     * @return For example /command treecmdnode or /treecmdnode
+     */
     public String getCommandString() {
         StringBuilder builder = new StringBuilder();
         builder.insert(0, getName());
@@ -41,23 +65,54 @@ public class TreeCmdNode extends CommandNode {
         return builder.insert(0, "/").toString();
     }
 
+    /**
+     * Retrieve groupings of {@link CommandNode} sub-commands of this command.
+     *
+     * @return Array that consists of grouped {@link CommandNode} arrays.
+     */
     public CommandNode[][] getNodeGroups() {
         return nodeGroups;
     }
 
+    /**
+     * Set {@link CommandNode} sub-commands of this command.
+     * <p>
+     * Each array is regarded as a sub-command group, that is displayed in its own block on {@link HelpCommand}.
+     *
+     * @param nodeGroups {@link CommandNode}s grouped by their use, for easier reading of Help.
+     */
     public void setNodeGroups(CommandNode[]... nodeGroups) {
         Verify.nullCheck(nodeGroups);
         this.nodeGroups = nodeGroups;
     }
 
+    /**
+     * Get the {@link ColorScheme} appropriate for this command.
+     *
+     * @return a defined color scheme or all white if not defined.
+     */
     public ColorScheme getColorScheme() {
         return colorScheme != null ? colorScheme : new ColorScheme("§f", "§f", "§f");
     }
 
+    /**
+     * Define the {@link ColorScheme} appropriate for this command.
+     *
+     * @param colorScheme a color scheme.
+     * @see ColorScheme for Color instructions.
+     */
     public void setColorScheme(ColorScheme colorScheme) {
         this.colorScheme = colorScheme;
     }
 
+    /**
+     * Set the command to execute when unknown sub-command is attempted to be used.
+     * <p>
+     * This command will be executed when first given argument is not a known sub-command.
+     * If this is not set 'help' will be executed.
+     *
+     * @param defaultCommand Command to execute, eg. 'find', 'search'
+     */
     public void setDefaultCommand(String defaultCommand) {
         Verify.nullCheck(defaultCommand);
         this.defaultCommand = defaultCommand;
@@ -72,14 +127,15 @@ public class TreeCmdNode extends CommandNode {
             }
             CommandNode command = getCommand(args);
 
+            // Permission Check
             boolean console = !CommandUtils.isPlayer(sender);
             String permission = command.getPermission();
             if (!"".equals(permission) && !sender.hasPermission(permission)) {
                 throw new IllegalAccessException("You do not have the required permission.");
             }
 
+            // Argument Check
             boolean isDefaultCommandWithArgs = command.getName().equals(defaultCommand) && args.length <= 1;
-
             CommandType cType = command.getCommandType();
             if (!isDefaultCommandWithArgs
                     && ((cType == CommandType.ALL_WITH_ARGS && args.length < 2)
@@ -87,9 +143,12 @@ public class TreeCmdNode extends CommandNode {
                 throw new IllegalAccessException("Too few arguments! " + Arrays.toString(getArguments()));
             }
 
+            // CommandType check for Console
             if (console && cType == CommandType.PLAYER) {
                 throw new IllegalAccessException("Command can only be used as a player.");
             }
+
+            // In Depth Help
             if (args[args.length - 1].equals("?")) {
                 if (args.length == 1) {
                     sender.sendMessage(getInDepthHelp());
@@ -101,6 +160,7 @@ public class TreeCmdNode extends CommandNode {
                 return;
             }
 
+            // Argument parsing for non-help default command
             String[] realArgs = args;
             if (!isDefaultCommandWithArgs) {
                 realArgs = new String[args.length - 1];

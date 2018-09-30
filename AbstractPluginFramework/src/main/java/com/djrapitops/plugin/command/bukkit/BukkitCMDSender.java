@@ -9,9 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Class that wraps bukkit's CommandSender to a Sender.
- * <p>
- * Represents a command sender of Bukkit server.
+ * Class for wrapping Bukkit CommandSender into a {@link Sender}.
  *
  * @author Rsl1122
  * @since 2.0.0

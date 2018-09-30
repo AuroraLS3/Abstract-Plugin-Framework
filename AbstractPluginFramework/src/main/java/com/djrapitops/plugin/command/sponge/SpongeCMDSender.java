@@ -16,7 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Sender implementation for Sponge CommandSource.
+ * Class for wrapping Sponge CommandSource into a {@link Sender}.
  *
  * @author Rsl1122
  */

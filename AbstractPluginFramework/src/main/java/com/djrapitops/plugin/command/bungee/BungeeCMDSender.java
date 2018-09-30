@@ -10,7 +10,7 @@ import net.md_5.bungee.api.connection.ConnectedPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
- * Class that wraps bungee's CommandSender into a Sender.
+ * Class for wrapping Bungee CommandSender into a {@link Sender}.
  *
  * @author Rsl1122
  * @since 2.0.0
