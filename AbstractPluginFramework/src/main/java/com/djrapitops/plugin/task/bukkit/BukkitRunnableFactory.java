@@ -18,7 +18,7 @@ public class BukkitRunnableFactory extends RunnableFactory {
         return new AbsBukkitRunnable(name, plugin, time) {
             @Override
             public void run() {
-                runnable.setCancellable(this);
+                setCancellable(runnable, this);
                 runnable.run();
             }
         };

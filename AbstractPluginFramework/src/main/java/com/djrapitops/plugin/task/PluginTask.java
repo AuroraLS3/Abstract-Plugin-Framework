@@ -6,16 +6,35 @@
 package com.djrapitops.plugin.task;
 
 /**
+ * Represents a task that is implemented by the platform.
  *
  * @author Rsl1122
  */
 public interface PluginTask<T> {
 
+    /**
+     * Retrieve the task ID provided by the platform.
+     *
+     * @return ID or -1 if undefined.
+     */
     int getTaskId();
 
+    /**
+     * Check if the task is being run on the main thread of the platform.
+     *
+     * @return true/false
+     */
     boolean isSync();
 
+    /**
+     * Cancel the task.
+     */
     void cancel();
-    
+
+    /**
+     * Get the platform specific implementation of the task.
+     *
+     * @return object representing a task - depends on the platform.
+     */
     T getWrappedTask();
 }

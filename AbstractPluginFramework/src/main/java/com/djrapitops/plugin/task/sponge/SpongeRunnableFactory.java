@@ -18,7 +18,7 @@ public class SpongeRunnableFactory extends RunnableFactory {
         return new AbsSpongeRunnable(name, plugin, time) {
             @Override
             public void run() {
-                runnable.setCancellable(this);
+                setCancellable(runnable, this);
                 runnable.run();
             }
         };

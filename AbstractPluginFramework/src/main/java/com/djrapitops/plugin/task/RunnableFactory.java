@@ -54,4 +54,8 @@ public abstract class RunnableFactory {
         new ArrayList<>(runningTasks.values())
                 .forEach(PluginRunnable::cancel);
     }
+
+    protected void setCancellable(AbsRunnable runnable, PluginRunnable implementingRunnable) {
+        runnable.setCancellable(implementingRunnable);
+    }
 }

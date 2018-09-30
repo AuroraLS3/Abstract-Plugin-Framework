@@ -9,7 +9,7 @@ import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.PluginTask;
 
 /**
- * PluginRunnable implementation for tasks where no scheduler is available.
+ * {@link PluginRunnable} implementation for tasks where no scheduler is available.
  *
  * @author Rsl1122
  */
@@ -24,7 +24,6 @@ public class ThreadRunnable implements PluginRunnable, Runnable {
         this.name = name;
         this.runnable = runnable;
         this.time = time;
-        runnable.setCancellable(this);
     }
 
     @Override

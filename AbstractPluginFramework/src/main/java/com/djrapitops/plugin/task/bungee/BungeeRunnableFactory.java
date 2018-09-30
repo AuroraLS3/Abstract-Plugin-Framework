@@ -18,7 +18,7 @@ public class BungeeRunnableFactory extends RunnableFactory {
         return new AbsBungeeRunnable(name, plugin, time) {
             @Override
             public void run() {
-                runnable.setCancellable(this);
+                setCancellable(runnable, this);
                 runnable.run();
             }
         };

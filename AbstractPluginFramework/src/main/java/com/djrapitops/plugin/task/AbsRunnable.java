@@ -7,9 +7,9 @@ package com.djrapitops.plugin.task;
 
 /**
  * This class is an abstraction class used to contain run information for Plugin runnables.
- *
- * When creating a new task, RunnableFactory#createNew method should
- * be called with an implementation of this class as a parameter.
+ * <p>
+ * When creating a new task, {@link RunnableFactory#create(String, AbsRunnable)} method should be
+ * called with an implementation of this class as a parameter.
  *
  * @author Rsl1122
  */
@@ -17,20 +17,25 @@ public abstract class AbsRunnable implements Runnable {
 
     private PluginRunnable runnable;
 
-    public AbsRunnable() {
-    }
-
+    /**
+     * Get the ID defined by the delegated platform specific runnable.
+     *
+     * @return integer, -1 if undefined.
+     */
     public int getTaskId() {
-        return runnable.getTaskId();
+        return runnable != null ? runnable.getTaskId() : -1;
     }
 
     @Override
     public abstract void run();
 
-    public void setCancellable(PluginRunnable cancellable) {
+    void setCancellable(PluginRunnable cancellable) {
         this.runnable = cancellable;
     }
 
+    /**
+     * Cancel the delegated platform specific runnable.
+     */
     public void cancel() {
         if (runnable != null) {
             runnable.cancel();
