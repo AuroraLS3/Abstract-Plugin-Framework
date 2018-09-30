@@ -36,7 +36,6 @@ public abstract class CommandNode {
         this.aliases = aliases;
         this.permission = permission;
         this.commandType = commandType;
-        setInDepthHelp(addHelp());
     }
 
     @Deprecated
@@ -196,10 +195,5 @@ public abstract class CommandNode {
         }
         this.inDepthHelp = inDepthHelp;
         return this;
-    }
-
-    @Deprecated
-    public String[] addHelp() {
-        return null;
     }
 }
