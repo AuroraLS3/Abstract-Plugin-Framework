@@ -8,8 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+/**
+ * {@link ErrorHandler} implementation that logs the errors to a per day file.
+ *
+ * @author Rsl1122
+ */
 public class FolderTimeStampErrorFileLogger extends FolderTimeStampFileLogger implements ErrorHandler {
 
+    /**
+     * Create a new FolderTimeStampErrorFileLogger.
+     *
+     * @param logFolder    Folder to store the logs in.
+     * @param errorHandler ErrorHandler to use in case logging the file goes wrong.
+     */
     public FolderTimeStampErrorFileLogger(File logFolder, ErrorHandler errorHandler) {
         super("Errors", logFolder, () -> errorHandler);
     }
@@ -38,6 +49,12 @@ public class FolderTimeStampErrorFileLogger extends FolderTimeStampFileLogger im
         return trace;
     }
 
+    /**
+     * Parse a list of lines from a file logged by this logger into a TreeMap of different errors.
+     *
+     * @param lines Lines read from a file logged by this logger.
+     * @return TreeMap with first line - rest of the lines structure.
+     */
     public static TreeMap<String, List<String>> splitByError(List<String> lines) {
         if (lines.isEmpty()) {
             return new TreeMap<>();

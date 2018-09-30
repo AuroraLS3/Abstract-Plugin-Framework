@@ -43,7 +43,7 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
                 this::getDebugLogger,
                 getLogger()
         );
-        errorHandler = new DefaultErrorHandler(logger, new File(getDataFolder(), "logs"));
+        errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
     }
 
     protected boolean reloading;

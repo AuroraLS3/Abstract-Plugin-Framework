@@ -49,8 +49,8 @@ public abstract class SpongePlugin implements IPlugin {
         this.debugLogger = debugLogger;
         runnableFactory = new SpongeRunnableFactory(this);
         timings = new Timings(debugLogger);
-        logger = new SpongePluginLogger(this, this::getDebugLogger);
-        errorHandler = new DefaultErrorHandler(logger, new File(getDataFolder(), "logs"));
+        logger = new SpongePluginLogger(getLogger(), this::getDebugLogger);
+        errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
     }
 
     protected boolean reloading;

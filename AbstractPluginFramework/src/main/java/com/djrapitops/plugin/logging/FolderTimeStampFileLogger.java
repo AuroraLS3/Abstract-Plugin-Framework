@@ -10,6 +10,13 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * Logging utility class that is used to log messages into files with timestamps.
+ * <p>
+ * This class is used by other logger classes and creating instances is not required.
+ *
+ * @author Rsl1122
+ */
 public class FolderTimeStampFileLogger {
 
     private final String fileNamePrefix;
@@ -17,16 +24,23 @@ public class FolderTimeStampFileLogger {
 
     private final Supplier<ErrorHandler> errorHandler;
 
+    /**
+     * Create a new FolderTimeStampFileLogger.
+     *
+     * @param fileNamePrefix Prefix of the file, usage: fileNamePrefix-day_timestamp.txt
+     * @param logFolder      Folder the log files should be created in.
+     * @param errorHandler   Supplier for a {@link ErrorHandler} in case logging the information fails.
+     */
     public FolderTimeStampFileLogger(String fileNamePrefix, File logFolder, Supplier<ErrorHandler> errorHandler) {
         this.fileNamePrefix = fileNamePrefix;
         this.logFolder = logFolder;
         this.errorHandler = errorHandler;
     }
 
-    public void log(String... message) {
+    public void log(String... lines) {
         File logFile = new File(logFolder, getFileName());
         try {
-            FileLogger.appendToFile(logFile, Arrays.stream(message)
+            FileLogger.appendToFile(logFile, Arrays.stream(lines)
                     .map(line -> "| " + getTimeStamp() + " | " + line)
                     .collect(Collectors.toList()));
         } catch (IOException e) {

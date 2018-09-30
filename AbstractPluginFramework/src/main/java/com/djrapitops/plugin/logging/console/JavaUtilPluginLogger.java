@@ -8,12 +8,24 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Generic {@link PluginLogger} implementation for platforms using {@link Logger} as logging solution.
+ *
+ * @author Rsl1222
+ */
 public class JavaUtilPluginLogger implements PluginLogger {
 
     protected final Consumer<String> console;
     protected final Supplier<DebugLogger> debugLogger;
     protected final Logger logger;
 
+    /**
+     * Create a new JavaUtilPluginLogger.
+     *
+     * @param console     Consumer of the logging method for colored messages on the console.
+     * @param debugLogger {@link DebugLogger} to log all channels on.
+     * @param logger      plugin logger for logging messages.
+     */
     public JavaUtilPluginLogger(Consumer<String> console, Supplier<DebugLogger> debugLogger, Logger logger) {
         this.console = console;
         this.debugLogger = debugLogger;

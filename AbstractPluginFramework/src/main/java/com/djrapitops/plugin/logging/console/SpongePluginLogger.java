@@ -1,20 +1,29 @@
 package com.djrapitops.plugin.logging.console;
 
-import com.djrapitops.plugin.SpongePlugin;
 import com.djrapitops.plugin.logging.L;
 import com.djrapitops.plugin.logging.debug.DebugLogger;
 import org.slf4j.Logger;
 
 import java.util.function.Supplier;
 
+/**
+ * {@link PluginLogger} implementation for Sponge and other slf4j Logger platforms.
+ *
+ * @author Rsl1122
+ */
 public class SpongePluginLogger implements PluginLogger {
 
-    private final SpongePlugin plugin;
     private final Supplier<DebugLogger> debugLogger;
+    private final Logger logger;
 
-    public SpongePluginLogger(SpongePlugin plugin, Supplier<DebugLogger> debugLogger) {
-        this.plugin = plugin;
+    /**
+     * Create a new SpongePluginLogger.
+     *
+     * @param debugLogger Supplier for the {@link DebugLogger} to use.
+     */
+    public SpongePluginLogger(Logger logger, Supplier<DebugLogger> debugLogger) {
         this.debugLogger = debugLogger;
+        this.logger = logger;
     }
 
     @Override
@@ -25,7 +34,6 @@ public class SpongePluginLogger implements PluginLogger {
         } else if (level != L.DEBUG_INFO) {
             log(L.DEBUG, message);
         }
-        Logger logger = plugin.getLogger();
         switch (level) {
             case CRITICAL:
             case ERROR:
@@ -55,7 +63,6 @@ public class SpongePluginLogger implements PluginLogger {
 
     @Override
     public void log(L level, String message, Throwable throwable) {
-        Logger logger = plugin.getLogger();
         switch (level) {
             case CRITICAL:
             case ERROR:

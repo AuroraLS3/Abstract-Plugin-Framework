@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * PluginLogger implementation for testing purposes.
+ * {@link PluginLogger} implementation for testing purposes.
  *
  * @author Rsl1122
  */

@@ -45,7 +45,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
                 this::getDebugLogger,
                 getLogger()
         );
-        errorHandler = new DefaultErrorHandler(logger, new File(getDataFolder(), "logs"));
+        errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
     }
 
     @Override

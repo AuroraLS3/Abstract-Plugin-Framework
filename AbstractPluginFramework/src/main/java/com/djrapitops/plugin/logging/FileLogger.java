@@ -6,7 +6,7 @@ package com.djrapitops.plugin.logging;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
@@ -15,33 +15,67 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Utility used for logging to files.
+ * Static logging utility for writing lines into files.
  *
  * @author Rsl1122
  */
 public class FileLogger {
 
+    /**
+     * Append lines to a file.
+     *
+     * @param file  File to append to. Should be UTF-8 format.
+     * @param lines Lines to append
+     * @throws IOException If write fails.
+     */
     public static void appendToFile(File file, String... lines) throws IOException {
         appendToFile(file, Arrays.asList(lines));
     }
 
+    /**
+     * Write lines to a file, overwriting existing file.
+     *
+     * @param file  File to write to. Should be UTF-8 format.
+     * @param lines Lines to write.
+     * @throws IOException If write fails.
+     */
     public static void logToFile(File file, List<String> lines) throws IOException {
-        Files.write(file.toPath(), lines, getCharset());
+        Files.write(file.toPath(), lines, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Append lines to a file.
+     *
+     * @param file  File to append to. Should be UTF-8 format.
+     * @param lines Lines to append
+     * @throws IOException If write fails.
+     */
     public static void appendToFile(File file, List<String> lines) throws IOException {
         if (!file.exists() && !file.createNewFile()) {
             return;
         }
-        Files.write(file.toPath(), lines, getCharset(), StandardOpenOption.APPEND);
+        Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
     }
 
+    /**
+     * Read lines of a File.
+     *
+     * @param file File to read. Should be UTF-8 format.
+     * @return read lines.
+     * @throws IOException If read fails.
+     */
     public static List<String> readContents(File file) throws IOException {
-        try (Stream<String> lines = Files.lines(file.toPath(), getCharset())) {
+        try (Stream<String> lines = Files.lines(file.toPath(), StandardCharsets.UTF_8)) {
             return lines.collect(Collectors.toList());
         }
     }
 
+    /**
+     * Get how many space characters are in front of a line.
+     *
+     * @param line Line to check.
+     * @return For example '  43432' -> 2.
+     */
     public static int getIndentation(String line) {
         int indentation = 0;
         for (char c : line.toCharArray()) {
@@ -52,10 +86,6 @@ public class FileLogger {
             }
         }
         return indentation;
-    }
-
-    private static Charset getCharset() {
-        return Charset.forName("UTF-8");
     }
 
     private FileLogger() {
