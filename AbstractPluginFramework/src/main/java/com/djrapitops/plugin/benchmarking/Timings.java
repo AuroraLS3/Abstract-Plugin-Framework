@@ -11,14 +11,16 @@ import java.util.*;
  */
 public class Timings {
 
-    private final Map<String, List<Benchmark>> results;
+    private final Map<String, Benchmark> average;
+    private final Map<String, Long> timesRun;
     private final Map<String, RunningBenchmark> running;
 
     private final DebugLogger debugLogger;
 
     public Timings(DebugLogger debugLogger) {
         this.debugLogger = debugLogger;
-        results = new HashMap<>();
+        average = new HashMap<>();
+        timesRun = new HashMap<>();
         running = new HashMap<>();
     }
 
@@ -44,9 +46,19 @@ public class Timings {
         }
         Benchmark result = bench.end();
 
-        List<Benchmark> benchmarks = results.getOrDefault(name, new ArrayList<>());
-        benchmarks.add(result);
-        results.put(name, benchmarks);
+        Long times = timesRun.getOrDefault(name, 0L);
+        Benchmark currentAverage = average.get(name);
+
+        long weighedAvgNs = currentAverage != null
+                ? (result.getNs() + currentAverage.getNs() * times) / (times + 1)
+                : result.getNs();
+        long weighedAvgMem = currentAverage != null
+                ? (result.getUsedMemory() + currentAverage.getUsedMemory() * times) / (times + 1)
+                : result.getUsedMemory();
+
+        average.put(name, new Benchmark(name, weighedAvgNs, weighedAvgMem));
+        timesRun.put(name, times + 1L);
+
         return Optional.of(result);
     }
 
@@ -68,19 +80,16 @@ public class Timings {
      */
     public void reset() {
         running.clear();
-        results.clear();
+        average.clear();
     }
 
     /**
-     * Get a list of each named {@link Benchmark} object averaged from all the results.
+     * Get a list of each named {@link Benchmark} object averaged from all the average.
      *
      * @return List that contains one {@link Benchmark} for each name.
      */
     public List<Benchmark> getAverageResults() {
-        List<Benchmark> averageResults = new ArrayList<>();
-        for (List<Benchmark> benchmarks : results.values()) {
-            averageResults.add(new BenchmarkMutator(benchmarks).average());
-        }
+        List<Benchmark> averageResults = new ArrayList<>(average.values());
         Collections.sort(averageResults);
         return averageResults;
     }
