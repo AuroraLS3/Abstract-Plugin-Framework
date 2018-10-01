@@ -24,6 +24,12 @@ public class Version implements Comparable<Version> {
 
     private final String versionString;
 
+    /**
+     * Create a new Version object.
+     *
+     * @param versionString For example "2017.132", "1.1.0", "v-43"
+     *                      All non-number characters will be omitted during comparison.
+     */
     public Version(String versionString) {
         this.versionString = versionString;
     }
@@ -43,6 +49,13 @@ public class Version implements Comparable<Version> {
         return new Version(lineWithVersion.split(": ")[1]);
     }
 
+    /**
+     * Compare two versions.
+     *
+     * @param currentVersion Current version object.
+     * @param newVersion     New version object.
+     * @return if new version object has higher version than current version.
+     */
     public static boolean isNewVersionAvailable(Version currentVersion, Version newVersion) {
         return newVersion.compareTo(currentVersion) > 0;
     }
