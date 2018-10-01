@@ -1,73 +1,113 @@
 package com.djrapitops.plugin.command;
 
-import mock.MockCMDSender;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.*;
 
 public class TreeCmdNodeTest {
 
-    private List<Boolean> calls = new ArrayList<>();
-    private TreeCmdNode treeCmdNode;
-    private MockCMDSender mockCMDSender;
+    private static final String METHOD_ONE_CALL = "Called Test SubCommand 'one' with args: ";
+    private static final String METHOD_TWO_CALL = "Called Test SubCommand 'two with args: ";
+    private TreeCmdNode underTest;
+
+    private Sender sender;
 
     @Before
     public void setUp() {
-        calls.clear();
+        sender = Mockito.mock(Sender.class);
+        SenderType player = SenderType.PLAYER;
+        when(sender.getSenderType()).thenReturn(player);
 
-        mockCMDSender = new MockCMDSender();
-        treeCmdNode = new TreeCmdNode("test|two", "", CommandType.ALL, null);
-        treeCmdNode.setInDepthHelp("Wrong in depth help");
-        treeCmdNode.setDefaultCommand("one");
+        underTest = new TreeCmdNode("test|two", "", CommandType.ALL, null);
+        underTest.setInDepthHelp("Wrong in depth help");
+        underTest.setDefaultCommand("one");
 
-        CommandNode test = new CommandNode("one|alias", "", CommandType.ALL) {
+        CommandNode one = new CommandNode("one|alias", "", CommandType.ALL) {
             @Override
             public void onCommand(Sender sender, String commandLabel, String[] args) {
-                calls.add(true);
+                sender.sendMessage(METHOD_ONE_CALL + Arrays.toString(args));
             }
         };
-        test.setInDepthHelp("In Depth", "Once again");
-        treeCmdNode.setNodeGroups(new CommandNode[]{
-                test
+        one.setInDepthHelp("In Depth", "Once again");
+
+        CommandNode two = new CommandNode("two|alias2", "", CommandType.ALL) {
+            @Override
+            public void onCommand(Sender sender, String commandLabel, String[] args) {
+                sender.sendMessage(METHOD_TWO_CALL + Arrays.toString(args));
+            }
+        };
+        underTest.setNodeGroups(new CommandNode[]{
+                one, two
         });
     }
 
     @Test
-    public void onCommand() {
-        treeCmdNode.onCommand(mockCMDSender, "", new String[]{"one"});
-        assertEquals(1, calls.size());
+    public void onCommandOne() {
+        underTest.onCommand(sender, "", new String[]{"one"});
+
+        verify(sender).getSenderType();
+        verify(sender).sendMessage(METHOD_ONE_CALL + "[]");
+        verifyNoMoreInteractions(sender);
     }
 
     @Test
-    public void onCommandHelpEmpty() {
-        treeCmdNode.onCommand(mockCMDSender, "", new String[0]);
-        assertEquals(0, calls.size());
-        assertEquals("§f>", mockCMDSender.getLastMsg());
+    public void onCommandOneArgument() {
+        underTest.onCommand(sender, "", new String[]{"one", "argument"});
+
+        verify(sender).getSenderType();
+        verify(sender).sendMessage(METHOD_ONE_CALL + "[argument]");
+        verifyNoMoreInteractions(sender);
+    }
+
+    @Test
+    public void onCommandTwo() {
+        underTest.onCommand(sender, "", new String[]{"two"});
+
+        verify(sender).getSenderType();
+        verify(sender).sendMessage(METHOD_TWO_CALL + "[]");
+        verifyNoMoreInteractions(sender);
+    }
+
+    @Test
+    public void onCommandAlias() {
+        underTest.onCommand(sender, "", new String[]{"alias", "test"});
+
+        verify(sender).getSenderType();
+        verify(sender).sendMessage(METHOD_ONE_CALL + "[test]");
+        verifyNoMoreInteractions(sender);
     }
 
     @Test
     public void onCommandWrongCMD() {
-        treeCmdNode.onCommand(mockCMDSender, "", new String[]{""});
-        assertEquals(1, calls.size());
-        assertNull(mockCMDSender.getLastMsg());
+        underTest.onCommand(sender, "", new String[]{"non-existing-command"});
+
+        verify(sender).getSenderType();
+        verify(sender).sendMessage(METHOD_ONE_CALL + "[non-existing-command]");
+        verifyNoMoreInteractions(sender);
+    }
+
+    @Test
+    public void onCommandHelpEmpty() {
+        underTest.onCommand(sender, "", new String[]{});
+
+        verify(sender).sendMessage("§f>");
     }
 
     @Test
     public void onCommandInDepthHelp() {
-        treeCmdNode.onCommand(mockCMDSender, "", new String[]{"?"});
-        assertEquals(0, calls.size());
-        assertEquals("Aliases: [test, two]", mockCMDSender.getLastMsg());
+        underTest.onCommand(sender, "", new String[]{"?"});
+
+        verify(sender).sendMessage("Aliases: [test, two]");
     }
 
     @Test
     public void onCommandInDepthHelpSubCmd() {
-        treeCmdNode.onCommand(mockCMDSender, "", new String[]{"one", "?"});
-        assertEquals(0, calls.size());
-        assertEquals("Aliases: [one, alias]", mockCMDSender.getLastMsg());
+        underTest.onCommand(sender, "", new String[]{"one", "?"});
+
+        verify(sender).sendMessage("Aliases: [one, alias]");
     }
 }

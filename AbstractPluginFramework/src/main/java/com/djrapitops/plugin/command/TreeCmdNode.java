@@ -135,9 +135,13 @@ public class TreeCmdNode extends CommandNode {
             }
 
             // Argument Check
-            boolean isDefaultCommandWithArgs = command.getName().equals(defaultCommand) && args.length <= 1;
+            String commandName = command.getName();
+            // Check if default command was parsed without the command argument
+            boolean isDefaultCommandWithoutCommandArg = commandName.equals(defaultCommand)
+                    && args.length <= 1 && !args[0].equals(commandName);
             CommandType cType = command.getCommandType();
-            if (!isDefaultCommandWithArgs
+            // Check if there are enough arguments
+            if (!isDefaultCommandWithoutCommandArg
                     && ((cType == CommandType.ALL_WITH_ARGS && args.length < 2)
                     || console && args.length < 2 && cType == CommandType.PLAYER_OR_ARGS)) {
                 throw new IllegalAccessException("Too few arguments! " + Arrays.toString(getArguments()));
@@ -162,9 +166,8 @@ public class TreeCmdNode extends CommandNode {
 
             // Argument parsing for non-help default command
             String[] realArgs = args;
-            if (!isDefaultCommandWithArgs) {
-                realArgs = new String[args.length - 1];
-                System.arraycopy(args, 1, realArgs, 0, args.length - 1);
+            if (!isDefaultCommandWithoutCommandArg) {
+                realArgs = ArrayUtil.removeFirstArgument(args);
             }
 
             command.onCommand(sender, commandLabel, realArgs);

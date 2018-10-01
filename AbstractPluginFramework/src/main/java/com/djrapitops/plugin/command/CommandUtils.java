@@ -15,7 +15,8 @@ public class CommandUtils {
      * @return true/false
      */
     public static boolean isPlayer(Sender sender) {
-        return !isConsole(sender) && !isCommandBlock(sender);
+        SenderType type = sender.getSenderType();
+        return type == SenderType.PLAYER || type == SenderType.PROXY_PLAYER;
     }
 
     /**
@@ -45,6 +46,6 @@ public class CommandUtils {
      * @return true/false
      */
     public static boolean senderHasEntity(Sender sender) {
-        return isPlayer(sender) && sender.getSenderType() != SenderType.PROXY_PLAYER;
+        return sender.getSenderType() == SenderType.PLAYER;
     }
 }
