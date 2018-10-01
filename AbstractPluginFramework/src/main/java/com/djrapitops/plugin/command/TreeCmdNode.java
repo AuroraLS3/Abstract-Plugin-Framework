@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * {@link CommandNode} with sub-commands.
  * <p>
- * Sub commands are defined with {@link TreeCmdNode#setNodeGroups(CommandNode[]...)}.
+ * Sub commands are defined with {@link TreeCmdNode#setNodeGroups}.
  * Each TreeCmdNode is initialized with a {@link HelpCommand} that provides listing of sub-commands.
  * It is recommended to use {@link TreeCmdNode#setColorScheme(ColorScheme)} to apply chat colors to the help listings.
  * <p>

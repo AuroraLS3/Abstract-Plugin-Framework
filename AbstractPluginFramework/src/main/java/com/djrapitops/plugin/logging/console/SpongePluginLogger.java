@@ -19,6 +19,7 @@ public class SpongePluginLogger implements PluginLogger {
     /**
      * Create a new SpongePluginLogger.
      *
+     * @param logger      slf4j logger for console logging.
      * @param debugLogger Supplier for the {@link DebugLogger} to use.
      */
     public SpongePluginLogger(Logger logger, Supplier<DebugLogger> debugLogger) {

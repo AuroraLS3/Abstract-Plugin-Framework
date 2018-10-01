@@ -10,7 +10,7 @@ import com.djrapitops.plugin.task.PluginTask;
 import org.spongepowered.api.scheduler.Task;
 
 /**
- * PluginRunnable implementation for Sponge.
+ * {@link PluginRunnable} implementation for Sponge.
  *
  * @author Rsl1122
  */

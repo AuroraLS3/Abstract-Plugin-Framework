@@ -34,10 +34,12 @@ public abstract class RunnableFactory {
     }
 
     /**
-     * Creates a new PluginRunnable.
+     * Create a new {@link PluginRunnable}.
      *
-     * @return a new PluginRunnable.
-     * @throws IllegalStateException If the plugin is disabled.
+     * @param name     Name of the task when the PluginRunnable is started.
+     * @param runnable Abstract executable that can be cancelled.
+     * @param time     Time of creation.
+     * @return a new {@link PluginRunnable} specific to the platform.
      */
     protected abstract PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time);
 

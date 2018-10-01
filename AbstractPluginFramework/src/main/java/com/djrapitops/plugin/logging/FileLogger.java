@@ -74,7 +74,7 @@ public class FileLogger {
      * Get how many space characters are in front of a line.
      *
      * @param line Line to check.
-     * @return For example '  43432' -> 2.
+     * @return For example: '  43432' returns 2.
      */
     public static int getIndentation(String line) {
         int indentation = 0;

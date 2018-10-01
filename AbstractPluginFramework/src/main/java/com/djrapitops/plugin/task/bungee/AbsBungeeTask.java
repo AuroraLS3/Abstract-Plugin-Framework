@@ -10,6 +10,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 /**
+ * {@link PluginTask} implementation for Bungee.
  *
  * @author Rsl1122
  */
@@ -17,7 +18,7 @@ public class AbsBungeeTask implements ScheduledTask, PluginTask {
 
     private final ScheduledTask task;
 
-    public AbsBungeeTask(ScheduledTask task) {
+    AbsBungeeTask(ScheduledTask task) {
         this.task = task;
     }
 

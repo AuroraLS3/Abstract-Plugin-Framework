@@ -5,10 +5,20 @@ import com.djrapitops.plugin.task.AbsRunnable;
 import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.RunnableFactory;
 
+/**
+ * {@link RunnableFactory} implementation for Bukkit.
+ *
+ * @author Rsl1122
+ */
 public class BukkitRunnableFactory extends RunnableFactory {
 
     private final BukkitPlugin plugin;
 
+    /**
+     * Create a new BukkitRunnableFactory.
+     *
+     * @param plugin BukkitPlugin this factory is for.
+     */
     public BukkitRunnableFactory(BukkitPlugin plugin) {
         this.plugin = plugin;
     }

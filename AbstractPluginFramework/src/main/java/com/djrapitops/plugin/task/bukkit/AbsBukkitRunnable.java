@@ -6,34 +6,27 @@
 package com.djrapitops.plugin.task.bukkit;
 
 import com.djrapitops.plugin.BukkitPlugin;
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.PluginTask;
-import com.djrapitops.plugin.task.RunnableFactory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * @param <T>
+ * {@link PluginRunnable} implementation for Bukkit.
+ *
  * @author Rsl1122
  */
-public abstract class AbsBukkitRunnable<T extends BukkitPlugin> extends BukkitRunnable implements PluginRunnable, Runnable {
+public abstract class AbsBukkitRunnable extends BukkitRunnable implements PluginRunnable, Runnable {
 
     private final String name;
     private final long time;
     private int id = -1;
 
-    private T plugin;
-    private RunnableFactory runnableFactory;
+    private BukkitPlugin plugin;
 
-    public AbsBukkitRunnable(String name, IPlugin plugin, long time) {
+    AbsBukkitRunnable(String name, BukkitPlugin plugin, long time) {
         this.name = name;
         this.time = time;
-        if (plugin instanceof BukkitPlugin) {
-            this.plugin = (T) plugin;
-        } else {
-            throw new IllegalArgumentException("Given plugin was not of correct type");
-        }
-        runnableFactory = plugin.getRunnableFactory();
+        this.plugin = plugin;
     }
 
     @Override
@@ -87,12 +80,9 @@ public abstract class AbsBukkitRunnable<T extends BukkitPlugin> extends BukkitRu
             return;
         }
         try {
-            runnableFactory.cancelled(this);
             plugin.getServer().getScheduler().cancelTask(id);
             super.cancel();
         } finally {
-            // Clear instances so that cyclic references don't block GC
-            runnableFactory = null;
             plugin = null;
         }
     }

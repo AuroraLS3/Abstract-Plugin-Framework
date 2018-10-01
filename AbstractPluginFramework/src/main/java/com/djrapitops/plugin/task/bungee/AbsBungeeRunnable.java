@@ -6,39 +6,32 @@
 package com.djrapitops.plugin.task.bungee;
 
 import com.djrapitops.plugin.BungeePlugin;
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.TimeAmount;
 import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.PluginTask;
-import com.djrapitops.plugin.task.RunnableFactory;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 
 import java.util.concurrent.TimeUnit;
 
 /**
- * @param <T>
+ * {@link PluginRunnable} implementation for Bungee.
+ *
  * @author Rsl1122
  */
-public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements PluginRunnable, Runnable {
+public abstract class AbsBungeeRunnable implements PluginRunnable, Runnable {
 
     private final String name;
     private final long time;
 
-    private RunnableFactory runnableFactory;
-    private T plugin;
+    private BungeePlugin plugin;
     private TaskScheduler scheduler;
     private int id = -1;
 
-    public AbsBungeeRunnable(String name, IPlugin plugin, long time) {
+    AbsBungeeRunnable(String name, BungeePlugin plugin, long time) {
         this.name = name;
         this.time = time;
-        if (plugin instanceof BungeePlugin) {
-            this.plugin = (T) plugin;
-        } else {
-            throw new IllegalArgumentException("Given plugin was not of correct type");
-        }
-        scheduler = this.plugin.getProxy().getScheduler();
-        runnableFactory = plugin.getRunnableFactory();
+        this.plugin = plugin;
+        this.scheduler = plugin.getProxy().getScheduler();
     }
 
     @Override
@@ -86,12 +79,10 @@ public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements Plugi
             return;
         }
         try {
-            runnableFactory.cancelled(this);
             scheduler.cancel(id);
         } finally {
             // Clear instances so that cyclic references don't block GC
             plugin = null;
-            runnableFactory = null;
             scheduler = null;
         }
     }

@@ -5,10 +5,20 @@ import com.djrapitops.plugin.task.AbsRunnable;
 import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.RunnableFactory;
 
+/**
+ * {@link RunnableFactory} implementation for Bungee.
+ *
+ * @author Rsl1122
+ */
 public class BungeeRunnableFactory extends RunnableFactory {
 
     private final BungeePlugin plugin;
 
+    /**
+     * Create a new BungeeRunnableFactory.
+     *
+     * @param plugin BungeePlugin this factory is for.
+     */
     public BungeeRunnableFactory(BungeePlugin plugin) {
         this.plugin = plugin;
     }

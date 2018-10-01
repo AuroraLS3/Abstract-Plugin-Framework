@@ -8,7 +8,7 @@ import java.io.File;
 /**
  * {@link ErrorHandler} implementation that is used by default in APF plugins.
  * <p>
- * To replace ErrorHandlers in use call {@link IPlugin#getErrorHandler()#setErrorHandlers(ErrorHandler...)}.
+ * To replace ErrorHandlers in use call {@link CombineErrorHandler#setErrorHandlers(ErrorHandler...)}.
  *
  * @author Rsl1122
  */

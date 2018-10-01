@@ -5,6 +5,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * {@link PluginTask} implementation for Bukkit.
  *
  * @author Rsl1122
  */
@@ -12,7 +13,7 @@ public class AbsBukkitTask implements BukkitTask, PluginTask {
 
     private final BukkitTask task;
 
-    public AbsBukkitTask(BukkitTask task) {
+    AbsBukkitTask(BukkitTask task) {
         this.task = task;
     }
 
