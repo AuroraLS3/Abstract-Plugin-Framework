@@ -10,6 +10,10 @@ import com.djrapitops.plugin.StaticHolder;
  */
 public class StackUtils {
 
+    private StackUtils() {
+        // Static method class.
+    }
+
     /**
      * Get the calling Plugin class from the StackTrace.
      *

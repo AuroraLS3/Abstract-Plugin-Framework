@@ -15,6 +15,8 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
+ * Utility class for throwing exceptions if some conditions are not fulfilled.
+ *
  * @author Rsl1122
  */
 public class Verify {
@@ -115,24 +117,35 @@ public class Verify {
     }
 
     /**
-     * @param <T>
-     * @param lookFor
-     * @param map
-     * @return
+     * Check if a Map contains a specific key.
+     *
+     * @param <T>     Type of the key.
+     * @param lookFor Key to look for.
+     * @param map     Map to search from.
+     * @return Does the map have the key.
      */
     public static <T> boolean contains(T lookFor, Map<T, Object> map) {
         return contains(lookFor, map.keySet().stream());
     }
 
     /**
-     * @param one
-     * @param two
-     * @return
+     * Check if a String equals another when case is ignored, and that they are not null.
+     *
+     * @param one First string.
+     * @param two Second string.
+     * @return If the Strings match and are not null.
      */
     public static boolean equalsIgnoreCase(String one, String two) {
         return notNull(one) && one.equalsIgnoreCase(two);
     }
 
+    /**
+     * Check if a String equals one option.
+     *
+     * @param toCheck String to check against
+     * @param isEqual Options that are considered good.
+     * @return If one of the given strings matches the first one.
+     */
     public static boolean equalsOne(String toCheck, String... isEqual) {
         if (isEqual == null) {
             return false;
@@ -149,25 +162,39 @@ public class Verify {
     }
 
     /**
-     * @param <T>
-     * @param <K>
-     * @param object
-     * @param object2
-     * @return
+     * Check if two objects equal and are not null.
+     *
+     * @param <T>     Type of the first object.
+     * @param <K>     Type of the second object.
+     * @param object  First object.
+     * @param object2 Second object.
+     * @return If the objects are equal and are not null.
      */
     public static <T, K> boolean equals(T object, K object2) {
         return notNull(object) && object.equals(object2);
     }
 
-    public static boolean notNull(Object... object) {
-        if (object == null) {
+    /**
+     * Check if an array is null or contains null objects.
+     *
+     * @param objects Objects to check
+     * @return true if a null is found.
+     */
+    public static boolean notNull(Object... objects) {
+        if (objects == null) {
             return false;
         }
-        return !containsNull(object);
+        return !containsNull(objects);
     }
 
-    public static boolean containsNull(Object... object) {
-        for (Object t : object) {
+    /**
+     * Check if an array contains null objects.
+     *
+     * @param objects Objects to check.
+     * @return true if a null is found.
+     */
+    public static boolean containsNull(Object... objects) {
+        for (Object t : objects) {
             if (t == null) {
                 return true;
             }
@@ -187,6 +214,16 @@ public class Verify {
         return nullCheck(object, () -> new IllegalArgumentException("Something was null!"));
     }
 
+    /**
+     * Checks if the given object is null, throws exception if null.
+     *
+     * @param object    Object to check
+     * @param exception Supplier for exception to throw if the object is null.
+     * @param <T>       Type of the object
+     * @param <K>       Type of the throwable
+     * @return The object if it is not null.
+     * @throws K Supplied exception if the object is null.
+     */
     public static <T, K extends Throwable> T nullCheck(T object, Supplier<K> exception) throws K {
         if (!notNull(object)) {
             throw exception.get();
@@ -194,6 +231,14 @@ public class Verify {
         return object;
     }
 
+    /**
+     * Checks if the given array contains null, throws exception if a null is found.
+     *
+     * @param objects Objects to check.
+     * @param <T>     Type of the objects in the array
+     * @return the given objects if they are not null.
+     * @throws IllegalArgumentException If a null is found.
+     */
     @SafeVarargs
     public static <T> T[] nullCheck(T... objects) throws IllegalArgumentException {
         return nullCheck(
@@ -202,6 +247,16 @@ public class Verify {
         );
     }
 
+    /**
+     * Checks if the given array contains null, throws exception if a null is found.
+     *
+     * @param exception Supplier for exception to throw if an object is null.
+     * @param objects   Objects to check
+     * @param <T>       Type of the objects
+     * @param <K>       Type of the exception
+     * @return The given objects if a null is not found
+     * @throws K Supplied exception thrown if a null object is found.
+     */
     public static <T, K extends Throwable> T[] nullCheck(Supplier<K> exception, T... objects) throws K {
         for (T obj : objects) {
             if (!notNull(obj)) {
@@ -211,6 +266,14 @@ public class Verify {
         return objects;
     }
 
+    /**
+     * Check if a condition is true, otherwise throw exception.
+     *
+     * @param condition Condition to check.
+     * @param exception Supplier for exception to throw if condition is false.
+     * @param <K>       Type of the exception
+     * @throws K Supplied exception if the condition is false.
+     */
     public static <K extends Throwable> void checkCondition(boolean condition, Supplier<K> exception) throws K {
         if (!condition) {
             throw exception.get();
@@ -222,10 +285,26 @@ public class Verify {
         return sender.hasPermission(permission);
     }
 
+    /**
+     * Check if a condition is true, otherwise throw exception.
+     *
+     * @param value     Condition to check.
+     * @param exception Supplier for exception to throw if condition is false.
+     * @param <K>       Type of the exception
+     * @throws K Supplied exception if the condition is false.
+     */
     public static <K extends Throwable> void isTrue(boolean value, Supplier<K> exception) throws K {
         checkCondition(value, exception);
     }
 
+    /**
+     * Check if a condition is false, otherwise throw exception.
+     *
+     * @param value     Condition to check.
+     * @param exception Supplier for exception to throw if condition is true.
+     * @param <K>       Type of the exception
+     * @throws K Supplied exception if the condition is true.
+     */
     public static <K extends Throwable> void isFalse(boolean value, Supplier<K> exception) throws K {
         checkCondition(!value, exception);
     }
