@@ -4,17 +4,14 @@ import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.utilities.StackUtils;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+/**
+ * Factory for creating runnable objects that can be scheduled on any server platform.
+ * <p>
+ * Obtain an instance from {@link IPlugin#getRunnableFactory()}.
+ *
+ * @author Rsl1122
+ */
 public abstract class RunnableFactory {
-
-    private final Map<Long, PluginRunnable> runningTasks;
-
-    public RunnableFactory() {
-        this.runningTasks = new ConcurrentHashMap<>();
-    }
 
     @Deprecated
     public static PluginRunnable createNew(String name, AbsRunnable absRunnable) {
@@ -24,14 +21,16 @@ public abstract class RunnableFactory {
         return plugin.getRunnableFactory().create(name, absRunnable);
     }
 
-    public PluginRunnable create(String name, AbsRunnable absRunnable) {
+    /**
+     * Create a new {@link PluginRunnable} that can be scheduled.
+     *
+     * @param name     Name of the new task that is created when the {@link PluginRunnable} is executed.
+     * @param runnable Abstract executable that can be cancelled.
+     * @return a new {@link PluginRunnable} specific to the platform.
+     */
+    public PluginRunnable create(String name, AbsRunnable runnable) {
         long time = System.currentTimeMillis();
-        PluginRunnable runnable = createNewRunnable(name, absRunnable, time);
-        while (runningTasks.containsKey(time)) {
-            time++;
-        }
-        runningTasks.put(time, runnable);
-        return runnable;
+        return createNewRunnable(name, runnable, time);
     }
 
     /**
@@ -42,18 +41,7 @@ public abstract class RunnableFactory {
      */
     protected abstract PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time);
 
-    public Map<Long, PluginRunnable> getRunningTasks() {
-        return runningTasks;
-    }
-
-    public void cancelled(PluginRunnable pluginRunnable) {
-        runningTasks.remove(pluginRunnable.getTime());
-    }
-
-    public void cancelAllKnownTasks() {
-        new ArrayList<>(runningTasks.values())
-                .forEach(PluginRunnable::cancel);
-    }
+    public abstract void cancelAllKnownTasks();
 
     protected void setCancellable(AbsRunnable runnable, PluginRunnable implementingRunnable) {
         runnable.setCancellable(implementingRunnable);

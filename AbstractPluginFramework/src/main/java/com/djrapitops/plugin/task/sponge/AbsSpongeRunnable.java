@@ -49,7 +49,6 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
         }
         try {
             if (task != null) {
-                runnableFactory.cancelled(this);
                 task.cancel();
             }
         } finally {

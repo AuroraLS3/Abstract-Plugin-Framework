@@ -23,4 +23,9 @@ public class BungeeRunnableFactory extends RunnableFactory {
             }
         };
     }
+
+    @Override
+    public void cancelAllKnownTasks() {
+        plugin.getProxy().getScheduler().cancel(plugin);
+    }
 }

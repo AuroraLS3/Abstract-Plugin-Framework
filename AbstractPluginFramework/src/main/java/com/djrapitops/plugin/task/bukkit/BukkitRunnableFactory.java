@@ -23,4 +23,9 @@ public class BukkitRunnableFactory extends RunnableFactory {
             }
         };
     }
+
+    @Override
+    public void cancelAllKnownTasks() {
+        plugin.getServer().getScheduler().cancelTasks(plugin);
+    }
 }
