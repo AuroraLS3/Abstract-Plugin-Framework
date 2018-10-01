@@ -20,7 +20,17 @@ import java.io.File;
 import java.io.IOException;
 
 /**
+ * {@link IPlugin} implementation for Bukkit.
+ * <p>
+ * This class should be extended when creating a bukkit part of your plugin using this library.
+ * It provides instances for a {@link PluginLogger}, {@link DebugLogger}, {@link ErrorHandler}, {@link Timings} and {@link RunnableFactory}.
+ * <p>
+ * If you wish to change default debug or error handling behavior, use
+ * {@link IPlugin#setDebugLoggers}
+ * {@link IPlugin#setErrorHandlers}
+ *
  * @author Rsl1122
+ * @see IPlugin for method overview.
  */
 public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
 
@@ -30,27 +40,34 @@ public abstract class BukkitPlugin extends JavaPlugin implements IPlugin {
     protected final Timings timings;
     protected final RunnableFactory runnableFactory;
 
+    /**
+     * Standard constructor that initializes the plugin with the default DebugLogger.
+     */
     public BukkitPlugin() {
         this(new CombineDebugLogger(new MemoryDebugLogger()));
     }
 
+    /**
+     * Constructor for defining a debug logger at creation time.
+     *
+     * @param debugLogger debug logger to use.
+     */
     public BukkitPlugin(CombineDebugLogger debugLogger) {
         this.debugLogger = debugLogger;
-        runnableFactory = new BukkitRunnableFactory(this);
-        timings = new Timings(debugLogger);
-        logger = new BukkitPluginLogger(
+        this.runnableFactory = new BukkitRunnableFactory(this);
+        this.timings = new Timings(debugLogger);
+        this.logger = new BukkitPluginLogger(
                 message -> getServer().getConsoleSender().sendMessage(message),
                 this::getDebugLogger,
                 getLogger()
         );
-        errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
+        this.errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
     }
 
     protected boolean reloading;
 
     @Override
     public void onDisable() {
-        Class<? extends IPlugin> pluginClass = getClass();
         runnableFactory.cancelAllKnownTasks();
     }
 

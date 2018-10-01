@@ -16,12 +16,14 @@ import com.djrapitops.plugin.logging.error.DefaultErrorHandler;
 import com.djrapitops.plugin.logging.error.ErrorHandler;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.djrapitops.plugin.task.sponge.SpongeRunnableFactory;
+import com.djrapitops.plugin.utilities.Verify;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandMapping;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
+import org.spongepowered.api.plugin.Plugin;
 
 import java.io.File;
 import java.util.HashMap;
@@ -29,9 +31,19 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * IPlugin implementation for Sponge.
+ * {@link IPlugin} implementation for Sponge.
+ * <p>
+ * This class should be extended when creating a sponge part of your plugin using this library.
+ * It provides instances for a {@link PluginLogger}, {@link DebugLogger}, {@link ErrorHandler}, {@link Timings} and {@link RunnableFactory}.
+ * <p>
+ * If you wish to change default debug or error handling behavior, use
+ * {@link IPlugin#setDebugLoggers}
+ * {@link IPlugin#setErrorHandlers}
+ * <p>
+ * When extended, you should provide the Sponge Plugin annotation above your own class.
  *
  * @author Rsl1122
+ * @see IPlugin for method overview.
  */
 public abstract class SpongePlugin implements IPlugin {
 
@@ -41,16 +53,33 @@ public abstract class SpongePlugin implements IPlugin {
     protected final Timings timings;
     protected final RunnableFactory runnableFactory;
 
+    /**
+     * Standard constructor that initializes the plugin with the default DebugLogger.
+     */
     public SpongePlugin() {
         this(new CombineDebugLogger(new MemoryDebugLogger()));
     }
 
+    /**
+     * Constructor for defining a debug logger at creation time.
+     *
+     * @param debugLogger debug logger to use.
+     */
     public SpongePlugin(CombineDebugLogger debugLogger) {
         this.debugLogger = debugLogger;
-        runnableFactory = new SpongeRunnableFactory(this);
-        timings = new Timings(debugLogger);
-        logger = new SpongePluginLogger(getLogger(), this::getDebugLogger);
-        errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
+        this.runnableFactory = new SpongeRunnableFactory(this);
+        this.timings = new Timings(debugLogger);
+        this.logger = new SpongePluginLogger(getLogger(), this::getDebugLogger);
+        this.errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
+    }
+
+    @Override
+    public String getVersion() {
+        Plugin annotation = getClass().getAnnotation(Plugin.class);
+        return Verify.nullCheck(
+                annotation,
+                () -> new IllegalStateException(getClass().getName() + " does not have required @Plugin annotation.")
+        ).version();
     }
 
     protected boolean reloading;
@@ -59,7 +88,6 @@ public abstract class SpongePlugin implements IPlugin {
 
     @Override
     public void onDisable() {
-        Class<? extends IPlugin> pluginClass = getClass();
         runnableFactory.cancelAllKnownTasks();
     }
 
