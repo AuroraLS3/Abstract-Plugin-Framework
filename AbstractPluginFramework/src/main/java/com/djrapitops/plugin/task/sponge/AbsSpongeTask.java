@@ -8,15 +8,15 @@ import com.djrapitops.plugin.task.PluginTask;
 import org.spongepowered.api.scheduler.Task;
 
 /**
- * PluginTask implementation for Sponge.
+ * {@link PluginTask} implementation for Sponge.
  *
  * @author Rsl1122
  */
-public class AbsSpongeTask implements PluginTask<Task> {
+class AbsSpongeTask implements PluginTask {
 
     private final Task task;
 
-    public AbsSpongeTask(Task task) {
+    AbsSpongeTask(Task task) {
         this.task = task;
     }
 
@@ -33,10 +33,5 @@ public class AbsSpongeTask implements PluginTask<Task> {
     @Override
     public void cancel() {
         task.cancel();
-    }
-
-    @Override
-    public Task getWrappedTask() {
-        return task;
     }
 }

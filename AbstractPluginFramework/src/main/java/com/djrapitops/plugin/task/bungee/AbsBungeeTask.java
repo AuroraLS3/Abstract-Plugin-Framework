@@ -13,7 +13,7 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
  *
  * @author Rsl1122
  */
-public class AbsBungeeTask implements ScheduledTask, PluginTask<ScheduledTask> {
+public class AbsBungeeTask implements ScheduledTask, PluginTask {
 
     private final ScheduledTask task;
 
@@ -49,10 +49,5 @@ public class AbsBungeeTask implements ScheduledTask, PluginTask<ScheduledTask> {
     @Override
     public Runnable getTask() {
         return task.getTask();
-    }
-
-    @Override
-    public ScheduledTask getWrappedTask() {
-        return this;
     }
 }

@@ -41,6 +41,9 @@ public abstract class RunnableFactory {
      */
     protected abstract PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time);
 
+    /**
+     * Cancel all known tasks of the plugin.
+     */
     public abstract void cancelAllKnownTasks();
 
     protected void setCancellable(AbsRunnable runnable, PluginRunnable implementingRunnable) {

@@ -10,7 +10,7 @@ package com.djrapitops.plugin.task;
  *
  * @author Rsl1122
  */
-public interface PluginTask<T> {
+public interface PluginTask {
 
     /**
      * Retrieve the task ID provided by the platform.
@@ -30,11 +30,4 @@ public interface PluginTask<T> {
      * Cancel the task.
      */
     void cancel();
-
-    /**
-     * Get the platform specific implementation of the task.
-     *
-     * @return object representing a task - depends on the platform.
-     */
-    T getWrappedTask();
 }

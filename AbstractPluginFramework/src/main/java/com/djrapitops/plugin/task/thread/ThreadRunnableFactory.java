@@ -14,6 +14,9 @@ public class ThreadRunnableFactory extends RunnableFactory {
 
     private final ConcurrentSet<ThreadRunnable> threadRunnables;
 
+    /**
+     * Standard constructor.
+     */
     public ThreadRunnableFactory() {
         threadRunnables = new ConcurrentSet<>();
     }

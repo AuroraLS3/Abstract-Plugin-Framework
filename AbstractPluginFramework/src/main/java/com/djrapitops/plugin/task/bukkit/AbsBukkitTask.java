@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitTask;
  *
  * @author Rsl1122
  */
-public class AbsBukkitTask implements BukkitTask, PluginTask<BukkitTask> {
+public class AbsBukkitTask implements BukkitTask, PluginTask {
 
     private final BukkitTask task;
 
@@ -39,11 +39,6 @@ public class AbsBukkitTask implements BukkitTask, PluginTask<BukkitTask> {
     @Override
     public void cancel() {
         task.cancel();
-    }
-
-    @Override
-    public BukkitTask getWrappedTask() {
-        return task;
     }
 
 }

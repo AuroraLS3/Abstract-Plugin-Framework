@@ -4,11 +4,9 @@
  */
 package com.djrapitops.plugin.task.sponge;
 
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.SpongePlugin;
 import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.PluginTask;
-import com.djrapitops.plugin.task.RunnableFactory;
 import org.spongepowered.api.scheduler.Task;
 
 /**
@@ -16,25 +14,19 @@ import org.spongepowered.api.scheduler.Task;
  *
  * @author Rsl1122
  */
-public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunnable, Runnable {
+abstract class AbsSpongeRunnable implements PluginRunnable, Runnable {
 
     private final String name;
     private final long time;
 
-    private T plugin;
-    private RunnableFactory runnableFactory;
+    private SpongePlugin plugin;
 
     private PluginTask task;
 
-    public AbsSpongeRunnable(String name, IPlugin plugin, long time) {
+    AbsSpongeRunnable(String name, SpongePlugin plugin, long time) {
         this.time = time;
-        if (plugin instanceof SpongePlugin) {
-            this.plugin = (T) plugin;
-        } else {
-            throw new IllegalArgumentException("Given plugin was not of correct type");
-        }
+        this.plugin = plugin;
         this.name = name;
-        this.runnableFactory = plugin.getRunnableFactory();
     }
 
     @Override
@@ -54,7 +46,6 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements PluginRunn
         } finally {
             // Clear instances so that cyclic references don't block GC
             plugin = null;
-            runnableFactory = null;
         }
     }
 

@@ -79,7 +79,7 @@ public class ThreadRunnable implements PluginRunnable, Runnable {
         return null;
     }
 
-    public void runThis() {
+    private void runThis() {
         thread = new Thread(this);
         thread.start();
     }
