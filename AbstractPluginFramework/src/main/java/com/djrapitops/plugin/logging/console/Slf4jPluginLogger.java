@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import java.util.function.Supplier;
 
 /**
- * {@link PluginLogger} implementation for Sponge and other slf4j Logger platforms.
+ * {@link PluginLogger} implementation for slf4j Logger platforms.
  *
  * @author Rsl1122
  */

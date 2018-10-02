@@ -13,7 +13,7 @@ import com.velocitypowered.api.scheduler.Scheduler;
 import java.util.concurrent.TimeUnit;
 
 /**
- * {@link PluginRunnable} implementation for Sponge.
+ * {@link PluginRunnable} implementation for Velocity.
  *
  * @author Rsl1122
  */
