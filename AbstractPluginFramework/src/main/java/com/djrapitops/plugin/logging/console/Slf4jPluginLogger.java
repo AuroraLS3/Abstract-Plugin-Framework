@@ -11,18 +11,18 @@ import java.util.function.Supplier;
  *
  * @author Rsl1122
  */
-public class SpongePluginLogger implements PluginLogger {
+public class Slf4jPluginLogger implements PluginLogger {
 
     private final Supplier<DebugLogger> debugLogger;
     private final Logger logger;
 
     /**
-     * Create a new SpongePluginLogger.
+     * Create a new Slf4jPluginLogger.
      *
      * @param logger      slf4j logger for console logging.
      * @param debugLogger Supplier for the {@link DebugLogger} to use.
      */
-    public SpongePluginLogger(Logger logger, Supplier<DebugLogger> debugLogger) {
+    public Slf4jPluginLogger(Logger logger, Supplier<DebugLogger> debugLogger) {
         this.debugLogger = debugLogger;
         this.logger = logger;
     }

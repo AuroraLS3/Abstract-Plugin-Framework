@@ -7,7 +7,7 @@ package com.djrapitops.plugin;
  */
 class PluginCommon {
 
-    static void reload(IPlugin plugin, boolean full) {
+    static void reload(APFPlugin plugin, boolean full) {
         try {
             plugin.setReloading(true);
             if (full) {

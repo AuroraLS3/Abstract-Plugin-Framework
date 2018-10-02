@@ -68,13 +68,6 @@ public interface IPlugin {
     boolean isReloading();
 
     /**
-     * Internal method for setting the plugin as reloading.
-     *
-     * @param value is the plugin reloading.
-     */
-    void setReloading(boolean value);
-
-    /**
      * Retrieve the folder that contains data and configuration for the plugin.
      *
      * @return a folder that is plugin specific for storing things.

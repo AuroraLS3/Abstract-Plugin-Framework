@@ -8,7 +8,7 @@ import com.djrapitops.plugin.benchmarking.Timings;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.sponge.SpongeCommand;
 import com.djrapitops.plugin.logging.console.PluginLogger;
-import com.djrapitops.plugin.logging.console.SpongePluginLogger;
+import com.djrapitops.plugin.logging.console.Slf4jPluginLogger;
 import com.djrapitops.plugin.logging.debug.CombineDebugLogger;
 import com.djrapitops.plugin.logging.debug.DebugLogger;
 import com.djrapitops.plugin.logging.debug.MemoryDebugLogger;
@@ -45,13 +45,15 @@ import java.util.Optional;
  * @author Rsl1122
  * @see IPlugin for method overview.
  */
-public abstract class SpongePlugin implements IPlugin {
+public abstract class SpongePlugin implements APFPlugin {
 
     protected final PluginLogger logger;
     protected final CombineDebugLogger debugLogger;
     protected final DefaultErrorHandler errorHandler;
     protected final Timings timings;
     protected final RunnableFactory runnableFactory;
+
+    protected boolean reloading;
 
     /**
      * Standard constructor that initializes the plugin with the default DebugLogger.
@@ -69,9 +71,16 @@ public abstract class SpongePlugin implements IPlugin {
         this.debugLogger = debugLogger;
         this.runnableFactory = new SpongeRunnableFactory(this);
         this.timings = new Timings(debugLogger);
-        this.logger = new SpongePluginLogger(getLogger(), this::getDebugLogger);
+        this.logger = new Slf4jPluginLogger(getLogger(), this::getDebugLogger);
         this.errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
     }
+
+    /**
+     * Implement this method by injecting slf4j.Logger in your plugin class.
+     *
+     * @return Logger of the plugin.
+     */
+    public abstract Logger getLogger();
 
     @Override
     public String getVersion() {
@@ -81,8 +90,6 @@ public abstract class SpongePlugin implements IPlugin {
                 () -> new IllegalStateException(getClass().getName() + " does not have required @Plugin annotation.")
         ).version();
     }
-
-    protected boolean reloading;
 
     private final Map<String, CommandMapping> commandMappings = new HashMap<>();
 
@@ -95,8 +102,6 @@ public abstract class SpongePlugin implements IPlugin {
     public void reloadPlugin(boolean full) {
         PluginCommon.reload(this, full);
     }
-
-    public abstract Logger getLogger();
 
     @Override
     public void setReloading(boolean reloading) {

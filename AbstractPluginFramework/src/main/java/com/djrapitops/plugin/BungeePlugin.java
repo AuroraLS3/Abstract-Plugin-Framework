@@ -4,7 +4,7 @@ import com.djrapitops.plugin.api.utility.Version;
 import com.djrapitops.plugin.benchmarking.Timings;
 import com.djrapitops.plugin.command.CommandNode;
 import com.djrapitops.plugin.command.bungee.BungeeCommand;
-import com.djrapitops.plugin.logging.console.BungeePluginLogger;
+import com.djrapitops.plugin.logging.console.JavaUtilPluginLogger;
 import com.djrapitops.plugin.logging.console.PluginLogger;
 import com.djrapitops.plugin.logging.debug.CombineDebugLogger;
 import com.djrapitops.plugin.logging.debug.DebugLogger;
@@ -32,7 +32,7 @@ import java.io.IOException;
  * @author Rsl1122
  * @see IPlugin for method overview.
  */
-public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements IPlugin {
+public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin implements APFPlugin {
 
     protected PluginLogger logger;
     protected final CombineDebugLogger debugLogger;
@@ -58,7 +58,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
         this.debugLogger = debugLogger;
         this.runnableFactory = new BungeeRunnableFactory(this);
         this.timings = new Timings(debugLogger);
-        this.logger = new BungeePluginLogger(
+        this.logger = new JavaUtilPluginLogger(
                 message -> getProxy().getConsole().sendMessage(new TextComponent(message)),
                 this::getDebugLogger,
                 getLogger()

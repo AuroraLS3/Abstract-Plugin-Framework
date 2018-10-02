@@ -20,7 +20,7 @@ import java.net.URL;
  *
  * @author Rsl1122
  */
-public class SpongeCMDSender implements Sender {
+class SpongeCMDSender implements Sender {
 
     private final CommandSource commandSource;
 

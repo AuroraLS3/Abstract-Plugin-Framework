@@ -15,7 +15,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author Rsl1122
  * @since 2.0.0
  */
-public class BungeeCMDSender implements Sender {
+class BungeeCMDSender implements Sender {
 
     private final CommandSender cs;
 

@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @author Rsl1122
  * @since 2.0.0
  */
-public class BukkitCMDSender implements Sender {
+class BukkitCMDSender implements Sender {
 
     private final CommandSender cs;
 
