@@ -17,13 +17,13 @@ public class TestPluginLogger implements PluginLogger {
     @Override
     public void log(L level, String... message) {
         for (String line : message) {
-            System.out.println(level.name() + ": " + line);
+            Logger.getAnonymousLogger().log(Level.INFO, level.name() + ": " + line);
         }
     }
 
     @Override
     public void log(L level, String message, Throwable throwable) {
-        Logger.getGlobal().log(Level.SEVERE, message, throwable);
+        Logger.getAnonymousLogger().log(Level.SEVERE, message, throwable);
     }
 
     @Override

@@ -44,25 +44,21 @@ public class ConfigTest {
 
     @Test
     public void save() throws Exception {
-        System.out.println("Testing save");
         config.save();
 
         List<String> original = readLines(copyFromFile);
         List<String> test = readLines();
-        boolean different = false;
+
+        StringBuilder differing = new StringBuilder();
         for (int i = 0; i < original.size(); i++) {
             String origLine = original.get(i);
             String testLine = test.get(i).replace("    ", "  ");
             if (!origLine.equals(testLine)) {
-                System.out.println((i + 1) + "! " + origLine);
-                System.out.println((i + 1) + "! " + testLine);
-                different = true;
-            } else {
-                System.out.println((i + 1) + ": " + origLine);
-                System.out.println((i + 1) + ": " + testLine);
+                differing.append(i + 1).append("! ").append(origLine).append("\n");
+                differing.append(i + 1).append("! ").append(testLine).append("\n\n");
             }
         }
-        assertFalse(different);
+        assertEquals(differing.toString(), 0, differing.length());
     }
 
     @Test
@@ -76,7 +72,6 @@ public class ConfigTest {
         config.set("Plugins.Example2.Block", "Test2");
         config.save();
         lines = readLines();
-        lines.forEach(System.out::println);
         assertTrue(lines.contains("        Block: Test2"));
     }
 
@@ -101,7 +96,6 @@ public class ConfigTest {
         config.save();
 
         List<String> lines = readLines();
-        lines.forEach(System.out::println);
         assertTrue(lines.contains("            - Thot"));
         stringList = config.getStringList("Plugins.Example.Block");
         assertTrue(stringList.contains("Thot"));
@@ -112,14 +106,12 @@ public class ConfigTest {
         List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5);
         config.set("Test.IntList", expected);
         config.save();
-        readLines().forEach(System.out::println);
         List<Integer> intList = config.getIntList("Test.IntList");
         assertEquals(expected, intList);
 
         expected = Arrays.asList(1, 2, 3, 5);
         config.set("Test.IntList", expected);
         config.save();
-        readLines().forEach(System.out::println);
         intList = config.getIntList("Test.IntList");
         assertEquals(expected, intList);
     }
@@ -157,7 +149,6 @@ public class ConfigTest {
         config.set("T", "'Test', 'Two'");
         config.save();
         config.read();
-        readLines().forEach(System.out::println);
         assertEquals("'Test', 'Two'", config.getString("T"));
         assertEquals("#.###", config.getString("Customization.Formatting.DecimalPoints"));
     }
@@ -179,7 +170,6 @@ public class ConfigTest {
         assertEquals(expected, config.getIntList("Test.IntList"));
         config.copyDefaults(copyFromFile);
         config.save();
-        readLines().forEach(System.out::println);
         assertEquals(expected, config.getIntList("Test.IntList"));
         assertEquals(expected2, config.getStringList("Plugins.Example.Block"));
         assertEquals("EN", config.getString("Plugin.Locale"));
