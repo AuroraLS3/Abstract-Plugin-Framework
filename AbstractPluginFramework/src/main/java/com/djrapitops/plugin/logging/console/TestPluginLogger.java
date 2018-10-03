@@ -1,7 +1,7 @@
 package com.djrapitops.plugin.logging.console;
 
 import com.djrapitops.plugin.logging.L;
-import com.djrapitops.plugin.logging.debug.DebugConsoleLogger;
+import com.djrapitops.plugin.logging.debug.ConsoleDebugLogger;
 import com.djrapitops.plugin.logging.debug.DebugLogger;
 
 import java.util.logging.Level;
@@ -28,6 +28,6 @@ public class TestPluginLogger implements PluginLogger {
 
     @Override
     public DebugLogger getDebugLogger() {
-        return new DebugConsoleLogger(this);
+        return new ConsoleDebugLogger(this);
     }
 }

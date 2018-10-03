@@ -11,15 +11,15 @@ import java.util.function.Supplier;
  *
  * @author Rsl1122
  */
-public class DebugFolderTimeStampFileLogger extends FolderTimeStampFileLogger implements DebugLogger {
+public class FolderTimeStampFileDebugLogger extends FolderTimeStampFileLogger implements DebugLogger {
 
     /**
-     * Create a new DebugFolderTimeStampFileLogger.
+     * Create a new FolderTimeStampFileDebugLogger.
      *
      * @param logFolder    Folder to store the log files in.
      * @param errorHandler Supplier for the {@link ErrorHandler} if writing to file fails.
      */
-    public DebugFolderTimeStampFileLogger(File logFolder, Supplier<ErrorHandler> errorHandler) {
+    public FolderTimeStampFileDebugLogger(File logFolder, Supplier<ErrorHandler> errorHandler) {
         super("DebugLog", logFolder, errorHandler);
     }
 

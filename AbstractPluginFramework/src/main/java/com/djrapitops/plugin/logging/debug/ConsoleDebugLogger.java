@@ -8,16 +8,16 @@ import com.djrapitops.plugin.logging.console.PluginLogger;
  *
  * @author Rsl1122
  */
-public class DebugConsoleLogger implements DebugLogger {
+public class ConsoleDebugLogger implements DebugLogger {
 
     private final PluginLogger logger;
 
     /**
-     * Create a new DebugConsoleLogger.
+     * Create a new ConsoleDebugLogger.
      *
      * @param logger PluginLogger to use for logging.
      */
-    public DebugConsoleLogger(PluginLogger logger) {
+    public ConsoleDebugLogger(PluginLogger logger) {
         this.logger = logger;
     }
 
