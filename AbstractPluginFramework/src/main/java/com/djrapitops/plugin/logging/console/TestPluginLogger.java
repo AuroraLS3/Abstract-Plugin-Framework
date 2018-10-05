@@ -17,7 +17,7 @@ public class TestPluginLogger implements PluginLogger {
     @Override
     public void log(L level, String... message) {
         for (String line : message) {
-            Logger.getAnonymousLogger().log(Level.INFO, level.name() + ": " + line);
+            Logger.getAnonymousLogger().log(Level.INFO, () -> level.name() + ": " + line);
         }
     }
 

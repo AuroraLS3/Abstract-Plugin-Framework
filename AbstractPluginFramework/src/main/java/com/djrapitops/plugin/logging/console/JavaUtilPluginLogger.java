@@ -59,7 +59,7 @@ public class JavaUtilPluginLogger implements PluginLogger {
                 break;
             case DEBUG_INFO:
                 for (String line : message) {
-                    logger.log(Level.INFO, "[DEBUG] " + line);
+                    logger.log(Level.INFO, "[DEBUG] {0}", line);
                 }
                 break;
             case INFO:

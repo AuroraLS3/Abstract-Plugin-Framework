@@ -49,7 +49,7 @@ public class Slf4jPluginLogger implements PluginLogger {
                 break;
             case DEBUG_INFO:
                 for (String line : message) {
-                    logger.info("[DEBUG] " + line);
+                    logger.info("[DEBUG] {}", line);
                 }
                 break;
             case INFO_COLOR:
