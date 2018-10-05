@@ -6,6 +6,7 @@ import com.djrapitops.plugin.logging.L;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -55,7 +56,7 @@ public class FolderTimeStampErrorFileLogger extends FolderTimeStampFileLogger im
      * @param lines Lines read from a file logged by this logger.
      * @return TreeMap with first line - rest of the lines structure.
      */
-    public static TreeMap<String, List<String>> splitByError(List<String> lines) {
+    public static SortedMap<String, List<String>> splitByError(List<String> lines) {
         if (lines.isEmpty()) {
             return new TreeMap<>();
         }
