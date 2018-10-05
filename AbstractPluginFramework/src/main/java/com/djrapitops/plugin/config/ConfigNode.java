@@ -302,7 +302,6 @@ public class ConfigNode {
      * @param value Value to set the node to. Supports String, Boolean, Long, Double and List and ConfigNode.
      */
     public void set(String path, Object value) {
-        String[] split = path.split("\\.");
         ConfigNode node = getConfigNode(path);
         node.set(value);
     }
