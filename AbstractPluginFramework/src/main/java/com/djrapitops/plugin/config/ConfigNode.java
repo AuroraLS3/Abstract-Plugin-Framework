@@ -263,15 +263,17 @@ public class ConfigNode {
      * @return a config node.
      */
     public ConfigNode getConfigNode(String path) {
-        String[] split = path.split("\\.");
+        String[] pathKeys = path.split("\\.");
         ConfigNode node = this;
-        for (String key : split) {
-            ConfigNode parent = node;
-            node = node.children.get(key);
+        for (String pathKey : pathKeys) {
+            ConfigNode parentOfNewNode = node;
+
+            node = node.children.get(pathKey);
             if (node == null) {
-                ConfigNode newN = new ConfigNode(key, parent, "");
-                parent.addChild(key, newN);
-                node = newN;
+                // Add a new node if node does not exist.
+                ConfigNode newNode = new ConfigNode(pathKey, parentOfNewNode, "");
+                parentOfNewNode.addChild(pathKey, newNode);
+                node = newNode;
             }
         }
         return node;
@@ -339,11 +341,11 @@ public class ConfigNode {
      * @see Config#save()
      */
     public void save() throws IOException {
-        ConfigNode parent = this.parent;
-        while (parent.parent != null) {
-            parent = parent.parent;
+        ConfigNode root = this.parent;
+        while (root.parent != null) {
+            root = root.parent;
         }
-        parent.save();
+        root.save();
     }
 
     /**
@@ -375,14 +377,12 @@ public class ConfigNode {
      * @return For example: "Child" or "Parent.Child" if deep is true.
      */
     public String getKey(boolean deep) {
-        if (deep) {
-            if (parent != null) {
-                String s = parent.getKey(true) + "." + key;
-                if (s.startsWith(".")) {
-                    return s.substring(1);
-                }
-                return s;
+        if (deep && parent != null) {
+            String s = parent.getKey(true) + "." + key;
+            if (s.startsWith(".")) {
+                return s.substring(1);
             }
+            return s;
         }
         return key;
     }
@@ -398,8 +398,8 @@ public class ConfigNode {
     public String toString() {
         StringBuilder toString = new StringBuilder(key);
         toString.append(":\n");
-        for (String key : childOrder) {
-            toString.append(this.key).append(".").append(children.get(key).toString());
+        for (String childKey : childOrder) {
+            toString.append(this.key).append(".").append(children.get(childKey).toString());
         }
         return toString.toString();
     }
@@ -428,24 +428,25 @@ public class ConfigNode {
      * Copy default values from a node if no values exist for this node.
      * <p>
      * Non-existing nodes will be added from the given node.
+     * Depth-first.
      * <p>
      * Values are only held in memory unless {@link ConfigNode#save()} is called.
      *
      * @param node Node to copy things from.
      */
     public void copyDefaults(ConfigNode node) {
-        for (String key : node.childOrder) {
-            ConfigNode copyFromNode = node.getConfigNode(key);
-            if (!contains(key)) {
-                this.addChild(key, copyFromNode);
+        for (String childKey : node.childOrder) {
+            ConfigNode copyFromNode = node.getConfigNode(childKey);
+            if (!contains(childKey)) {
+                this.addChild(childKey, copyFromNode);
             } else {
-                ConfigNode thisNode = this.getConfigNode(key);
-                List<String> comment = thisNode.comment;
+                ConfigNode child = this.getConfigNode(childKey);
+                List<String> originalComment = child.comment;
                 List<String> copyComment = copyFromNode.comment;
-                if (comment.size() < copyComment.size()) {
-                    thisNode.comment = copyComment;
+                if (originalComment.size() < copyComment.size()) {
+                    child.comment = copyComment;
                 }
-                thisNode.copyDefaults(copyFromNode);
+                child.copyDefaults(copyFromNode);
             }
         }
     }
