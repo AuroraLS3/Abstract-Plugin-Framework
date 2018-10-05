@@ -45,8 +45,7 @@ public class ThreadRunnable implements PluginRunnable, Runnable {
 
     @Override
     public PluginTask runTask() {
-        runThis();
-        return null;
+        return runTaskAsynchronously();
     }
 
     @Override
@@ -55,33 +54,29 @@ public class ThreadRunnable implements PluginRunnable, Runnable {
         return null;
     }
 
+    private void runThis() {
+        thread = new Thread(this);
+        thread.start();
+    }
+
     @Override
     public PluginTask runTaskLater(long delay) {
-        runThis();
-        return null;
+        return runTaskAsynchronously();
     }
 
     @Override
     public PluginTask runTaskLaterAsynchronously(long delay) {
-        runThis();
-        return null;
+        return runTaskAsynchronously();
     }
 
     @Override
     public PluginTask runTaskTimer(long delay, long period) {
-        runThis();
-        return null;
+        return runTaskAsynchronously();
     }
 
     @Override
     public PluginTask runTaskTimerAsynchronously(long delay, long period) {
-        runThis();
-        return null;
-    }
-
-    private void runThis() {
-        thread = new Thread(this);
-        thread.start();
+        return runTaskAsynchronously();
     }
 
     @Override

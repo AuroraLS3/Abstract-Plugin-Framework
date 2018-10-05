@@ -65,8 +65,7 @@ abstract class AbsVelocityRunnable implements PluginRunnable, Runnable {
 
     @Override
     public PluginTask runTask() {
-        task = new AbsVelocityTask(scheduler.buildTask(plugin, this).schedule());
-        return this.task;
+        return runTaskAsynchronously();
     }
 
     @Override
@@ -77,10 +76,7 @@ abstract class AbsVelocityRunnable implements PluginRunnable, Runnable {
 
     @Override
     public PluginTask runTaskLater(long delay) {
-        task = new AbsVelocityTask(scheduler.buildTask(plugin, this)
-                .delay(TimeAmount.ticksToMillis(delay), TimeUnit.MILLISECONDS)
-                .schedule());
-        return this.task;
+        return runTaskLaterAsynchronously(delay);
     }
 
     @Override
@@ -93,11 +89,7 @@ abstract class AbsVelocityRunnable implements PluginRunnable, Runnable {
 
     @Override
     public PluginTask runTaskTimer(long delay, long period) {
-        task = new AbsVelocityTask(scheduler.buildTask(plugin, this)
-                .delay(TimeAmount.ticksToMillis(delay), TimeUnit.MILLISECONDS)
-                .repeat(TimeAmount.ticksToMillis(delay), TimeUnit.MILLISECONDS)
-                .schedule());
-        return this.task;
+        return runTaskTimerAsynchronously(delay, period);
     }
 
     @Override
