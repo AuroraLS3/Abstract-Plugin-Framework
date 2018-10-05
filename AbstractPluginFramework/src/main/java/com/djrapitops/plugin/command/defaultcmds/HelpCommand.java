@@ -30,8 +30,6 @@ public class HelpCommand extends CommandNode {
         sender.sendMessage("  ");
 
         for (CommandNode[] commandNodes : treeCmdNode.getNodeGroups()) {
-//            int desiredLength = getIndent(commandNodes);
-
             for (CommandNode node : commandNodes) {
                 if (node == null) {
                     continue;
@@ -43,48 +41,6 @@ public class HelpCommand extends CommandNode {
 
         sender.sendMessage("  " + cSec + "Add ? to the end of the command for more help");
         sender.sendMessage(cTer + ">");
-    }
-
-    private String getWithSpaces(String nameAndArgs, int desiredLength) {
-        StringBuilder builder = new StringBuilder(nameAndArgs);
-        while (builder.length() < desiredLength) {
-            builder.append(" ");
-        }
-        return builder.toString();
-    }
-
-    private int getIndent(CommandNode[] commandNodes) {
-        double maxIndent = 0.0;
-
-        for (CommandNode node : commandNodes) {
-            if (node == null) {
-                continue;
-            }
-            double indent = 0.0;
-            String nameAndArgs = getNameAndArgs(node);
-            for (char c : nameAndArgs.toCharArray()) {
-                switch (c) {
-                    case 'i':
-                    case 'l':
-                    case '!':
-                    case '|':
-                    case ';':
-                    case ':':
-                    case '\'':
-                    case '.':
-                        indent += 0.5;
-                        break;
-                    default:
-                        indent += 1;
-                        break;
-                }
-            }
-            if (indent > maxIndent) {
-                maxIndent = indent;
-            }
-        }
-
-        return (int) Math.ceil(maxIndent);
     }
 
     private String getNameAndArgs(CommandNode node) {
