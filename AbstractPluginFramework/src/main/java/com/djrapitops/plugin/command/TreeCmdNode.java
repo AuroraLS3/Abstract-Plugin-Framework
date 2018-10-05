@@ -126,41 +126,17 @@ public class TreeCmdNode extends CommandNode {
                 return;
             }
             CommandNode command = getCommand(args);
+            CommandType cmdType = command.getCommandType();
 
-            // Permission Check
             boolean console = !CommandUtils.isPlayer(sender);
-            String permission = command.getPermission();
-            if (!"".equals(permission) && !sender.hasPermission(permission)) {
-                throw new IllegalAccessException("You do not have the required permission.");
-            }
+            consoleTypeCheck(cmdType, console);
+            checkPermission(sender, command);
 
-            // Argument Check
-            String commandName = command.getName();
-            // Check if default command was parsed without the command argument
-            boolean isDefaultCommandWithoutCommandArg = commandName.equals(defaultCommand)
-                    && args.length <= 1 && !args[0].equals(commandName);
-            CommandType cType = command.getCommandType();
-            // Check if there are enough arguments
-            if (!isDefaultCommandWithoutCommandArg
-                    && ((cType == CommandType.ALL_WITH_ARGS && args.length < 2)
-                    || console && args.length < 2 && cType == CommandType.PLAYER_OR_ARGS)) {
-                throw new IllegalAccessException("Too few arguments! " + Arrays.toString(getArguments()));
-            }
-
-            // CommandType check for Console
-            if (console && cType == CommandType.PLAYER) {
-                throw new IllegalAccessException("Command can only be used as a player.");
-            }
+            boolean isDefaultCommandWithoutCommandArg = checkArguments(args, command, console, cmdType);
 
             // In Depth Help
             if (args[args.length - 1].equals("?")) {
-                if (args.length == 1) {
-                    sender.sendMessage(getInDepthHelp());
-                    sender.sendMessage("Aliases: " + Arrays.toString(getAliases()));
-                } else {
-                    sender.sendMessage(command.getInDepthHelp());
-                    sender.sendMessage("Aliases: " + Arrays.toString(command.getAliases()));
-                }
+                sendInDepthHelp(sender, args, command);
                 return;
             }
 
@@ -178,6 +154,43 @@ public class TreeCmdNode extends CommandNode {
         } catch (IllegalAccessException e) {
             sender.sendMessage("§c" + e.getMessage());
         }
+    }
+
+    private void sendInDepthHelp(Sender sender, String[] args, CommandNode command) {
+        if (args.length == 1) {
+            sender.sendMessage(getInDepthHelp());
+            sender.sendMessage("Aliases: " + Arrays.toString(getAliases()));
+        } else {
+            sender.sendMessage(command.getInDepthHelp());
+            sender.sendMessage("Aliases: " + Arrays.toString(command.getAliases()));
+        }
+    }
+
+    private void consoleTypeCheck(CommandType cmdType, boolean console) throws IllegalAccessException {
+        if (console && cmdType == CommandType.PLAYER) {
+            throw new IllegalAccessException("Command can only be used as a player.");
+        }
+    }
+
+    private void checkPermission(Sender sender, CommandNode command) throws IllegalAccessException {
+        String permission = command.getPermission();
+        if (!"".equals(permission) && !sender.hasPermission(permission)) {
+            throw new IllegalAccessException("You do not have the required permission.");
+        }
+    }
+
+    private boolean checkArguments(String[] args, CommandNode command, boolean console, CommandType cmdType) throws IllegalAccessException {
+        String commandName = command.getName();
+        // Check if default command was parsed without the command argument
+        boolean isDefaultCommandWithoutCommandArg = commandName.equals(defaultCommand)
+                && args.length <= 1 && !args[0].equals(commandName);
+        // Check if there are enough arguments
+        if (!isDefaultCommandWithoutCommandArg
+                && ((cmdType == CommandType.ALL_WITH_ARGS && args.length < 2)
+                || console && args.length < 2 && cmdType == CommandType.PLAYER_OR_ARGS)) {
+            throw new IllegalAccessException("Too few arguments! " + Arrays.toString(getArguments()));
+        }
+        return isDefaultCommandWithoutCommandArg;
     }
 
     private CommandNode getCommand(String[] args) {
