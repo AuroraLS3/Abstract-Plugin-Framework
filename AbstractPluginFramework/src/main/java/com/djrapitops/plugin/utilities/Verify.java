@@ -21,6 +21,10 @@ import java.util.stream.Stream;
  */
 public class Verify {
 
+    private Verify() {
+        /* Static method class */
+    }
+
     /**
      * Checks if the file exists if it is not null.
      *
