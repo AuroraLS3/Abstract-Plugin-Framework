@@ -14,7 +14,6 @@ public abstract class CommandNode {
     private final CommandType commandType;
 
     private String[] arguments = new String[0];
-    private String[] tabComplete = new String[0];
     private String onHover;
     private String shortHelp = "";
     private String[] inDepthHelp;
