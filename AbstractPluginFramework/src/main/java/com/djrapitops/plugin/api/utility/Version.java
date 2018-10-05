@@ -1,6 +1,5 @@
 package com.djrapitops.plugin.api.utility;
 
-import com.djrapitops.plugin.utilities.StackUtils;
 import com.google.common.base.Objects;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -82,7 +81,7 @@ public class Version implements Comparable<Version> {
         String requestUrl = "https://api.spiget.org/v2/resources/" + resourceID + "/versions?size=1&sort=-name";
         URL url = new URL(requestUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.addRequestProperty("User-Agent", "AbstractPluginFramework: " + StackUtils.getCallingPlugin().getSimpleName());
+        connection.addRequestProperty("User-Agent", "AbstractPluginFramework-plugin");
 
         int responseCode = connection.getResponseCode();
         try (InputStream inputStream = connection.getInputStream()) {
