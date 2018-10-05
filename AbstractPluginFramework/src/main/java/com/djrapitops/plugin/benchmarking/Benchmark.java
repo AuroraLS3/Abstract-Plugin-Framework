@@ -1,5 +1,6 @@
 package com.djrapitops.plugin.benchmarking;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -116,5 +117,20 @@ public class Benchmark implements Comparable<Benchmark> {
      */
     public long getUsedMemory() {
         return estimatedMemoryUse;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Benchmark)) return false;
+        Benchmark benchmark = (Benchmark) o;
+        return ns == benchmark.ns &&
+                estimatedMemoryUse == benchmark.estimatedMemoryUse &&
+                Objects.equals(name, benchmark.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ns, estimatedMemoryUse, name);
     }
 }
