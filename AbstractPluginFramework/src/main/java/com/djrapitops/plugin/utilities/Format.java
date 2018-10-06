@@ -104,6 +104,7 @@ public class Format {
     /**
      * Remove parts using multiple regex patterns.
      *
+     * @param regex Patterns
      * @return called formatter.
      */
     public Format remove(String... regex) {

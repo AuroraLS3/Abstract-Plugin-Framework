@@ -5,18 +5,9 @@ import com.djrapitops.plugin.utilities.StackUtils;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Rsl1122
- */
 @Deprecated
 public class Benchmark {
 
-    /**
-     * Start a new benchmark.
-     *
-     * @param source Task/Source/Name
-     * @return Bench start Epoch ms.
-     */
     public static long start(String source) {
         Class plugin = StackUtils.getCallingPlugin();
         StaticHolder.getInstance(plugin).getTimings().start(source);
@@ -68,9 +59,6 @@ public class Benchmark {
     public static void pluginDisabled(Class c) {
     }
 
-    /**
-     * @deprecated Use TimeAmount.currentMs instead.
-     */
     @Deprecated
     public static long getTime() {
         return System.currentTimeMillis();

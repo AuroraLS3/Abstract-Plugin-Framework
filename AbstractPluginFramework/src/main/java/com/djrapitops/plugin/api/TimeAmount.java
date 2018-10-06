@@ -64,6 +64,7 @@ public enum TimeAmount {
     }
 
     /**
+     * @return System.currentTimeMillis().
      * @deprecated use {@code System.currentTimeMillis()} instead.
      */
     @Deprecated
@@ -72,6 +73,7 @@ public enum TimeAmount {
     }
 
     /**
+     * @return ticks of this unit.
      * @deprecated use {@code toTicks(long, TimeUnit)} instead.
      */
     @Deprecated
@@ -80,6 +82,7 @@ public enum TimeAmount {
     }
 
     /**
+     * @return milliseconds of this unit.
      * @deprecated use {@code TimeUnit#toMillis(long)} instead.
      */
     @Deprecated
@@ -88,6 +91,7 @@ public enum TimeAmount {
     }
 
     /**
+     * @return nanoseconds of this unit.
      * @deprecated use {@code TimeUnit#toNanos(long)} instead.
      */
     @Deprecated
