@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Timings {
 
-    private final Map<String, Benchmark> average;
+    private final Map<String, Benchmark> rollingAverage;
     private final Map<String, Long> timesRun;
     private final Map<String, RunningBenchmark> running;
 
@@ -19,7 +19,7 @@ public class Timings {
 
     public Timings(DebugLogger debugLogger) {
         this.debugLogger = debugLogger;
-        average = new HashMap<>();
+        rollingAverage = new HashMap<>();
         timesRun = new HashMap<>();
         running = new HashMap<>();
     }
@@ -47,7 +47,7 @@ public class Timings {
         Benchmark result = bench.end();
 
         Long times = timesRun.getOrDefault(name, 0L);
-        Benchmark currentAverage = average.get(name);
+        Benchmark currentAverage = rollingAverage.get(name);
 
         long weighedAvgNs = currentAverage != null
                 ? (result.getNs() + currentAverage.getNs() * times) / (times + 1)
@@ -56,7 +56,7 @@ public class Timings {
                 ? (result.getUsedMemory() + currentAverage.getUsedMemory() * times) / (times + 1)
                 : result.getUsedMemory();
 
-        average.put(name, new Benchmark(name, weighedAvgNs, weighedAvgMem));
+        rollingAverage.put(name, new Benchmark(name, weighedAvgNs, weighedAvgMem));
         timesRun.put(name, times + 1L);
 
         return Optional.of(result);
@@ -80,16 +80,16 @@ public class Timings {
      */
     public void reset() {
         running.clear();
-        average.clear();
+        rollingAverage.clear();
     }
 
     /**
-     * Get a list of each named {@link Benchmark} object averaged from all the average.
+     * Get a list of each named {@link Benchmark} object that represents the rolling average.
      *
      * @return List that contains one {@link Benchmark} for each name.
      */
     public List<Benchmark> getAverageResults() {
-        List<Benchmark> averageResults = new ArrayList<>(average.values());
+        List<Benchmark> averageResults = new ArrayList<>(rollingAverage.values());
         Collections.sort(averageResults);
         return averageResults;
     }
