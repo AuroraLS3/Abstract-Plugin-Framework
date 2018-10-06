@@ -1,6 +1,5 @@
 package com.djrapitops.plugin.config;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,10 +35,6 @@ public class ConfigTest {
         config = new Config(testFile);
         copyFromFile = new File("src/test/resources/testconfig.yml");
         config.copyDefaults(copyFromFile);
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test

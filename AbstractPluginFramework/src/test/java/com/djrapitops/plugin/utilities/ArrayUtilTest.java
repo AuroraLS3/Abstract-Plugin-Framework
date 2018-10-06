@@ -12,7 +12,7 @@ import static org.junit.Assert.assertArrayEquals;
 public class ArrayUtilTest {
 
     @Test
-    public void merge() {
+    public void mergeCombinesArrays() {
         String[] one = new String[]{"one"};
         String[] two = new String[]{"two"};
         String[] expected = new String[]{"one", "two"};
@@ -23,7 +23,7 @@ public class ArrayUtilTest {
     }
 
     @Test
-    public void mergeEmpty() {
+    public void mergeCombinesEmptyArray() {
         String[] one = new String[]{"one"};
         String[] two = new String[]{};
         String[] expected = new String[]{"one"};
@@ -34,7 +34,7 @@ public class ArrayUtilTest {
     }
 
     @Test
-    public void mergeNoArgs() {
+    public void mergeCreatesNoArgsArray() {
         String[] expected = new String[]{};
         String[] result = ArrayUtil.merge();
 
@@ -42,7 +42,7 @@ public class ArrayUtilTest {
     }
 
     @Test
-    public void removeFirstArg() {
+    public void firstArgumentIsRemoved() {
         String[] args = new String[]{"one", "two", "three", "four"};
         String[] expected = new String[]{"two", "three", "four"};
         String[] result = ArrayUtil.removeFirstArgument(args);
@@ -51,7 +51,7 @@ public class ArrayUtilTest {
     }
 
     @Test
-    public void removeFirstArgNoArgs() {
+    public void argumentRemovalDoesNotLeadToOutOfBoundsOnEmptyArray() {
         String[] expected = new String[]{};
         String[] result = ArrayUtil.removeFirstArgument(expected);
 
@@ -59,7 +59,7 @@ public class ArrayUtilTest {
     }
 
     @Test
-    public void removeFirstArgOneArg() {
+    public void argumentRemovalLeadsToEmptyArray() {
         String[] args = new String[]{"one"};
         String[] expected = new String[]{};
         String[] result = ArrayUtil.removeFirstArgument(args);

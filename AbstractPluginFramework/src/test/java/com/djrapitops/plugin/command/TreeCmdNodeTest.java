@@ -46,7 +46,7 @@ public class TreeCmdNodeTest {
     }
 
     @Test
-    public void onCommandOne() {
+    public void argumentsAreParsedCorrectlyDefaultCommandNoArgs() {
         underTest.onCommand(sender, "", new String[]{"one"});
 
         verify(sender).getSenderType();
@@ -55,7 +55,7 @@ public class TreeCmdNodeTest {
     }
 
     @Test
-    public void onCommandOneArgument() {
+    public void argumentsAreParsedCorrectlyDefaultCommand() {
         underTest.onCommand(sender, "", new String[]{"one", "argument"});
 
         verify(sender).getSenderType();
@@ -64,7 +64,7 @@ public class TreeCmdNodeTest {
     }
 
     @Test
-    public void onCommandTwo() {
+    public void argumentsAreParsedCorrectlyNonDefaultCommand() {
         underTest.onCommand(sender, "", new String[]{"two"});
 
         verify(sender).getSenderType();
@@ -73,7 +73,7 @@ public class TreeCmdNodeTest {
     }
 
     @Test
-    public void onCommandAlias() {
+    public void aliasExecutesCommand() {
         underTest.onCommand(sender, "", new String[]{"alias", "test"});
 
         verify(sender).getSenderType();
@@ -82,7 +82,7 @@ public class TreeCmdNodeTest {
     }
 
     @Test
-    public void onCommandWrongCMD() {
+    public void wrongCommandExecutesDefaultCommandWithArgument() {
         underTest.onCommand(sender, "", new String[]{"non-existing-command"});
 
         verify(sender).getSenderType();
@@ -91,21 +91,21 @@ public class TreeCmdNodeTest {
     }
 
     @Test
-    public void onCommandHelpEmpty() {
+    public void noArgsDisplaysHelp() {
         underTest.onCommand(sender, "", new String[]{});
 
         verify(sender).sendMessage("§f>");
     }
 
     @Test
-    public void onCommandInDepthHelp() {
+    public void questionArgDisplaysInDepthHelp() {
         underTest.onCommand(sender, "", new String[]{"?"});
 
         verify(sender).sendMessage("Aliases: [test, two]");
     }
 
     @Test
-    public void onCommandInDepthHelpSubCmd() {
+    public void questionArgDisplaysSubCommandInDepthHelp() {
         underTest.onCommand(sender, "", new String[]{"one", "?"});
 
         verify(sender).sendMessage("Aliases: [one, alias]");
