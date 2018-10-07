@@ -4,19 +4,19 @@
  */
 package com.djrapitops.plugin.task.sponge;
 
-import com.djrapitops.plugin.task.ITask;
+import com.djrapitops.plugin.task.PluginTask;
 import org.spongepowered.api.scheduler.Task;
 
 /**
- * ITask implementation for Sponge.
+ * {@link PluginTask} implementation for Sponge.
  *
  * @author Rsl1122
  */
-public class AbsSpongeTask implements ITask<Task> {
+class AbsSpongeTask implements PluginTask {
 
     private final Task task;
 
-    public AbsSpongeTask(Task task) {
+    AbsSpongeTask(Task task) {
         this.task = task;
     }
 
@@ -33,10 +33,5 @@ public class AbsSpongeTask implements ITask<Task> {
     @Override
     public void cancel() {
         task.cancel();
-    }
-
-    @Override
-    public Task getWrappedTask() {
-        return task;
     }
 }

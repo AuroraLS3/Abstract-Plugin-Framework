@@ -5,8 +5,7 @@
 package com.djrapitops.plugin.api.utility.log;
 
 import com.djrapitops.plugin.IPlugin;
-import com.djrapitops.plugin.api.TimeAmount;
-import com.djrapitops.plugin.utilities.FormatUtils;
+import com.djrapitops.plugin.logging.FileLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +22,7 @@ import java.util.stream.Stream;
  *
  * @author Rsl1122
  */
+@Deprecated
 public class ErrorLogger {
 
     private static List<String> getStackTrace(Throwable e) {
@@ -39,13 +39,14 @@ public class ErrorLogger {
         return trace;
     }
 
+    @Deprecated
     public static void logThrowable(Throwable e, File logsFolder) throws IOException {
         File errorFile = new File(logsFolder, Log.getErrorFileName());
         if (!errorFile.exists() && !errorFile.createNewFile()) {
             return;
         }
         List<String> stackTrace = getStackTrace(e);
-        stackTrace.add("Error was logged: " + FormatUtils.formatTimeStampSecond(TimeAmount.currentMs()));
+        stackTrace.add("Error was logged: " + System.currentTimeMillis());
         FileLogger.appendToFile(errorFile, stackTrace);
     }
 
@@ -56,6 +57,7 @@ public class ErrorLogger {
      * @return TreeMap: "Error was logged: timestamp", List of error stacktrace lines.
      * @throws IOException If file can not be read.
      */
+    @Deprecated
     public static TreeMap<String, List<String>> getLoggedErrors(IPlugin plugin) throws IOException {
         File logsFolder = new File(plugin.getDataFolder(), "logs");
         File errorFile = new File(logsFolder, Log.getErrorFileName());

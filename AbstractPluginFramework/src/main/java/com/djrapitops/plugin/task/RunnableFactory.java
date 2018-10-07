@@ -1,68 +1,54 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.djrapitops.plugin.task;
 
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
-import com.djrapitops.plugin.api.Check;
-import com.djrapitops.plugin.task.bukkit.AbsBukkitRunnable;
-import com.djrapitops.plugin.task.bungee.AbsBungeeRunnable;
-import com.djrapitops.plugin.task.sponge.AbsSpongeRunnable;
 import com.djrapitops.plugin.utilities.StackUtils;
 
 /**
+ * Factory for creating runnable objects that can be scheduled on any server platform.
+ * <p>
+ * Obtain an instance from {@link IPlugin#getRunnableFactory()}.
+ *
  * @author Rsl1122
  */
-public class RunnableFactory {
+public abstract class RunnableFactory {
 
-    private static boolean testMode = false;
-
-    public static IRunnable createNew(AbsRunnable runnable) {
-        return createNew(runnable.getName(), runnable);
+    @Deprecated
+    public static PluginRunnable createNew(String name, AbsRunnable absRunnable) {
+        Class callingPlugin = StackUtils.getCallingPlugin();
+        StaticHolder.saveInstance(absRunnable.getClass(), callingPlugin);
+        IPlugin plugin = StaticHolder.getInstance(callingPlugin);
+        return plugin.getRunnableFactory().create(name, absRunnable);
     }
 
-    public static IRunnable createNew(String name, AbsRunnable runnable) {
-        if (!testMode) {
-            try {
-                Class callingPlugin = StackUtils.getCallingPlugin();
-                IPlugin instance = StaticHolder.getInstance(callingPlugin);
-                StaticHolder.saveInstance(runnable.getClass(), callingPlugin);
-
-                if (Check.isBukkitAvailable()) {
-                    return new AbsBukkitRunnable(name, instance) {
-                        @Override
-                        public void run() {
-                            runnable.setCancellable(this);
-                            runnable.run();
-                        }
-                    };
-                } else if (Check.isBungeeAvailable()) {
-                    return new AbsBungeeRunnable(name, instance) {
-                        @Override
-                        public void run() {
-                            runnable.setCancellable(this);
-                            runnable.run();
-                        }
-                    };
-                } else if (Check.isSpongeAvailable()) {
-                    return new AbsSpongeRunnable(name, instance) {
-                        @Override
-                        public void run() {
-                            runnable.setCancellable(this);
-                            runnable.run();
-                        }
-                    };
-                }
-            } catch (NullPointerException ignored) {
-            }
-        }
-        return new ThreadRunnable(name, 0, runnable);
+    /**
+     * Create a new {@link PluginRunnable} that can be scheduled.
+     *
+     * @param name     Name of the new task that is created when the {@link PluginRunnable} is executed.
+     * @param runnable Abstract executable that can be cancelled.
+     * @return a new {@link PluginRunnable} specific to the platform.
+     */
+    public PluginRunnable create(String name, AbsRunnable runnable) {
+        long time = System.currentTimeMillis();
+        return createNewRunnable(name, runnable, time);
     }
 
-    public static void activateTestMode() {
-        testMode = true;
+    /**
+     * Create a new {@link PluginRunnable}.
+     *
+     * @param name     Name of the task when the PluginRunnable is started.
+     * @param runnable Abstract executable that can be cancelled.
+     * @param time     Time of creation.
+     * @return a new {@link PluginRunnable} specific to the platform.
+     */
+    protected abstract PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time);
+
+    /**
+     * Cancel all known tasks of the plugin.
+     */
+    public abstract void cancelAllKnownTasks();
+
+    protected void setCancellable(AbsRunnable runnable, PluginRunnable implementingRunnable) {
+        runnable.setCancellable(implementingRunnable);
     }
 }

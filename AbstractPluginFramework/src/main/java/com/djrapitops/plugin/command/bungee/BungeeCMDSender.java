@@ -1,6 +1,6 @@
 package com.djrapitops.plugin.command.bungee;
 
-import com.djrapitops.plugin.command.ISender;
+import com.djrapitops.plugin.command.Sender;
 import com.djrapitops.plugin.command.SenderType;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -10,16 +10,16 @@ import net.md_5.bungee.api.connection.ConnectedPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
- * Class that wraps bungee's CommandSender into an ISender.
+ * Class for wrapping Bungee CommandSender into a {@link Sender}.
  *
  * @author Rsl1122
  * @since 2.0.0
  */
-public class BungeeCMDSender implements ISender {
+class BungeeCMDSender implements Sender {
 
     private final CommandSender cs;
 
-    public BungeeCMDSender(CommandSender cs) {
+    BungeeCMDSender(CommandSender cs) {
         this.cs = cs;
     }
 
@@ -35,9 +35,9 @@ public class BungeeCMDSender implements ISender {
     }
 
     @Override
-    public void sendLink(String pretext, String linkMsg, String url) {
+    public void sendLink(String pretext, String linkText, String url) {
         TextComponent message = new TextComponent(pretext);
-        TextComponent link = new TextComponent(linkMsg);
+        TextComponent link = new TextComponent(linkText);
         link.setUnderlined(true);
         message.addExtra(link);
         message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
@@ -45,8 +45,8 @@ public class BungeeCMDSender implements ISender {
     }
 
     @Override
-    public void sendLink(String linkMsg, String url) {
-        sendLink("", linkMsg, url);
+    public void sendLink(String linkText, String url) {
+        sendLink("", linkText, url);
     }
 
     @Override

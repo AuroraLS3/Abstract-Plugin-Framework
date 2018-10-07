@@ -1,7 +1,5 @@
 package com.djrapitops.plugin.api.utility;
 
-import com.djrapitops.plugin.utilities.FormatUtils;
-import com.djrapitops.plugin.utilities.StackUtils;
 import com.google.common.base.Objects;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -11,7 +9,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  * Utility class for checking newest version availability from different sources.
@@ -22,6 +23,12 @@ public class Version implements Comparable<Version> {
 
     private final String versionString;
 
+    /**
+     * Create a new Version object.
+     *
+     * @param versionString For example "2017.132", "1.1.0", "v-43"
+     *                      All non-number characters will be omitted during comparison.
+     */
     public Version(String versionString) {
         this.versionString = versionString;
     }
@@ -41,6 +48,13 @@ public class Version implements Comparable<Version> {
         return new Version(lineWithVersion.split(": ")[1]);
     }
 
+    /**
+     * Compare two versions.
+     *
+     * @param currentVersion Current version object.
+     * @param newVersion     New version object.
+     * @return if new version object has higher version than current version.
+     */
     public static boolean isNewVersionAvailable(Version currentVersion, Version newVersion) {
         return newVersion.compareTo(currentVersion) > 0;
     }
@@ -67,7 +81,7 @@ public class Version implements Comparable<Version> {
         String requestUrl = "https://api.spiget.org/v2/resources/" + resourceID + "/versions?size=1&sort=-name";
         URL url = new URL(requestUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.addRequestProperty("User-Agent", "AbstractPluginFramework: " + StackUtils.getCallingPlugin().getSimpleName());
+        connection.addRequestProperty("User-Agent", "AbstractPluginFramework-plugin");
 
         int responseCode = connection.getResponseCode();
         try (InputStream inputStream = connection.getInputStream()) {
@@ -95,9 +109,28 @@ public class Version implements Comparable<Version> {
     @Override
     public int compareTo(Version o) {
         return Long.compare(
-                FormatUtils.parseVersionNumber(this.versionString),
-                FormatUtils.parseVersionNumber(o.versionString)
+                this.getVersionLong(),
+                o.getVersionLong()
         );
+    }
+
+    /**
+     * Get a parsed long of the version string.
+     *
+     * @return Comparable version number.
+     */
+    public long getVersionLong() {
+        String replaced = versionString.replaceAll("[^0-9]", ".");
+        String[] split = replaced.split("\\.");
+        List<String> version = Arrays.stream(split).filter(s -> !s.isEmpty()).collect(Collectors.toList());
+
+        long versionNumber = 0;
+        for (int i = 0; i < version.size(); i++) {
+            int num = Integer.parseInt(version.get(i));
+            long multiplier = (long) Math.pow(100, 8.0 - i);
+            versionNumber += num * multiplier;
+        }
+        return versionNumber;
     }
 
     @Override

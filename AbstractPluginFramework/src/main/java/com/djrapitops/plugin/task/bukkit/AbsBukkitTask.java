@@ -1,18 +1,19 @@
 package com.djrapitops.plugin.task.bukkit;
 
-import com.djrapitops.plugin.task.ITask;
+import com.djrapitops.plugin.task.PluginTask;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * {@link PluginTask} implementation for Bukkit.
  *
  * @author Rsl1122
  */
-public class AbsBukkitTask implements BukkitTask, ITask<BukkitTask> {
+public class AbsBukkitTask implements BukkitTask, PluginTask {
 
     private final BukkitTask task;
 
-    public AbsBukkitTask(BukkitTask task) {
+    AbsBukkitTask(BukkitTask task) {
         this.task = task;
     }
 
@@ -39,11 +40,6 @@ public class AbsBukkitTask implements BukkitTask, ITask<BukkitTask> {
     @Override
     public void cancel() {
         task.cancel();
-    }
-
-    @Override
-    public BukkitTask getWrappedTask() {
-        return task;
     }
 
 }

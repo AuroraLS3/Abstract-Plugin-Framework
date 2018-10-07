@@ -10,12 +10,17 @@ import com.djrapitops.plugin.StaticHolder;
  */
 public class StackUtils {
 
+    private StackUtils() {
+        // Static method class.
+    }
+
     /**
      * Get the calling Plugin class from the StackTrace.
      *
      * @return Class that extends Plugin or Plugin.class if not found in the
      * StackTrace.
      */
+    @Deprecated
     public static Class getCallingPlugin() {
         StackTraceElement[] stack = Thread.currentThread().getStackTrace();
         for (StackTraceElement element : stack) {

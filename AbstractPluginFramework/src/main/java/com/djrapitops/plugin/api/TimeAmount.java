@@ -1,21 +1,28 @@
 package com.djrapitops.plugin.api;
 
+import java.util.concurrent.TimeUnit;
+
 /**
- * Enum containing milli and nano second durations for several times.
+ * Utility for converting time amounts to ticks and milliseconds.
  *
  * @author Rsl1122
  * @since 2.0.0
  */
 public enum TimeAmount {
 
-    MILLISECOND(1L),
-    SECOND(1000L),
-    MINUTE(60L * SECOND.ms()),
-    HOUR(60L * MINUTE.ms()),
-    DAY(24L * HOUR.ms()),
-    WEEK(7L * DAY.ms()),
-    MONTH(30L * DAY.ms()),
-    YEAR(365L * DAY.ms());
+    @Deprecated
+    MILLISECOND(TimeUnit.MILLISECONDS.toMillis(1L)),
+    @Deprecated
+    SECOND(TimeUnit.SECONDS.toMillis(1L)),
+    @Deprecated
+    MINUTE(TimeUnit.MINUTES.toMillis(1L)),
+    @Deprecated
+    HOUR(TimeUnit.HOURS.toMillis(1L)),
+    @Deprecated
+    DAY(TimeUnit.DAYS.toMillis(1L)),
+    WEEK(TimeUnit.DAYS.toMillis(7L)),
+    MONTH(TimeUnit.DAYS.toMillis(30L)),
+    YEAR(TimeUnit.DAYS.toMillis(365L));
 
     private final long ms;
 
@@ -23,23 +30,72 @@ public enum TimeAmount {
         this.ms = ms;
     }
 
-    public long ticks() {
-        return (ms / 1000L) * 20L;
+    /**
+     * Convert a time into ticks.
+     *
+     * @param amount How many of the time unit?
+     * @param unit   Unit of time
+     * @return How many ticks that time span is.
+     */
+    public static long toTicks(long amount, TimeUnit unit) {
+        return unit.toMillis(amount) / 50L;
     }
 
+    /**
+     * Convert a tick count into milliseconds.
+     *
+     * @param ticks How many ticks?
+     * @return How many milliseconds pass during those ticks.
+     */
+    public static long ticksToMillis(long ticks) {
+        return ticks * 50L;
+    }
+
+    /**
+     * Find how many milliseconds a TimeAmount is.
+     * <p>
+     * This method is provided as extension for TimeUnit that does not provide WEEK, MONTH or YEAR.
+     *
+     * @param amount Amount of the time unit.
+     * @return Milliseconds.
+     */
+    public long toMillis(long amount) {
+        return ms * amount;
+    }
+
+    /**
+     * @return System.currentTimeMillis().
+     * @deprecated use {@code System.currentTimeMillis()} instead.
+     */
+    @Deprecated
+    public static long currentMs() {
+        return System.currentTimeMillis();
+    }
+
+    /**
+     * @return ticks of this unit.
+     * @deprecated use {@code toTicks(long, TimeUnit)} instead.
+     */
+    @Deprecated
+    public long ticks() {
+        return toTicks(ms, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * @return milliseconds of this unit.
+     * @deprecated use {@code TimeUnit#toMillis(long)} instead.
+     */
+    @Deprecated
     public long ms() {
         return ms;
     }
 
+    /**
+     * @return nanoseconds of this unit.
+     * @deprecated use {@code TimeUnit#toNanos(long)} instead.
+     */
+    @Deprecated
     public long ns() {
-        return ms * 1000000L;
-    }
-
-    public static long ticksToMillis(long ticks) {
-        return ticks * 1000 / 20;
-    }
-
-    public static long currentMs() {
-        return System.currentTimeMillis();
+        return TimeUnit.MILLISECONDS.toNanos(ms);
     }
 }

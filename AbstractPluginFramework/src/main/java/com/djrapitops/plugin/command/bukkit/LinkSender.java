@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
  *
  * @author Rsl1122
  */
-public class LinkSender {
+class LinkSender {
 
-    public static void send(CommandSender cs, String pretext, String linkMsg, String url) {
+    static void send(CommandSender cs, String pretext, String linkMsg, String url) {
         BaseComponent message = new TextComponent(TextComponent.fromLegacyText(pretext));
 
         BaseComponent[] link =

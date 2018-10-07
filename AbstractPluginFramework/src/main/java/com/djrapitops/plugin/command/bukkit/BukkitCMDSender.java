@@ -1,7 +1,7 @@
 package com.djrapitops.plugin.command.bukkit;
 
 import com.djrapitops.plugin.command.CommandUtils;
-import com.djrapitops.plugin.command.ISender;
+import com.djrapitops.plugin.command.Sender;
 import com.djrapitops.plugin.command.SenderType;
 import org.bukkit.ChatColor;
 import org.bukkit.block.CommandBlock;
@@ -9,18 +9,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Class that wraps bukkit's CommandSender to an ISender.
- * <p>
- * Represents a command sender of Bukkit server.
+ * Class for wrapping Bukkit CommandSender into a {@link Sender}.
  *
  * @author Rsl1122
  * @since 2.0.0
  */
-public class BukkitCMDSender implements ISender {
+class BukkitCMDSender implements Sender {
 
     private final CommandSender cs;
 
-    public BukkitCMDSender(CommandSender cs) {
+    BukkitCMDSender(CommandSender cs) {
         this.cs = cs;
     }
 
@@ -55,10 +53,10 @@ public class BukkitCMDSender implements ISender {
     }
 
     @Override
-    public void sendLink(String pretext, String linkMsg, String url) {
+    public void sendLink(String pretext, String linkText, String url) {
         try {
             if (CommandUtils.isPlayer(this)) {
-                LinkSender.send(cs, pretext, linkMsg, url);
+                LinkSender.send(cs, pretext, linkText, url);
                 return;
             }
         } catch (NoClassDefFoundError ignore) {
@@ -68,8 +66,8 @@ public class BukkitCMDSender implements ISender {
     }
 
     @Override
-    public void sendLink(String message, String url) {
-        sendLink("", message, url);
+    public void sendLink(String linkText, String url) {
+        sendLink("", linkText, url);
     }
 
     @Override

@@ -1,13 +1,13 @@
 package com.djrapitops.plugin.command.defaultcmds;
 
-import com.djrapitops.plugin.command.CommandNode;
-import com.djrapitops.plugin.command.CommandType;
-import com.djrapitops.plugin.command.ISender;
-import com.djrapitops.plugin.command.TreeCmdNode;
-import com.djrapitops.plugin.settings.ColorScheme;
+import com.djrapitops.plugin.command.*;
 
 /**
- * Default command for any TreeCmdNode.
+ * CommandNode that displays Help for the command.
+ *
+ * Lists each sub {@link CommandNode} of a {@link TreeCmdNode} that the {@link Sender} has permission for.
+ *
+ * If the {@link Sender} does not have permission, the list is empty.
  *
  * @author Rsl1122
  */
@@ -21,7 +21,7 @@ public class HelpCommand extends CommandNode {
     }
 
     @Override
-    public void onCommand(ISender sender, String commandLabel, String[] args) {
+    public void onCommand(Sender sender, String commandLabel, String[] args) {
         ColorScheme colorScheme = treeCmdNode.getColorScheme();
         String cMain = colorScheme.getMainColor();
         String cSec = colorScheme.getSecondaryColor();
@@ -30,8 +30,6 @@ public class HelpCommand extends CommandNode {
         sender.sendMessage("  ");
 
         for (CommandNode[] commandNodes : treeCmdNode.getNodeGroups()) {
-            int desiredLength = getIndent(commandNodes);
-
             for (CommandNode node : commandNodes) {
                 if (node == null) {
                     continue;
@@ -43,48 +41,6 @@ public class HelpCommand extends CommandNode {
 
         sender.sendMessage("  " + cSec + "Add ? to the end of the command for more help");
         sender.sendMessage(cTer + ">");
-    }
-
-    private String getWithSpaces(String nameAndArgs, int desiredLength) {
-        StringBuilder builder = new StringBuilder(nameAndArgs);
-        while (builder.length() < desiredLength) {
-            builder.append(" ");
-        }
-        return builder.toString();
-    }
-
-    private int getIndent(CommandNode[] commandNodes) {
-        double maxIndent = 0.0;
-
-        for (CommandNode node : commandNodes) {
-            if (node == null) {
-                continue;
-            }
-            double indent = 0.0;
-            String nameAndArgs = getNameAndArgs(node);
-            for (char c : nameAndArgs.toCharArray()) {
-                switch (c) {
-                    case 'i':
-                    case 'l':
-                    case '!':
-                    case '|':
-                    case ';':
-                    case ':':
-                    case '\'':
-                    case '.':
-                        indent += 0.5;
-                        break;
-                    default:
-                        indent += 1;
-                        break;
-                }
-            }
-            if (indent > maxIndent) {
-                maxIndent = indent;
-            }
-        }
-
-        return (int) Math.ceil(maxIndent);
     }
 
     private String getNameAndArgs(CommandNode node) {

@@ -8,33 +8,23 @@ package com.djrapitops.plugin.api.utility.log;
 import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.StaticHolder;
 import com.djrapitops.plugin.api.TimeAmount;
-import com.djrapitops.plugin.api.utility.log.errormanager.DefaultErrorManager;
 import com.djrapitops.plugin.api.utility.log.errormanager.ErrorManager;
-import com.djrapitops.plugin.utilities.FormatUtils;
+import com.djrapitops.plugin.logging.L;
 import com.djrapitops.plugin.utilities.StackUtils;
-import com.djrapitops.plugin.utilities.Verify;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Rsl1122
  */
+@Deprecated
 public class Log extends DebugLog {
 
-    private static final String DEBUG_FILE_NAME = "DebugLog-";
-    private static final String ERROR_FILE_NAME = "ErrorLog-";
-
-    private static final Map<Class, String> debugMode = new HashMap<>();
-
-    private static final Map<Class, List<String>> debugLogs = new HashMap<>();
-
-    private static final Map<Class, ErrorManager> errorManagers = new HashMap<>();
-    private static DefaultErrorManager defaultErrorManager = new DefaultErrorManager();
-
+    @Deprecated
     public static void info(String s) {
         info(s, StackUtils.getCallingPlugin());
     }
@@ -44,12 +34,10 @@ public class Log extends DebugLog {
         if (instance == null) {
             return;
         }
-        instance.log("INFO", s);
-        if (!s.startsWith("[DEBUG]")) {
-            debug(Collections.singletonList(s), c);
-        }
+        instance.getPluginLogger().info(s);
     }
 
+    @Deprecated
     public static void infoColor(String s) {
         infoColor(s, StackUtils.getCallingPlugin());
     }
@@ -59,21 +47,24 @@ public class Log extends DebugLog {
         if (instance == null) {
             return;
         }
-        instance.log("INFO_COLOR", s);
+        instance.getPluginLogger().log(L.INFO_COLOR, s);
     }
 
+    @Deprecated
     public static void warn(String s) {
         warn(s, StackUtils.getCallingPlugin());
     }
 
+    @Deprecated
     public static void warn(String s, Class c) {
         IPlugin instance = StaticHolder.getInstance(c);
         if (instance == null) {
             return;
         }
-        instance.log("WARN", s);
+        instance.getPluginLogger().warn(s);
     }
 
+    @Deprecated
     public static void error(String s) {
         error(s, StackUtils.getCallingPlugin());
     }
@@ -83,67 +74,45 @@ public class Log extends DebugLog {
         if (instance == null) {
             return;
         }
-        instance.log("ERROR", s);
+        instance.getPluginLogger().error(s);
     }
 
+    @Deprecated
     public static void debug(Class callingPlugin, String... lines) {
         debug(Arrays.asList(lines), callingPlugin);
     }
 
+    @Deprecated
     public static void debug(String... lines) {
         debug(Arrays.asList(lines));
     }
 
+    @Deprecated
     public static void debug(List<String> lines) {
         debug(lines, StackUtils.getCallingPlugin());
     }
 
-    static void debug(List<String> lines, Class callingPlugin) {
-        List<String> log = debugLogs.getOrDefault(callingPlugin, new ArrayList<>());
-        boolean debugToConsole = debugToConsole(callingPlugin);
-
-        for (String line : lines) {
-            if (log.size() >= 750) {
-                log.remove(0);
-            }
-            log.add(line);
-            if (debugToConsole) {
-                if (line.startsWith("|")) {
-                    info("[DEBUG] " + line.substring(19));
-                } else {
-                    info("[DEBUG] " + line);
-                }
-            }
-        }
-
-        if (callingPlugin != null) {
-            debugLogs.put(callingPlugin, log);
-        }
-
-        if (debugToFile(callingPlugin)) {
-            toDebugLog(lines, callingPlugin);
-        }
+    private static void debug(List<String> lines, Class callingPlugin) {
+        StaticHolder.getInstance(callingPlugin).getPluginLogger().debug(lines.toArray(new String[0]));
     }
 
+    @Deprecated
     public static void toLog(Class clazz, Throwable e) {
         toLog(clazz.getName(), e);
     }
 
+    @Deprecated
     public static void toLog(String source, Throwable e) {
         Class callingPlugin = StackUtils.getCallingPlugin();
         toLog(source, e, callingPlugin);
     }
 
     private static void toLog(String source, Throwable e, Class callingPlugin) {
-        getErrorManager(callingPlugin).toLog(source, e, callingPlugin);
+        StaticHolder.getInstance(callingPlugin).getErrorHandler().log(L.ERROR, callingPlugin, e);
     }
 
-    private static ErrorManager getErrorManager(Class callingPlugin) {
-        return errorManagers.getOrDefault(callingPlugin, defaultErrorManager);
-    }
-
+    @Deprecated
     public static void setErrorManager(ErrorManager errorManager) {
-        errorManagers.put(StackUtils.getCallingPlugin(), errorManager);
     }
 
     public static File getLogsFolder() {
@@ -163,57 +132,18 @@ public class Log extends DebugLog {
         return logsFolder;
     }
 
-    private static void toDebugLog(List<String> lines, Class callingPlugin) {
-        File logsFolder = getLogsFolder(callingPlugin);
-
-        String debugLogFileName = getDebugFileName();
-        String timeStamp = FormatUtils.formatTimeStampSecond(TimeAmount.currentMs());
-        List<String> timeStamped = lines.stream().map(line -> "| " + timeStamp + " | " + line)
-                .collect(Collectors.toList());
-
-        try {
-            FileLogger.appendToFile(new File(logsFolder, debugLogFileName), timeStamped);
-        } catch (IOException e) {
-            Log.toLog("com.djrapitops.plugin.api.utility.log.Log", e);
-        }
-    }
-
-    private static boolean debugToFile(Class c) {
-        String debugMode = Log.debugMode.get(c);
-        if (debugMode == null) {
-            return false;
-        }
-        return Verify.equalsOne(debugMode.toLowerCase(), "true", "both", "file");
-    }
-
-    private static boolean debugToConsole(Class c) {
-        String debugMode = Log.debugMode.get(c);
-        if (debugMode == null) {
-            return false;
-        }
-        return Verify.equalsOne(debugMode.toLowerCase(), "true", "both", "console");
-    }
-
+    @Deprecated
     public static void setDebugMode(String mode) {
-        Class callingPlugin = StackUtils.getCallingPlugin();
-        debugMode.put(callingPlugin, mode);
     }
 
+    @Deprecated
     public static List<String> getDebugLogInMemory() {
-        return getDebugLogInMemory(StackUtils.getCallingPlugin());
+        return new ArrayList<>();
     }
 
-    private static List<String> getDebugLogInMemory(Class callingPlugin) {
-        return debugLogs.getOrDefault(callingPlugin, new ArrayList<>());
-    }
-
-    public static String getDebugFileName() {
-        String day = new SimpleDateFormat("yyyy_MM_dd").format(TimeAmount.currentMs());
-        return DEBUG_FILE_NAME + day + ".txt";
-    }
-
+    @Deprecated
     public static String getErrorFileName() {
         String day = new SimpleDateFormat("yyyy_MM_dd").format(TimeAmount.currentMs());
-        return ERROR_FILE_NAME + day + ".txt";
+        return "ErrorLog-" + day + ".txt";
     }
 }

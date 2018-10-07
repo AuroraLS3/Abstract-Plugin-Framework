@@ -5,8 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 
 /**
- * Class that is used to wrap a CommandNode implementation into executable
- * command by Bungee.
+ * {@link CommandNode} wrapper for Bungee implementation.
  *
  * @author Rsl1122
  * @since 2.0.0

@@ -6,83 +6,85 @@
 package com.djrapitops.plugin.task.bungee;
 
 import com.djrapitops.plugin.BungeePlugin;
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.api.TimeAmount;
-import com.djrapitops.plugin.task.IRunnable;
-import com.djrapitops.plugin.task.ITask;
-import com.djrapitops.plugin.api.systems.TaskCenter;
+import com.djrapitops.plugin.task.PluginRunnable;
+import com.djrapitops.plugin.task.PluginTask;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 
 import java.util.concurrent.TimeUnit;
 
 /**
- * @param <T>
+ * {@link PluginRunnable} implementation for Bungee.
+ *
  * @author Rsl1122
  */
-public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements IRunnable, Runnable {
+public abstract class AbsBungeeRunnable implements PluginRunnable, Runnable {
 
-    private final T plugin;
     private final String name;
-    private final TaskScheduler scheduler;
+    private final long time;
+
+    private BungeePlugin plugin;
+    private TaskScheduler scheduler;
     private int id = -1;
 
-    public AbsBungeeRunnable(String name, IPlugin plugin) {
+    AbsBungeeRunnable(String name, BungeePlugin plugin, long time) {
         this.name = name;
-        if (plugin instanceof BungeePlugin) {
-            this.plugin = (T) plugin;
-        } else {
-            throw new IllegalArgumentException("Given plugin was not of correct type");
-        }
-        scheduler = this.plugin.getProxy().getScheduler();
+        this.time = time;
+        this.plugin = plugin;
+        this.scheduler = plugin.getProxy().getScheduler();
     }
 
     @Override
     public abstract void run();
 
     @Override
-    public ITask runTask() {
+    public PluginTask runTask() {
         return runTaskAsynchronously();
     }
 
     @Override
-    public ITask runTaskAsynchronously() {
+    public PluginTask runTaskAsynchronously() {
         AbsBungeeTask task = new AbsBungeeTask(scheduler.runAsync(plugin, this));
         id = task.getTaskId();
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return task;
     }
 
     @Override
-    public ITask runTaskLater(long delay) {
-
+    public PluginTask runTaskLater(long delay) {
         return runTaskLaterAsynchronously(delay);
     }
 
     @Override
-    public ITask runTaskLaterAsynchronously(long delay) {
+    public PluginTask runTaskLaterAsynchronously(long delay) {
         AbsBungeeTask task = new AbsBungeeTask(scheduler.schedule(plugin, this, TimeAmount.ticksToMillis(delay), TimeUnit.MILLISECONDS));
         id = task.getTaskId();
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return task;
     }
 
     @Override
-    public ITask runTaskTimer(long delay, long period) {
+    public PluginTask runTaskTimer(long delay, long period) {
         return runTaskTimerAsynchronously(delay, period);
     }
 
     @Override
-    public ITask runTaskTimerAsynchronously(long delay, long period) {
+    public PluginTask runTaskTimerAsynchronously(long delay, long period) {
         AbsBungeeTask task = new AbsBungeeTask(scheduler.schedule(plugin, this, TimeAmount.ticksToMillis(delay), TimeAmount.ticksToMillis(period), TimeUnit.MILLISECONDS));
         id = task.getTaskId();
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return task;
     }
 
     @Override
     public synchronized void cancel() throws IllegalStateException {
-        TaskCenter.taskCancelled(plugin.getClass(), name, id);
-        scheduler.cancel(id);
+        if (plugin == null) {
+            return;
+        }
+        try {
+            scheduler.cancel(id);
+        } finally {
+            // Clear instances so that cyclic references don't block GC
+            plugin = null;
+            scheduler = null;
+        }
     }
 
     @Override
@@ -93,5 +95,10 @@ public abstract class AbsBungeeRunnable<T extends BungeePlugin> implements IRunn
     @Override
     public String getTaskName() {
         return name;
+    }
+
+    @Override
+    public long getTime() {
+        return time;
     }
 }

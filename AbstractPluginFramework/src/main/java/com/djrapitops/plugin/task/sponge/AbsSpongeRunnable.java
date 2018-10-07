@@ -4,31 +4,28 @@
  */
 package com.djrapitops.plugin.task.sponge;
 
-import com.djrapitops.plugin.IPlugin;
 import com.djrapitops.plugin.SpongePlugin;
-import com.djrapitops.plugin.api.systems.TaskCenter;
-import com.djrapitops.plugin.task.IRunnable;
-import com.djrapitops.plugin.task.ITask;
+import com.djrapitops.plugin.task.PluginRunnable;
+import com.djrapitops.plugin.task.PluginTask;
 import org.spongepowered.api.scheduler.Task;
 
 /**
- * IRunnable implementation for Sponge.
+ * {@link PluginRunnable} implementation for Sponge.
  *
  * @author Rsl1122
  */
-public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable, Runnable {
+abstract class AbsSpongeRunnable implements PluginRunnable, Runnable {
 
-    private final T plugin;
     private final String name;
+    private final long time;
 
-    private ITask task;
+    private SpongePlugin plugin;
 
-    public AbsSpongeRunnable(String name, IPlugin plugin) {
-        if (plugin instanceof SpongePlugin) {
-            this.plugin = (T) plugin;
-        } else {
-            throw new IllegalArgumentException("Given plugin was not of correct type");
-        }
+    private PluginTask task;
+
+    AbsSpongeRunnable(String name, SpongePlugin plugin, long time) {
+        this.time = time;
+        this.plugin = plugin;
         this.name = name;
     }
 
@@ -39,9 +36,16 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
 
     @Override
     public void cancel() {
-        TaskCenter.taskCancelled(plugin.getClass(), name, getTaskId());
-        if (task != null) {
-            task.cancel();
+        if (plugin == null) {
+            return;
+        }
+        try {
+            if (task != null) {
+                task.cancel();
+            }
+        } finally {
+            // Clear instances so that cyclic references don't block GC
+            plugin = null;
         }
     }
 
@@ -51,54 +55,53 @@ public abstract class AbsSpongeRunnable<T extends IPlugin> implements IRunnable,
     }
 
     @Override
-    public ITask runTask() {
+    public PluginTask runTask() {
         task = new AbsSpongeTask(Task.builder().execute(this).submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
     @Override
-    public ITask runTaskAsynchronously() {
+    public PluginTask runTaskAsynchronously() {
         task = new AbsSpongeTask(Task.builder().execute(this).async().submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
     @Override
-    public ITask runTaskLater(long delay) {
+    public PluginTask runTaskLater(long delay) {
         task = new AbsSpongeTask(Task.builder().execute(this)
                 .delayTicks(delay)
                 .submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
     @Override
-    public ITask runTaskLaterAsynchronously(long delay) {
+    public PluginTask runTaskLaterAsynchronously(long delay) {
         task = new AbsSpongeTask(Task.builder().execute(this).async()
                 .delayTicks(delay)
                 .submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
     @Override
-    public ITask runTaskTimer(long delay, long period) {
+    public PluginTask runTaskTimer(long delay, long period) {
         task = new AbsSpongeTask(Task.builder().execute(this)
                 .delayTicks(delay)
                 .intervalTicks(period)
                 .submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
     }
 
     @Override
-    public ITask runTaskTimerAsynchronously(long delay, long period) {
+    public PluginTask runTaskTimerAsynchronously(long delay, long period) {
         task = new AbsSpongeTask(Task.builder().execute(this).async()
                 .delayTicks(delay)
                 .intervalTicks(period)
                 .submit(plugin));
-        TaskCenter.taskStarted(plugin.getClass(), task, name, this);
         return this.task;
+    }
+
+    @Override
+    public long getTime() {
+        return time;
     }
 }
