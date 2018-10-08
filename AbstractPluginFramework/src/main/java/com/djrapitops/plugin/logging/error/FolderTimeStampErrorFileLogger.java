@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Supplier;
 
 /**
  * {@link ErrorHandler} implementation that logs the errors to a per day file.
@@ -23,6 +24,16 @@ public class FolderTimeStampErrorFileLogger extends FolderTimeStampFileLogger im
      * @param errorHandler ErrorHandler to use in case logging the file goes wrong.
      */
     public FolderTimeStampErrorFileLogger(File logFolder, ErrorHandler errorHandler) {
+        super("Errors", logFolder, () -> errorHandler);
+    }
+
+    /**
+     * Create a new FolderTimeStampErrorFileLogger.
+     *
+     * @param logFolder    Supplier for the Folder to store the logs in.
+     * @param errorHandler ErrorHandler to use in case logging the file goes wrong.
+     */
+    public FolderTimeStampErrorFileLogger(Supplier<File> logFolder, ErrorHandler errorHandler) {
         super("Errors", logFolder, () -> errorHandler);
     }
 
