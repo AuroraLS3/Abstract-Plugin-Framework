@@ -17,7 +17,7 @@ public class JavaUtilPluginLogger implements PluginLogger {
 
     protected final Consumer<String> console;
     protected final Supplier<DebugLogger> debugLogger;
-    protected final Logger logger;
+    protected final Supplier<Logger> logger;
 
     /**
      * Create a new JavaUtilPluginLogger.
@@ -27,6 +27,17 @@ public class JavaUtilPluginLogger implements PluginLogger {
      * @param logger      plugin logger for logging messages.
      */
     public JavaUtilPluginLogger(Consumer<String> console, Supplier<DebugLogger> debugLogger, Logger logger) {
+        this(console, debugLogger, () -> logger);
+    }
+
+    /**
+     * Create a new JavaUtilPluginLogger.
+     *
+     * @param console     Consumer of the logging method for colored messages on the console.
+     * @param debugLogger {@link DebugLogger} to log all channels on.
+     * @param logger      Supplier for plugin logger for logging messages.
+     */
+    public JavaUtilPluginLogger(Consumer<String> console, Supplier<DebugLogger> debugLogger, Supplier<Logger> logger) {
         this.console = console;
         this.debugLogger = debugLogger;
         this.logger = logger;
@@ -44,12 +55,12 @@ public class JavaUtilPluginLogger implements PluginLogger {
             case CRITICAL:
             case ERROR:
                 for (String line : message) {
-                    logger.log(Level.SEVERE, line);
+                    logger.get().log(Level.SEVERE, line);
                 }
                 break;
             case WARN:
                 for (String line : message) {
-                    logger.log(Level.WARNING, line);
+                    logger.get().log(Level.WARNING, line);
                 }
                 break;
             case INFO_COLOR:
@@ -59,13 +70,13 @@ public class JavaUtilPluginLogger implements PluginLogger {
                 break;
             case DEBUG_INFO:
                 for (String line : message) {
-                    logger.log(Level.INFO, "[DEBUG] {0}", line);
+                    logger.get().log(Level.INFO, "[DEBUG] {0}", line);
                 }
                 break;
             case INFO:
             default:
                 for (String line : message) {
-                    logger.log(Level.INFO, line);
+                    logger.get().log(Level.INFO, line);
                 }
                 break;
         }
@@ -76,11 +87,11 @@ public class JavaUtilPluginLogger implements PluginLogger {
         switch (level) {
             case CRITICAL:
             case ERROR:
-                logger.log(Level.SEVERE, message, throwable);
+                logger.get().log(Level.SEVERE, message, throwable);
                 break;
             case WARN:
             default:
-                logger.log(Level.WARNING, message, throwable);
+                logger.get().log(Level.WARNING, message, throwable);
                 break;
         }
     }

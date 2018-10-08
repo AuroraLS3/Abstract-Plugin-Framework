@@ -61,7 +61,7 @@ public abstract class BungeePlugin extends net.md_5.bungee.api.plugin.Plugin imp
         this.logger = new JavaUtilPluginLogger(
                 message -> getProxy().getConsole().sendMessage(new TextComponent(message)),
                 this::getDebugLogger,
-                getLogger()
+                this::getLogger
         );
         this.errorHandler = new DefaultErrorHandler(this, logger, () -> new File(getDataFolder(), "logs"));
     }

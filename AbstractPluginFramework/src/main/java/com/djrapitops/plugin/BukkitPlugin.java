@@ -59,7 +59,7 @@ public abstract class BukkitPlugin extends JavaPlugin implements APFPlugin {
         this.logger = new JavaUtilPluginLogger(
                 message -> getServer().getConsoleSender().sendMessage(message),
                 this::getDebugLogger,
-                getLogger()
+                this::getLogger
         );
         this.errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
     }
