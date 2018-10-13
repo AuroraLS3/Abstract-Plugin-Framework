@@ -58,7 +58,7 @@ public abstract class VelocityPlugin implements APFPlugin {
         this.debugLogger = debugLogger;
         this.runnableFactory = new VelocityRunnableFactory(this, getProxy().getScheduler());
         this.timings = new Timings(debugLogger);
-        this.logger = new Slf4jPluginLogger(getLogger(), this::getDebugLogger);
+        this.logger = new Slf4jPluginLogger(this::getLogger, this::getDebugLogger);
         this.errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
     }
 
