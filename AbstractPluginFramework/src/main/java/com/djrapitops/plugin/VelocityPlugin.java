@@ -112,12 +112,12 @@ public abstract class VelocityPlugin implements APFPlugin {
     }
 
     @Override
-    public CombineDebugLogger getDebugLogger() {
+    public DebugLogger getDebugLogger() {
         return debugLogger;
     }
 
     @Override
-    public DefaultErrorHandler getErrorHandler() {
+    public ErrorHandler getErrorHandler() {
         return errorHandler;
     }
 
