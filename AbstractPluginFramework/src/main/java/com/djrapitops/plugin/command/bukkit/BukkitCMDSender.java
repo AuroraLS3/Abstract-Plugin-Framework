@@ -87,7 +87,13 @@ class BukkitCMDSender implements Sender {
 
     @Override
     public SenderType getSenderType() {
-        return (cs instanceof Player) ? SenderType.PLAYER : ((cs instanceof CommandBlock) ? SenderType.CMD_BLOCK : SenderType.CONSOLE);
+        if (cs instanceof Player) {
+            return SenderType.PLAYER;
+        } else if (cs instanceof CommandBlock) {
+            return SenderType.CMD_BLOCK;
+        } else {
+            return SenderType.CONSOLE;
+        }
     }
 
     @Override

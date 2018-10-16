@@ -4,6 +4,8 @@ import com.djrapitops.plugin.command.CommandNode;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 
+import java.util.Objects;
+
 /**
  * {@link CommandNode} wrapper for Bungee implementation.
  *
@@ -23,5 +25,19 @@ public class BungeeCommand extends Command {
     public void execute(CommandSender sender, String[] args) {
         BungeeCMDSender iSender = new BungeeCMDSender(sender);
         commandNode.onCommand(iSender, "", args);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BungeeCommand)) return false;
+        if (!super.equals(o)) return false;
+        BungeeCommand that = (BungeeCommand) o;
+        return Objects.equals(commandNode, that.commandNode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), commandNode);
     }
 }

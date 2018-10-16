@@ -15,6 +15,10 @@ import org.bukkit.entity.Player;
  */
 class LinkSender {
 
+    private LinkSender() {
+        /* static method class */
+    }
+
     static void send(CommandSender cs, String pretext, String linkMsg, String url) {
         BaseComponent message = new TextComponent(TextComponent.fromLegacyText(pretext));
 
