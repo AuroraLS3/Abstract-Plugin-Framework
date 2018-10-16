@@ -35,9 +35,6 @@ public abstract class AbsBungeeRunnable implements PluginRunnable, Runnable {
     }
 
     @Override
-    public abstract void run();
-
-    @Override
     public PluginTask runTask() {
         return runTaskAsynchronously();
     }
