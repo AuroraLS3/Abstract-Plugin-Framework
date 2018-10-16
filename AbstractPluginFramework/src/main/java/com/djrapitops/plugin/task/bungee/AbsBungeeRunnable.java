@@ -74,7 +74,7 @@ public abstract class AbsBungeeRunnable implements PluginRunnable, Runnable {
     }
 
     @Override
-    public synchronized void cancel() throws IllegalStateException {
+    public synchronized void cancel() {
         if (plugin == null) {
             return;
         }

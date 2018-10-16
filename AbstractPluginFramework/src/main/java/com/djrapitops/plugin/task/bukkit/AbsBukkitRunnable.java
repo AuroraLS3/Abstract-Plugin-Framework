@@ -75,7 +75,7 @@ public abstract class AbsBukkitRunnable extends BukkitRunnable implements Plugin
     }
 
     @Override
-    public synchronized void cancel() throws IllegalStateException {
+    public synchronized void cancel() {
         if (plugin == null) {
             return;
         }
