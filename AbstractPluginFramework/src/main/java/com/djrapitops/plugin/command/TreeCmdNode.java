@@ -226,4 +226,8 @@ public class TreeCmdNode extends CommandNode {
         }
         return null;
     }
+
+    public HelpCommand getHelpCommand() {
+        return helpCommand;
+    }
 }

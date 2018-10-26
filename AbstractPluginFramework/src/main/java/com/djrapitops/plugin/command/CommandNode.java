@@ -10,7 +10,7 @@ package com.djrapitops.plugin.command;
 public abstract class CommandNode {
 
     private final String aliases;
-    private final String permission;
+    protected final String permission;
     private final CommandType commandType;
 
     private String[] arguments = new String[0];
