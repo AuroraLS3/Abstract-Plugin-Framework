@@ -31,7 +31,8 @@ public class HelpCommand extends CommandNode {
     }
 
     public List<String> getHelpMessages(Sender sender) {
-        if (!"".equals(permission) && !sender.hasPermission(permission)) {
+        String helpPermission = getPermission();
+        if (!Verify.isEmpty(helpPermission) && !sender.hasPermission(helpPermission)) {
             return Collections.singletonList("§cYou do not have the required permission.");
         }
 

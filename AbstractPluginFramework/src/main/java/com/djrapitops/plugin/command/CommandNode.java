@@ -10,8 +10,9 @@ package com.djrapitops.plugin.command;
 public abstract class CommandNode {
 
     private final String aliases;
-    protected final String permission;
     private final CommandType commandType;
+
+    private String permission;
 
     private String[] arguments = new String[0];
     private String onHover;
@@ -194,5 +195,9 @@ public abstract class CommandNode {
         }
         this.inDepthHelp = inDepthHelp;
         return this;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 }

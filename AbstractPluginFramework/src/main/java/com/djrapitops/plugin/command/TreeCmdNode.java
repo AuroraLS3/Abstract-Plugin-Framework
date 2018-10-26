@@ -174,7 +174,7 @@ public class TreeCmdNode extends CommandNode {
 
     private void checkPermission(Sender sender, CommandNode command) throws IllegalAccessException {
         String permission = command.getPermission();
-        if (!"".equals(permission) && !sender.hasPermission(permission)) {
+        if (!Verify.isEmpty(permission) && !sender.hasPermission(permission)) {
             throw new IllegalAccessException("You do not have the required permission.");
         }
     }
