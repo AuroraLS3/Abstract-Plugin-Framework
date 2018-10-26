@@ -46,6 +46,8 @@ public class HelpCommand extends CommandNode {
         messages.add("  ");
 
         for (CommandNode[] commandNodes : treeCmdNode.getNodeGroups()) {
+            // Used to track if player has any permissions in the group, to separate the groups
+            boolean addedCmdInfos = false;
             for (CommandNode node : commandNodes) {
                 if (node == null) {
                     continue;
@@ -53,9 +55,12 @@ public class HelpCommand extends CommandNode {
                 String permission = node.getPermission();
                 if (Verify.isEmpty(permission) || sender.hasPermission(permission)) {
                     messages.add(cMain + "  " + getNameAndArgs(node) + " " + cTer + node.getShortHelp());
+                    addedCmdInfos = true;
                 }
             }
-            messages.add("  ");
+            if (addedCmdInfos) {
+                messages.add("  ");
+            }
         }
 
         messages.add("  " + cSec + "Add ? to the end of the command for more help");
