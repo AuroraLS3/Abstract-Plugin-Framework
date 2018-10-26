@@ -130,6 +130,7 @@ public class TreeCmdNode extends CommandNode {
 
             boolean console = !CommandUtils.isPlayer(sender);
             consoleTypeCheck(cmdType, console);
+            checkPermission(sender, this);
             checkPermission(sender, command);
 
             boolean isDefaultCommandWithoutCommandArg = checkArguments(args, command, console, cmdType);
