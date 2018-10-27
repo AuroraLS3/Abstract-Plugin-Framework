@@ -13,8 +13,8 @@ import java.util.ArrayDeque;
 public class EjectingQueue<E> {
 
     private final int maxSize;
-    private ArrayDeque<E> queue;
-    private int size;
+    private volatile ArrayDeque<E> queue;
+    private volatile int size;
 
     /**
      * Create a new EjectingQueue.
@@ -34,7 +34,7 @@ public class EjectingQueue<E> {
      *
      * @param element Element to add.
      */
-    public void add(E element) {
+    public synchronized void add(E element) {
         if (size >= maxSize) {
             queue.poll();
             size--;

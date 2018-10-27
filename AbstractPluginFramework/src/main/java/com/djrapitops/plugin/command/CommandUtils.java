@@ -8,6 +8,10 @@ package com.djrapitops.plugin.command;
  */
 public class CommandUtils {
 
+    private CommandUtils() {
+        /* static method class */
+    }
+
     /**
      * Check if the sender is a player.
      *

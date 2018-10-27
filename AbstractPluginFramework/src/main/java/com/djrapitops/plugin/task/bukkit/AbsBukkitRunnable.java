@@ -30,9 +30,6 @@ public abstract class AbsBukkitRunnable extends BukkitRunnable implements Plugin
     }
 
     @Override
-    public abstract void run();
-
-    @Override
     public PluginTask runTask() {
         AbsBukkitTask task = new AbsBukkitTask(super.runTask(plugin));
         id = task.getTaskId();
@@ -75,7 +72,7 @@ public abstract class AbsBukkitRunnable extends BukkitRunnable implements Plugin
     }
 
     @Override
-    public synchronized void cancel() throws IllegalStateException {
+    public synchronized void cancel() {
         if (plugin == null) {
             return;
         }

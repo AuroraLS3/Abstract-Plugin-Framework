@@ -26,9 +26,6 @@ public abstract class AbsRunnable implements Runnable {
         return runnable != null ? runnable.getTaskId() : -1;
     }
 
-    @Override
-    public abstract void run();
-
     void setCancellable(PluginRunnable cancellable) {
         this.runnable = cancellable;
     }

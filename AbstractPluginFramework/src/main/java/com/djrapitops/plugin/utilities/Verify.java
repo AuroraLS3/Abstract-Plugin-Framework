@@ -37,7 +37,7 @@ public class Verify {
     }
 
     @Deprecated
-    public static File existCheck(File file) throws IllegalArgumentException {
+    public static File existCheck(File file) {
         return existCheck(file, () -> new IllegalArgumentException("File did not exist"));
     }
 
@@ -214,7 +214,7 @@ public class Verify {
      * @return the original object
      * @throws NullPointerException If the object is null.
      */
-    public static <T> T nullCheck(T object) throws IllegalArgumentException {
+    public static <T> T nullCheck(T object) {
         return nullCheck(object, () -> new IllegalArgumentException("Something was null!"));
     }
 
@@ -244,7 +244,7 @@ public class Verify {
      * @throws IllegalArgumentException If a null is found.
      */
     @SafeVarargs
-    public static <T> T[] nullCheck(T... objects) throws IllegalArgumentException {
+    public static <T> T[] nullCheck(T... objects) {
         return nullCheck(
                 () -> new IllegalArgumentException("Contained a null object!"),
                 objects

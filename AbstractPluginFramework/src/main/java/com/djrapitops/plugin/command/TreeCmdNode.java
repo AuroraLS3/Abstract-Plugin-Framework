@@ -130,6 +130,7 @@ public class TreeCmdNode extends CommandNode {
 
             boolean console = !CommandUtils.isPlayer(sender);
             consoleTypeCheck(cmdType, console);
+            checkPermission(sender, this);
             checkPermission(sender, command);
 
             boolean isDefaultCommandWithoutCommandArg = checkArguments(args, command, console, cmdType);
@@ -174,7 +175,7 @@ public class TreeCmdNode extends CommandNode {
 
     private void checkPermission(Sender sender, CommandNode command) throws IllegalAccessException {
         String permission = command.getPermission();
-        if (!"".equals(permission) && !sender.hasPermission(permission)) {
+        if (!Verify.isEmpty(permission) && !sender.hasPermission(permission)) {
             throw new IllegalAccessException("You do not have the required permission.");
         }
     }
@@ -225,5 +226,9 @@ public class TreeCmdNode extends CommandNode {
             }
         }
         return null;
+    }
+
+    public HelpCommand getHelpCommand() {
+        return helpCommand;
     }
 }

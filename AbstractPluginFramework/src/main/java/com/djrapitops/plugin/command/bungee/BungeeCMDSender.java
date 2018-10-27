@@ -68,7 +68,13 @@ class BungeeCMDSender implements Sender {
 
     @Override
     public SenderType getSenderType() {
-        return cs instanceof ConnectedPlayer ? SenderType.PLAYER : (cs instanceof ProxiedPlayer ? SenderType.PROXY_PLAYER : SenderType.CONSOLE);
+        if (cs instanceof ConnectedPlayer) {
+            return SenderType.PLAYER;
+        } else if (cs instanceof ProxiedPlayer) {
+            return SenderType.PROXY_PLAYER;
+        } else {
+            return SenderType.CONSOLE;
+        }
     }
 
     @Override

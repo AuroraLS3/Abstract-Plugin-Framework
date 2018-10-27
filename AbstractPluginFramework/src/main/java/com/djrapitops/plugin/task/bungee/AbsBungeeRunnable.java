@@ -35,9 +35,6 @@ public abstract class AbsBungeeRunnable implements PluginRunnable, Runnable {
     }
 
     @Override
-    public abstract void run();
-
-    @Override
     public PluginTask runTask() {
         return runTaskAsynchronously();
     }
@@ -74,7 +71,7 @@ public abstract class AbsBungeeRunnable implements PluginRunnable, Runnable {
     }
 
     @Override
-    public synchronized void cancel() throws IllegalStateException {
+    public synchronized void cancel() {
         if (plugin == null) {
             return;
         }

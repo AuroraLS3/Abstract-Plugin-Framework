@@ -14,17 +14,27 @@ import java.util.function.Supplier;
 public class Slf4jPluginLogger implements PluginLogger {
 
     private final Supplier<DebugLogger> debugLogger;
-    private final Logger logger;
+    private final Supplier<Logger> loggerSupplier;
 
     /**
      * Create a new Slf4jPluginLogger.
      *
-     * @param logger      slf4j logger for console logging.
-     * @param debugLogger Supplier for the {@link DebugLogger} to use.
+     * @param loggerSupplier slf4j logger for console logging.
+     * @param debugLogger    Supplier for the {@link DebugLogger} to use.
      */
-    public Slf4jPluginLogger(Logger logger, Supplier<DebugLogger> debugLogger) {
+    public Slf4jPluginLogger(Logger loggerSupplier, Supplier<DebugLogger> debugLogger) {
+        this(() -> loggerSupplier, debugLogger);
+    }
+
+    /**
+     * Create a new Slf4jPluginLogger
+     *
+     * @param loggerSupplier slf4j logger for console logging.
+     * @param debugLogger    Supplier for the {@link DebugLogger} to use.
+     */
+    public Slf4jPluginLogger(Supplier<Logger> loggerSupplier, Supplier<DebugLogger> debugLogger) {
         this.debugLogger = debugLogger;
-        this.logger = logger;
+        this.loggerSupplier = loggerSupplier;
     }
 
     @Override
@@ -35,6 +45,7 @@ public class Slf4jPluginLogger implements PluginLogger {
         } else if (level != L.DEBUG_INFO) {
             log(L.DEBUG, message);
         }
+        Logger logger = loggerSupplier.get();
         switch (level) {
             case CRITICAL:
             case ERROR:
@@ -64,6 +75,7 @@ public class Slf4jPluginLogger implements PluginLogger {
 
     @Override
     public void log(L level, String message, Throwable throwable) {
+        Logger logger = loggerSupplier.get();
         switch (level) {
             case CRITICAL:
             case ERROR:

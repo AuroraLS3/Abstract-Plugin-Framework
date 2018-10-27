@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class FolderTimeStampFileLogger {
 
     private final String fileNamePrefix;
-    private final File logFolder;
+    private final Supplier<File> logFolder;
 
     private final Supplier<ErrorHandler> errorHandler;
 
@@ -32,13 +32,24 @@ public class FolderTimeStampFileLogger {
      * @param errorHandler   Supplier for a {@link ErrorHandler} in case logging the information fails.
      */
     public FolderTimeStampFileLogger(String fileNamePrefix, File logFolder, Supplier<ErrorHandler> errorHandler) {
+        this(fileNamePrefix, () -> logFolder, errorHandler);
+    }
+
+    /**
+     * Create a new folderTimeStampFileLogger.
+     *
+     * @param fileNamePrefix Prefix of the file, usage: fileNamePrefix-day_timestamp.txt
+     * @param logFolder      Supplier for the Folder the log files should be created in.
+     * @param errorHandler   Supplier for a {@link ErrorHandler} in case logging the information fails.
+     */
+    public FolderTimeStampFileLogger(String fileNamePrefix, Supplier<File> logFolder, Supplier<ErrorHandler> errorHandler) {
         this.fileNamePrefix = fileNamePrefix;
         this.logFolder = logFolder;
         this.errorHandler = errorHandler;
     }
 
     public void log(String... lines) {
-        File logFile = new File(logFolder, getFileName());
+        File logFile = new File(logFolder.get(), getFileName());
         try {
             FileLogger.appendToFile(logFile, Arrays.stream(lines)
                     .map(line -> "| " + getTimeStamp() + " | " + line)
@@ -63,7 +74,7 @@ public class FolderTimeStampFileLogger {
      * @return Optional of file or empty optional if the file does not exist.
      */
     public Optional<File> getCurrentFile() {
-        File file = new File(logFolder, getFileName());
+        File file = new File(logFolder.get(), getFileName());
         if (file.exists()) {
             return Optional.of(file);
         }
