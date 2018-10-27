@@ -18,6 +18,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import org.slf4j.Logger;
 
 import java.io.File;
+import java.nio.file.Path;
 
 /**
  * {@link IPlugin} implementation for Velocity.
@@ -34,6 +35,10 @@ import java.io.File;
  */
 public abstract class VelocityPlugin implements APFPlugin {
 
+    protected final ProxyServer proxy;
+    private final Logger slf4jLogger;
+    private final Path dataFolderPath;
+
     protected final PluginLogger logger;
     protected final CombineDebugLogger debugLogger;
     protected final DefaultErrorHandler errorHandler;
@@ -44,22 +49,37 @@ public abstract class VelocityPlugin implements APFPlugin {
 
     /**
      * Standard constructor that initializes the plugin with the default DebugLogger.
+     *
+     * @param proxy          Injected ProxyServer.
+     * @param slf4jLogger    Injected Logger.
+     * @param dataFolderPath Injected Path to the plugin data folder.
      */
-    public VelocityPlugin() {
-        this(new CombineDebugLogger(new MemoryDebugLogger()));
+    public VelocityPlugin(ProxyServer proxy, Logger slf4jLogger, Path dataFolderPath) {
+        this(proxy, slf4jLogger, dataFolderPath, new CombineDebugLogger(new MemoryDebugLogger()));
     }
 
     /**
      * Constructor for defining a debug logger at creation time.
      *
-     * @param debugLogger debug logger to use.
+     * @param proxy          Injected ProxyServer.
+     * @param slf4jLogger    Injected Logger.
+     * @param dataFolderPath Injected Path to the plugin data folder.
+     * @param debugLogger    debug logger to use.
      */
-    public VelocityPlugin(CombineDebugLogger debugLogger) {
+    public VelocityPlugin(ProxyServer proxy, Logger slf4jLogger, Path dataFolderPath, CombineDebugLogger debugLogger) {
+        this.proxy = proxy;
+        this.slf4jLogger = slf4jLogger;
+        this.dataFolderPath = dataFolderPath;
         this.debugLogger = debugLogger;
-        this.runnableFactory = new VelocityRunnableFactory(this, getProxy().getScheduler());
+        this.runnableFactory = new VelocityRunnableFactory(this, proxy.getScheduler());
         this.timings = new Timings(debugLogger);
-        this.logger = new Slf4jPluginLogger(this::getLogger, this::getDebugLogger);
+        this.logger = new Slf4jPluginLogger(slf4jLogger, this::getDebugLogger);
         this.errorHandler = new DefaultErrorHandler(this, logger, new File(getDataFolder(), "logs"));
+    }
+
+    @Override
+    public File getDataFolder() {
+        return dataFolderPath.toFile();
     }
 
     /**
@@ -67,14 +87,18 @@ public abstract class VelocityPlugin implements APFPlugin {
      *
      * @return ProxyServer in use.
      */
-    protected abstract ProxyServer getProxy();
+    public ProxyServer getProxy() {
+        return proxy;
+    }
 
     /**
      * Implement this method by injecting slf4j.Logger in your plugin class.
      *
      * @return Logger of the plugin.
      */
-    protected abstract Logger getLogger();
+    protected Logger getLogger() {
+        return slf4jLogger;
+    }
 
     @Override
     public void onDisable() {

@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
 
 import static org.mockito.Mockito.when;
 
@@ -77,30 +78,14 @@ public class PluginConstructionTest {
     }
 
     @Test
-    public void velocityPluginConstructionSucceeds() {
-        underTest = new VelocityPlugin() {
-            @Override
-            protected ProxyServer getProxy() {
-                return Mockito.mock(ProxyServer.class);
-            }
-
-            @Override
-            protected Logger getLogger() {
-                return Mockito.mock(org.slf4j.Logger.class);
-            }
-
+    public void velocityPluginConstructionSucceeds() throws IOException {
+        ProxyServer proxy = Mockito.mock(ProxyServer.class);
+        Logger slf4jLogger = Mockito.mock(Logger.class);
+        Path dataFolderPath = temporaryFolder.newFolder().toPath();
+        underTest = new VelocityPlugin(proxy, slf4jLogger, dataFolderPath) {
             @Override
             public void onEnable() {
 
-            }
-
-            @Override
-            public File getDataFolder() {
-                try {
-                    return temporaryFolder.newFolder();
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
             }
         };
     }
@@ -118,7 +103,7 @@ public class PluginConstructionTest {
     }
 
     @Test
-    public void velocityPluginAPIFunctions() {
+    public void velocityPluginAPIFunctions() throws IOException {
         velocityPluginConstructionSucceeds();
         pluginAPIFunctions();
     }
