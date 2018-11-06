@@ -48,7 +48,7 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>org.json.simple:*</include>
+                            <include>com.googlecode.json-simple:*</include>
                         </includes>
                     </artifactSet>
                     <relocations>
