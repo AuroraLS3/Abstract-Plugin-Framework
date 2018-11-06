@@ -105,7 +105,7 @@ Theme:
 Plugins:
   Example:
     Block:
-    - This
-    - That
+      - This
+      - That
   Example3:
     Test: Yes - T
