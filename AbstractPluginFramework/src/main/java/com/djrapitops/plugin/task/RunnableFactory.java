@@ -1,8 +1,6 @@
 package com.djrapitops.plugin.task;
 
 import com.djrapitops.plugin.IPlugin;
-import com.djrapitops.plugin.StaticHolder;
-import com.djrapitops.plugin.utilities.StackUtils;
 
 /**
  * Factory for creating runnable objects that can be scheduled on any server platform.
@@ -12,14 +10,6 @@ import com.djrapitops.plugin.utilities.StackUtils;
  * @author Rsl1122
  */
 public abstract class RunnableFactory {
-
-    @Deprecated
-    public static PluginRunnable createNew(String name, AbsRunnable absRunnable) {
-        Class callingPlugin = StackUtils.getCallingPlugin();
-        StaticHolder.saveInstance(absRunnable.getClass(), callingPlugin);
-        IPlugin plugin = StaticHolder.getInstance(callingPlugin);
-        return plugin.getRunnableFactory().create(name, absRunnable);
-    }
 
     /**
      * Create a new {@link PluginRunnable} that can be scheduled.

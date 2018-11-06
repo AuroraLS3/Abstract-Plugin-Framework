@@ -10,16 +10,6 @@ import java.util.concurrent.TimeUnit;
  */
 public enum TimeAmount {
 
-    @Deprecated
-    MILLISECOND(TimeUnit.MILLISECONDS.toMillis(1L)),
-    @Deprecated
-    SECOND(TimeUnit.SECONDS.toMillis(1L)),
-    @Deprecated
-    MINUTE(TimeUnit.MINUTES.toMillis(1L)),
-    @Deprecated
-    HOUR(TimeUnit.HOURS.toMillis(1L)),
-    @Deprecated
-    DAY(TimeUnit.DAYS.toMillis(1L)),
     WEEK(TimeUnit.DAYS.toMillis(7L)),
     MONTH(TimeUnit.DAYS.toMillis(30L)),
     YEAR(TimeUnit.DAYS.toMillis(365L));
@@ -61,41 +51,5 @@ public enum TimeAmount {
      */
     public long toMillis(long amount) {
         return ms * amount;
-    }
-
-    /**
-     * @return System.currentTimeMillis().
-     * @deprecated use {@code System.currentTimeMillis()} instead.
-     */
-    @Deprecated
-    public static long currentMs() {
-        return System.currentTimeMillis();
-    }
-
-    /**
-     * @return ticks of this unit.
-     * @deprecated use {@code toTicks(long, TimeUnit)} instead.
-     */
-    @Deprecated
-    public long ticks() {
-        return toTicks(ms, TimeUnit.MILLISECONDS);
-    }
-
-    /**
-     * @return milliseconds of this unit.
-     * @deprecated use {@code TimeUnit#toMillis(long)} instead.
-     */
-    @Deprecated
-    public long ms() {
-        return ms;
-    }
-
-    /**
-     * @return nanoseconds of this unit.
-     * @deprecated use {@code TimeUnit#toNanos(long)} instead.
-     */
-    @Deprecated
-    public long ns() {
-        return TimeUnit.MILLISECONDS.toNanos(ms);
     }
 }
