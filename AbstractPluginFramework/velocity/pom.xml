@@ -22,7 +22,12 @@
         <dependency>
             <groupId>com.djrapitops</groupId>
             <artifactId>AbstractPluginFramework-api</artifactId>
-            <version>3.4.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.djrapitops</groupId>
+            <artifactId>AbstractPluginFramework-sponge</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
@@ -33,4 +38,37 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration> <!-- This shades in Slf4jPluginLogger required by VelocityPlugin -->
+                    <artifactSet>
+                        <includes>
+                            <include>com.djrapitops:AbstractPluginFramework-sponge</include>
+                        </includes>
+                    </artifactSet>
+                    <filters>
+                        <filter>
+                            <artifact>com.djrapitops:AbstractPluginFramework-sponge</artifact>
+                            <includes>
+                                <include>com/djrapitops/plugin/logging/console/**</include>
+                            </includes>
+                        </filter>
+                    </filters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
