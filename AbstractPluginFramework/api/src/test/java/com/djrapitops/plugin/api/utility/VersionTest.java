@@ -29,11 +29,6 @@ import static org.junit.Assert.*;
 
 public class VersionTest {
     @Test
-    public void checkVersionGitHub() throws Exception {
-        assertTrue(Version.checkVersion("1", "https://raw.githubusercontent.com/Rsl1122/Plan-PlayerAnalytics/master/Plan/src/main/resources/plugin.yml"));
-    }
-
-    @Test
     public void isNewVersionAvailableComparesCorrectly() {
         assertTrue(Version.isNewVersionAvailable(new Version("1"), new Version("2")));
         assertFalse(Version.isNewVersionAvailable(new Version("1"), new Version("1")));
