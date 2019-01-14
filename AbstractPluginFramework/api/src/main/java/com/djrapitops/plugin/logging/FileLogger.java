@@ -25,6 +25,7 @@ package com.djrapitops.plugin.logging;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -77,7 +78,11 @@ public class FileLogger {
         if (!file.exists() && !file.createNewFile()) {
             return;
         }
-        Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        try {
+            Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        } catch (ClosedByInterruptException ignore) {
+            /* Ignore the exception to not cause issues with old uses of the code. */
+        }
     }
 
     /**
