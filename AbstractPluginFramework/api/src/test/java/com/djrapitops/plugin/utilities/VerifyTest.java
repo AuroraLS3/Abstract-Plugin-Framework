@@ -25,82 +25,105 @@ package com.djrapitops.plugin.utilities;
 
 import org.junit.Test;
 
-import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class VerifyTest {
-    @Test
-    public void exists() {
-        assertFalse(Verify.exists(null));
-        assertFalse(Verify.exists(new File("Nonexistent")));
-        assertTrue(Verify.exists(new File("pom.xml")));
-    }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void existCheck() {
-        Verify.existCheck(new File("Nonexistent"));
+    @Test
+    public void emptyStringIsEmpty() {
+        assertTrue(Verify.isEmpty(""));
     }
 
     @Test
-    public void isEmpty() {
+    public void nullStringIsEmpty() {
+        assertTrue(Verify.isEmpty((String) null));
     }
 
     @Test
-    public void isEmpty1() {
+    public void stringIsNotEmpty() {
+        assertFalse(Verify.isEmpty("Test"));
     }
 
     @Test
-    public void isEmpty2() {
+    public void emptyCollectionIsEmpty() {
+        assertTrue(Verify.isEmpty(Collections.emptyList()));
     }
 
     @Test
-    public void contains() {
+    public void nullCollectionIsEmpty() {
+        assertTrue(Verify.isEmpty((Collection<Object>) null));
     }
 
     @Test
-    public void contains1() {
+    public void collectionIsNotEmpty() {
+        assertFalse(Verify.isEmpty(Collections.singletonList("")));
     }
 
     @Test
-    public void contains2() {
+    public void emptyMapIsEmpty() {
+        assertTrue(Verify.isEmpty(Collections.emptyMap()));
     }
 
     @Test
-    public void contains3() {
+    public void nullMapIsEmpty() {
+        assertTrue(Verify.isEmpty((Map<Object, Object>) null));
     }
 
     @Test
-    public void equalsIgnoreCase() {
+    public void mapIsNotEmpty() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("item", "");
+        assertFalse(Verify.isEmpty(map));
     }
 
     @Test
-    public void equalsOne() {
+    public void containsElement() {
+        assertTrue(Verify.contains("Element", "", "Element"));
     }
 
     @Test
-    public void equals() {
+    public void doesNotContainElement() {
+        assertFalse(Verify.contains("Not Found", "", "Element"));
     }
 
     @Test
-    public void notNull() {
+    public void collectionContainsElement() {
+        assertTrue(Verify.contains("Element", Collections.singletonList("Element")));
     }
 
     @Test
-    public void containsNull() {
+    public void collectionDoesNotContainElement() {
+        assertFalse(Verify.contains("Element", Collections.emptyList()));
     }
 
     @Test
-    public void nullCheck() {
+    public void stringContainsOne() {
+        assertTrue(Verify.containsOne("To Check", "To"));
     }
 
     @Test
-    public void nullCheck1() {
+    public void nullContainsOneNull() {
+        assertTrue(Verify.containsOne(null, null, null));
     }
 
     @Test
-    public void hasPermission() {
+    public void nullDoesNotContainOne() {
+        assertFalse(Verify.containsOne(null, ""));
     }
 
+    @Test
+    public void nullArrayIsNotContainedOne() {
+        assertFalse(Verify.containsOne("", (String[]) null));
+    }
+
+    @Test
+    public void stringDoesNotContainOne() {
+        assertFalse(Verify.containsOne("To Check", "E", "K"));
+    }
 }
