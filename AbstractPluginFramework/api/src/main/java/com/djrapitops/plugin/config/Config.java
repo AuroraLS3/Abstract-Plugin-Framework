@@ -50,7 +50,9 @@ import java.util.stream.Stream;
  *
  * @author Rsl1122
  * @see ConfigNode for variable accessing methods.
+ * @deprecated Various bugs have been identified in this class and it is discouraged to continue using this utility.
  */
+@Deprecated
 public class Config extends ConfigNode {
 
     private static final String APF_NEWLINE = " APF_NEWLINE ";
