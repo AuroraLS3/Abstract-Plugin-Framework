@@ -37,7 +37,7 @@ import java.util.Set;
  */
 public class ThreadRunnableFactory extends RunnableFactory {
 
-    private volatile Set<ThreadRunnable> threadRunnables;
+    private Set<ThreadRunnable> threadRunnables;
 
     /**
      * Standard constructor.
@@ -47,7 +47,7 @@ public class ThreadRunnableFactory extends RunnableFactory {
     }
 
     @Override
-    protected PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time) {
+    protected synchronized PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time) {
         ThreadRunnable threadRunnable = new ThreadRunnable(name, runnable, time);
         setCancellable(runnable, threadRunnable);
         threadRunnables.add(threadRunnable);

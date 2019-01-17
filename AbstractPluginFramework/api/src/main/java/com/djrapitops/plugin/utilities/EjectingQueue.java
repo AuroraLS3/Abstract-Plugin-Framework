@@ -36,7 +36,7 @@ import java.util.ArrayDeque;
 public class EjectingQueue<E> {
 
     private final int maxSize;
-    private volatile ArrayDeque<E> queue;
+    private ArrayDeque<E> queue;
     private volatile int size;
 
     /**

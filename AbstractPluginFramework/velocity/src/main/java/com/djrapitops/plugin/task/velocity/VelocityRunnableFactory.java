@@ -42,7 +42,7 @@ public class VelocityRunnableFactory extends RunnableFactory {
     private final VelocityPlugin plugin;
     private final Scheduler scheduler;
 
-    private volatile Set<AbsVelocityRunnable> tasks;
+    private Set<AbsVelocityRunnable> tasks;
 
     public VelocityRunnableFactory(VelocityPlugin plugin, Scheduler scheduler) {
         this.plugin = plugin;
@@ -64,12 +64,12 @@ public class VelocityRunnableFactory extends RunnableFactory {
         };
     }
 
-    private void cleanUp() {
+    private synchronized void cleanUp() {
         tasks.removeIf(runnable -> runnable.getTask().isFinished());
     }
 
     @Override
-    public void cancelAllKnownTasks() {
+    public synchronized void cancelAllKnownTasks() {
         tasks.forEach(PluginRunnable::cancel);
         tasks.clear();
     }
