@@ -23,9 +23,11 @@
  */
 package com.djrapitops.plugin.utilities;
 
+import com.jayway.awaitility.Awaitility;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -89,9 +91,9 @@ public class EjectingQueueTest {
 
         threads.forEach(Thread::start);
 
-        while (runTimes.size() < 2000000) {
-            Thread.sleep(1L);
-        }
+        Awaitility.await()
+                .atMost(5, TimeUnit.SECONDS)
+                .until(() -> runTimes.size() >= 2000000);
 
         run.clear();
         threads.forEach(Thread::interrupt);
