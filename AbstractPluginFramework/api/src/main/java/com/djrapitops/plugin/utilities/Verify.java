@@ -172,7 +172,7 @@ public class Verify {
         if (isEqual == null) {
             return false;
         }
-        if (toCheck == null && containsNull(new Object[]{isEqual})) {
+        if (toCheck == null && containsNull((Object[]) isEqual)) {
             return true;
         }
         for (String s : isEqual) {
@@ -194,7 +194,7 @@ public class Verify {
         if (contained == null) {
             return false;
         }
-        if (toCheck == null && containsNull(new Object[]{contained})) {
+        if (toCheck == null && containsNull((Object[]) contained)) {
             return true;
         }
         if (toCheck == null) {
