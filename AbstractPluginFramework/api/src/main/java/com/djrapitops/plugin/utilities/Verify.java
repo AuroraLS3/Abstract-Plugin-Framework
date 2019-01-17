@@ -184,6 +184,32 @@ public class Verify {
     }
 
     /**
+     * Check if a String contains one option.
+     *
+     * @param toCheck   String to check against
+     * @param contained Options that are considered good.
+     * @return If one of the given strings is found in the first one.
+     */
+    public static boolean containsOne(String toCheck, String... contained) {
+        if (contained == null) {
+            return false;
+        }
+        if (toCheck == null && containsNull(new Object[]{contained})) {
+            return true;
+        }
+        if (toCheck == null) {
+            return false;
+        }
+        for (String check : contained) {
+            if (toCheck.contains(check)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /**
      * Check if two objects equal and are not null.
      *
      * @param <T>     Type of the first object.
