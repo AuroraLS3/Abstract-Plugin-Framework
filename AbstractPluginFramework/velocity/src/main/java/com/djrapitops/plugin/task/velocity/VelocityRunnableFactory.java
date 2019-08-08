@@ -29,8 +29,9 @@ import com.djrapitops.plugin.task.PluginRunnable;
 import com.djrapitops.plugin.task.RunnableFactory;
 import com.velocitypowered.api.scheduler.Scheduler;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * {@link RunnableFactory} implementation for Velocity.
@@ -48,20 +49,22 @@ public class VelocityRunnableFactory extends RunnableFactory {
         this.plugin = plugin;
         this.scheduler = scheduler;
 
-        tasks = new HashSet<>();
+        tasks = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
 
     @Override
     protected PluginRunnable createNewRunnable(String name, AbsRunnable runnable, long time) {
         cleanUp();
 
-        return new AbsVelocityRunnable(name, plugin, scheduler, time) {
+        AbsVelocityRunnable taskRunnable = new AbsVelocityRunnable(name, plugin, scheduler, time) {
             @Override
             public void run() {
                 setCancellable(runnable, this);
                 runnable.run();
             }
         };
+        tasks.add(taskRunnable);
+        return taskRunnable;
     }
 
     private synchronized void cleanUp() {

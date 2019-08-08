@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.djrapitops</groupId>
     <artifactId>AbstractPluginFramework</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
     <modules>
         <module>api</module>
         <module>bukkit</module>
@@ -221,4 +221,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-rsl1122-Plan-repository</id>
+            <name>rsl1122-Plan-repository</name>
+            <url>https://api.bintray.com/maven/rsl1122/Plan-repository/AbstractPluginFramework/</url>
+        </repository>
+    </distributionManagement>
 </project>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>AbstractPluginFramework</artifactId>
         <groupId>com.djrapitops</groupId>
-        <version>3.4.1</version>
+        <version>3.4.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,5 +24,13 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-rsl1122-Plan-repository</id>
+            <name>rsl1122-Plan-repository</name>
+            <url>https://api.bintray.com/maven/rsl1122/Plan-repository/AbstractPluginFramework-bungeecord/</url>
+        </repository>
+    </distributionManagement>
 
 </project>
