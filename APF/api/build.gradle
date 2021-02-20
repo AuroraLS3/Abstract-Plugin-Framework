@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation "com.googlecode.json-simple:json-simple:$jsonSimpleVersion"
+    implementation "com.google.guava:guava:$guavaVersion"
+}

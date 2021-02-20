@@ -1,0 +1,4 @@
+rootProject.name = 'APF'
+include 'api'
+include 'bukkit'
+
