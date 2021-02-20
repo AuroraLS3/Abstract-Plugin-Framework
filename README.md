@@ -1,8 +1,5 @@
 # Abstract Plugin Framework
 
-[![Build Status](https://travis-ci.org/Rsl1122/Abstract-Plugin-Framework.svg?branch=master)](https://travis-ci.org/Rsl1122/Abstract-Plugin-Framework)  
-[![Quality Gate](https://sonarcloud.io/api/project_badges/quality_gate?project=com.djrapitops%3AAbstractPluginFramework)](https://sonarcloud.io/dashboard?id=com.djrapitops%3AAbstractPluginFramework)
-
 Abstract Plugin Framework is a library for abstracting away server platform specific implementations.
 Because of the work required, scope of the abstraction is quite limited.
 
