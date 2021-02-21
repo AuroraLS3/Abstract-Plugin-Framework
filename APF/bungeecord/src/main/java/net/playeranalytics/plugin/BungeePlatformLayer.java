@@ -1,19 +1,19 @@
 package net.playeranalytics.plugin;
 
+import net.md_5.bungee.api.plugin.Plugin;
 import net.playeranalytics.plugin.dependencies.DependencyLoader;
-import net.playeranalytics.plugin.scheduling.BukkitRunnableFactory;
+import net.playeranalytics.plugin.scheduling.BungeeRunnableFactory;
 import net.playeranalytics.plugin.scheduling.RunnableFactory;
-import net.playeranalytics.plugin.server.BukkitListeners;
+import net.playeranalytics.plugin.server.BungeeListeners;
 import net.playeranalytics.plugin.server.JavaUtilLoggerShim;
 import net.playeranalytics.plugin.server.Listeners;
 import net.playeranalytics.plugin.server.PluginLogger;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URLClassLoader;
 
-public class BukkitPlatformLayer implements PlatformAbstractionLayer {
+public class BungeePlatformLayer implements PlatformAbstractionLayer {
 
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
 
     private PluginLogger pluginLogger;
     private Listeners listeners;
@@ -21,7 +21,7 @@ public class BukkitPlatformLayer implements PlatformAbstractionLayer {
     private PluginInformation pluginInformation;
     private DependencyLoader dependencyLoader;
 
-    public BukkitPlatformLayer(JavaPlugin plugin) {
+    public BungeePlatformLayer(Plugin plugin) {
         this.plugin = plugin;
     }
 
@@ -33,19 +33,19 @@ public class BukkitPlatformLayer implements PlatformAbstractionLayer {
 
     @Override
     public Listeners getListeners() {
-        if (listeners == null) listeners = new BukkitListeners(plugin);
+        if (listeners == null) listeners = new BungeeListeners(plugin);
         return listeners;
     }
 
     @Override
     public RunnableFactory getRunnableFactory() {
-        if (runnableFactory == null) runnableFactory = new BukkitRunnableFactory(plugin);
+        if (runnableFactory == null) runnableFactory = new BungeeRunnableFactory(plugin);
         return runnableFactory;
     }
 
     @Override
     public PluginInformation getPluginInformation() {
-        if (pluginInformation == null) pluginInformation = new BukkitPluginInformation(plugin);
+        if (pluginInformation == null) pluginInformation = new BungeePluginInformation(plugin);
         return pluginInformation;
     }
 

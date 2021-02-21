@@ -2,4 +2,5 @@ rootProject.name = 'APF'
 include 'api'
 include 'bukkit'
 include 'sponge'
+include 'bungeecord'
 
