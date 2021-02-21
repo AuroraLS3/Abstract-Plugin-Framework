@@ -1,5 +1,6 @@
 package net.playeranalytics.plugin;
 
+import net.playeranalytics.plugin.dependencies.DependencyLoader;
 import net.playeranalytics.plugin.scheduling.BukkitRunnableFactory;
 import net.playeranalytics.plugin.scheduling.RunnableFactory;
 import net.playeranalytics.plugin.server.BukkitListeners;
@@ -8,6 +9,8 @@ import net.playeranalytics.plugin.server.Listeners;
 import net.playeranalytics.plugin.server.PluginLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.net.URLClassLoader;
+
 public class BukkitPlatformLayer implements PlatformAbstractionLayer {
 
     private final JavaPlugin plugin;
@@ -15,6 +18,8 @@ public class BukkitPlatformLayer implements PlatformAbstractionLayer {
     private PluginLogger pluginLogger;
     private Listeners listeners;
     private RunnableFactory runnableFactory;
+    private PluginInformation pluginInformation;
+    private DependencyLoader dependencyLoader;
 
     private BukkitPlatformLayer(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -40,5 +45,22 @@ public class BukkitPlatformLayer implements PlatformAbstractionLayer {
     public RunnableFactory getRunnableFactory() {
         if (runnableFactory == null) runnableFactory = new BukkitRunnableFactory(plugin);
         return runnableFactory;
+    }
+
+    @Override
+    public PluginInformation getPluginInformation() {
+        return plugin::getDataFolder;
+    }
+
+    @Override
+    public DependencyLoader getDependencyLoader() {
+        if (dependencyLoader == null) {
+            dependencyLoader = new DependencyLoader(
+                    (URLClassLoader) getClass().getClassLoader(),
+                    getPluginLogger(),
+                    getPluginInformation()
+            );
+        }
+        return dependencyLoader;
     }
 }

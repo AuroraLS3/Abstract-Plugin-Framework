@@ -40,6 +40,9 @@ allprojects {
         maven { // Nukkit Repository
             url = 'https://repo.nukkitx.com/main'
         }
+        maven { // DepDownloader Repository
+            url = 'https://nexus.egg82.me/repository/maven-releases/'
+        }
     }
 }
 
