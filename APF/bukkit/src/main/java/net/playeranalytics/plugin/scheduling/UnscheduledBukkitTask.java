@@ -11,11 +11,7 @@ public class UnscheduledBukkitTask extends BukkitRunnable implements Unscheduled
     private final Runnable runnable;
     private final Consumer<Task> cancellableConsumer;
 
-    public UnscheduledBukkitTask(
-            JavaPlugin plugin,
-            Runnable runnable,
-            Consumer<Task> cancellableConsumer
-    ) {
+    public UnscheduledBukkitTask(JavaPlugin plugin, Runnable runnable, Consumer<Task> cancellableConsumer) {
         this.plugin = plugin;
         this.runnable = runnable;
         this.cancellableConsumer = cancellableConsumer;

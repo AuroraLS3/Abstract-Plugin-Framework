@@ -11,4 +11,6 @@ public interface PluginInformation {
         return getDataFolder().toPath();
     }
 
+    String getVersion();
+
 }
