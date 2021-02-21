@@ -4,7 +4,7 @@ import net.playeranalytics.plugin.dependencies.DependencyLoader;
 import net.playeranalytics.plugin.scheduling.BukkitRunnableFactory;
 import net.playeranalytics.plugin.scheduling.RunnableFactory;
 import net.playeranalytics.plugin.server.BukkitListeners;
-import net.playeranalytics.plugin.server.JavaUtilLoggerShim;
+import net.playeranalytics.plugin.server.JavaUtilPluginLogger;
 import net.playeranalytics.plugin.server.Listeners;
 import net.playeranalytics.plugin.server.PluginLogger;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,7 +27,7 @@ public class BukkitPlatformLayer implements PlatformAbstractionLayer {
 
     @Override
     public PluginLogger getPluginLogger() {
-        if (pluginLogger == null) pluginLogger = new JavaUtilLoggerShim(plugin.getLogger());
+        if (pluginLogger == null) pluginLogger = new JavaUtilPluginLogger(plugin.getLogger());
         return pluginLogger;
     }
 

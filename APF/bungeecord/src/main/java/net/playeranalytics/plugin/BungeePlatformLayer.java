@@ -5,7 +5,7 @@ import net.playeranalytics.plugin.dependencies.DependencyLoader;
 import net.playeranalytics.plugin.scheduling.BungeeRunnableFactory;
 import net.playeranalytics.plugin.scheduling.RunnableFactory;
 import net.playeranalytics.plugin.server.BungeeListeners;
-import net.playeranalytics.plugin.server.JavaUtilLoggerShim;
+import net.playeranalytics.plugin.server.JavaUtilPluginLogger;
 import net.playeranalytics.plugin.server.Listeners;
 import net.playeranalytics.plugin.server.PluginLogger;
 
@@ -27,7 +27,7 @@ public class BungeePlatformLayer implements PlatformAbstractionLayer {
 
     @Override
     public PluginLogger getPluginLogger() {
-        if (pluginLogger == null) pluginLogger = new JavaUtilLoggerShim(plugin.getLogger());
+        if (pluginLogger == null) pluginLogger = new JavaUtilPluginLogger(plugin.getLogger());
         return pluginLogger;
     }
 

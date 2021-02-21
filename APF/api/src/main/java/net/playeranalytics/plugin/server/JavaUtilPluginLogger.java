@@ -3,11 +3,11 @@ package net.playeranalytics.plugin.server;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class JavaUtilLoggerShim implements PluginLogger {
+public class JavaUtilPluginLogger implements PluginLogger {
 
     private final Logger logger;
 
-    public JavaUtilLoggerShim(Logger logger) {
+    public JavaUtilPluginLogger(Logger logger) {
         this.logger = logger;
     }
 
