@@ -3,4 +3,5 @@ include 'api'
 include 'bukkit'
 include 'sponge'
 include 'bungeecord'
+include 'velocity'
 
