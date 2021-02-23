@@ -1,9 +1,0 @@
-plugins {
-    id 'java'
-}
-
-dependencies {
-    implementation project(':api')
-
-    compileOnly "cn.nukkit:nukkit:$nukkitVersion"
-}
