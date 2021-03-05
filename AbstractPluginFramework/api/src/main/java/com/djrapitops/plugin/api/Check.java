@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ package com.djrapitops.plugin.api;
  * inheritance, Single Responsibility Principle or class structure issues. Usages of this class can be replaced with a
  * split of the class on a per platform basis.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  */
 public class Check {
 

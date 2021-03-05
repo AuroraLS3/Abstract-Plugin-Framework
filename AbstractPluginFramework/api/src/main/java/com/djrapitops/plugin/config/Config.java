@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ import com.djrapitops.plugin.utilities.Verify;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ import java.util.stream.Stream;
  * <p>
  * If a non-existing node is attempted to be read, it will be initialized with an empty value.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  * @see ConfigNode for variable accessing methods.
  * @deprecated Various bugs have been identified in this class and it is discouraged to continue using this utility.
  */
@@ -56,7 +56,7 @@ import java.util.stream.Stream;
 public class Config extends ConfigNode {
 
     private static final String APF_NEWLINE = " APF_NEWLINE ";
-    private String absolutePath;
+    private final String absolutePath;
 
     /**
      * Create a Config by reading a file.
@@ -134,7 +134,7 @@ public class Config extends ConfigNode {
     }
 
     private List<String> readLines(Path from) throws IOException {
-        try (Stream<String> s = Files.lines(from, Charset.forName("UTF-8"))) {
+        try (Stream<String> s = Files.lines(from, StandardCharsets.UTF_8)) {
             return s.collect(Collectors.toList());
         }
     }
@@ -238,7 +238,7 @@ public class Config extends ConfigNode {
     public void save() throws IOException {
         File file = getFile();
         Verify.nullCheck(file, () -> new IllegalStateException("Absolute Path was null (Not defined)"));
-        Files.write(file.toPath(), processTree(), Charset.forName("UTF-8"));
+        Files.write(file.toPath(), processTree(), StandardCharsets.UTF_8);
     }
 
     private List<String> processTree() {

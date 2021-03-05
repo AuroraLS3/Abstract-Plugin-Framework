@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -61,7 +61,7 @@ import java.util.Optional;
  * <p>
  * When extended, you should provide the Sponge Plugin annotation above your own class.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  * @see IPlugin for method overview.
  */
 public abstract class SpongePlugin implements APFPlugin {

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,12 +31,12 @@ import java.util.ArrayDeque;
  * Utility queue that removes first element in the queue after max size is reached.
  *
  * @param <E> Type of the elements in this Queue.
- * @author Rsl1122
+ * @author AuroraLS3
  */
 public class EjectingQueue<E> {
 
     private final int maxSize;
-    private ArrayDeque<E> queue;
+    private final ArrayDeque<E> queue;
     private volatile int size;
 
     /**

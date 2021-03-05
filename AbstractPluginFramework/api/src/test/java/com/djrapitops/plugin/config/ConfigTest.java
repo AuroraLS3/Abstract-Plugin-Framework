@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -98,7 +98,7 @@ public class ConfigTest {
     }
 
     private List<String> readLines(File file) throws IOException {
-        try (Stream<String> s = Files.lines(file.toPath(), Charset.forName("UTF-8"))) {
+        try (Stream<String> s = Files.lines(file.toPath(), StandardCharsets.UTF_8)) {
             return s.collect(Collectors.toList());
         }
     }

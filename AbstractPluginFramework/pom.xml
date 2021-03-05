@@ -17,7 +17,7 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>An abstraction framework for Bukkit, Sponge and Bungee plugins</description>
-    <url>https://github.com/Rsl1122/Abstract-Plugin-Framework</url>
+    <url>https://github.com/AuroraLS3/Abstract-Plugin-Framework</url>
 
     <licenses>
         <license>
@@ -26,19 +26,10 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <name>Risto Lahtela (Rsl1122)</name>
-            <email>djrapitops@hotmail.com</email>
-            <organization>None</organization>
-            <organizationUrl>https://github.com/Rsl1122</organizationUrl>
-        </developer>
-    </developers>
-
     <scm>
-        <connection>scm:git:git://github.com/Rsl1122/Abstract-Plugin-Framework.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Rsl1122/Abstract-Plugin-Framework.git</developerConnection>
-        <url>https://github.com/Rsl1122/Abstract-Plugin-Framework</url>
+        <connection>scm:git:git://github.com/AuroraLS3/Abstract-Plugin-Framework.git</connection>
+        <developerConnection>scm:git:ssh://github.com:AuroraLS3/Abstract-Plugin-Framework.git</developerConnection>
+        <url>https://github.com/AuroraLS3/Abstract-Plugin-Framework</url>
     </scm>
 
     <properties>
@@ -224,9 +215,8 @@
 
     <distributionManagement>
         <repository>
-            <id>bintray-rsl1122-Plan-repository</id>
-            <name>rsl1122-Plan-repository</name>
-            <url>https://api.bintray.com/maven/rsl1122/Plan-repository/AbstractPluginFramework/</url>
+            <id>plan-repo</id>
+            <url>https://repo.playeranalytics.net/releases</url>
         </repository>
     </distributionManagement>
 </project>

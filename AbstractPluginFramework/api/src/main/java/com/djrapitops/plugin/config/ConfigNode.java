@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * <p>
  * Can be used to copy default values to other config nodes with {@link ConfigNode#copyDefaults(ConfigNode)}.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  */
 public class ConfigNode {
 
@@ -42,7 +42,7 @@ public class ConfigNode {
     ConfigNode parent;
     List<String> childOrder;
     int depth;
-    private Map<String, ConfigNode> children;
+    private final Map<String, ConfigNode> children;
     private List<String> comment;
 
     private String value;

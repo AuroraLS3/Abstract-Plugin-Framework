@@ -39,7 +39,7 @@ import java.util.concurrent.Callable;
 /**
  * Utility class for using Mojang API to fetch UUIDs.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  */
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
 

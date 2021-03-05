@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ package com.djrapitops.plugin.command;
  * <p>
  * Various setters should be called in the constructor to allow full use of {@link com.djrapitops.plugin.command.defaultcmds.HelpCommand}.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  */
 public abstract class CommandNode {
 

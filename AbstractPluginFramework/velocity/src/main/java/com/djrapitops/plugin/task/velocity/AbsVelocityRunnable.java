@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,14 +34,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * {@link PluginRunnable} implementation for Velocity.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  */
 abstract class AbsVelocityRunnable implements PluginRunnable, Runnable {
 
     private final String name;
     private final long time;
 
-    private VelocityPlugin plugin;
+    private final VelocityPlugin plugin;
     private Scheduler scheduler;
 
     private AbsVelocityTask task;

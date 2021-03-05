@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ import java.util.function.Supplier;
 /**
  * {@link PluginLogger} implementation for slf4j Logger platforms.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  */
 public class Slf4jPluginLogger implements PluginLogger {
 

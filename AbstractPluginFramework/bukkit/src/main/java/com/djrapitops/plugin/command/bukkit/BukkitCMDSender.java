@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
 /**
  * Class for wrapping Bukkit CommandSender into a {@link Sender}.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  * @since 2.0.0
  */
 class BukkitCMDSender implements Sender {

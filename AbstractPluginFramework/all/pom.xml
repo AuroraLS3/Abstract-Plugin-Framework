@@ -66,4 +66,11 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>plan-repo</id>
+            <url>https://repo.playeranalytics.net/releases</url>
+        </repository>
+    </distributionManagement>
+
 </project>

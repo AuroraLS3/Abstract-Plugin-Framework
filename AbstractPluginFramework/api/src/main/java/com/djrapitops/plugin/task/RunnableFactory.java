@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import com.djrapitops.plugin.IPlugin;
  * <p>
  * Obtain an instance from {@link IPlugin#getRunnableFactory()}.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  */
 public abstract class RunnableFactory {
 

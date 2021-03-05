@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Risto Lahtela
+ * Copyright (c) 2021 AuroraLS3
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,14 +36,14 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * {@link RunnableFactory} implementation for Velocity.
  *
- * @author Rsl1122
+ * @author AuroraLS3
  */
 public class VelocityRunnableFactory extends RunnableFactory {
 
     private final VelocityPlugin plugin;
     private final Scheduler scheduler;
 
-    private Set<AbsVelocityRunnable> tasks;
+    private final Set<AbsVelocityRunnable> tasks;
 
     public VelocityRunnableFactory(VelocityPlugin plugin, Scheduler scheduler) {
         this.plugin = plugin;
